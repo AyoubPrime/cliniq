@@ -206,7 +206,10 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <h1 className="text-2xl font-semibold text-gray-900">ClinIQ</h1>
           <p className="text-sm text-gray-400">Cas du jour</p>
         </div>
-        <span className="text-sm font-medium text-orange-500">🔥 Série</span>
+        <div className="flex items-center gap-3">
+          <a href="/archives" className="text-sm text-blue-600 font-medium">Archives</a>
+          <span className="text-sm font-medium text-orange-500">🔥 Série</span>
+        </div>
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 p-5 mb-4">
