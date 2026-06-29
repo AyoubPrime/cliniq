@@ -192,8 +192,9 @@ export default function GameBoard({ cas }: { cas: Case }) {
           </div>
         )}
 
-        <div className="text-center text-sm text-gray-400 pb-8">
-          Revenez demain pour un nouveau cas
+       <div className="text-center pb-8">
+          <p className="text-sm text-gray-400 mb-4">Revenez demain pour un nouveau cas</p>
+          <a href="/archives" className="text-sm text-blue-600 font-medium">Explorer les archives</a>
         </div>
       </div>
     )
