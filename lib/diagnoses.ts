@@ -2,7 +2,8 @@ export const DIAGNOSES = [
   // Cardiologie
   "Infarctus du myocarde",
   "Syndrome coronarien aigu",
-  "Angine de poitrine instable",
+  "Angor instable",
+  "Angor stable",
   "Fibrillation auriculaire",
   "Flutter auriculaire",
   "Tachycardie supraventriculaire",
@@ -54,6 +55,7 @@ export const DIAGNOSES = [
   "Vertiges positionnels paroxystiques bénins",
   "Névrite vestibulaire",
   "Neuropathie périphérique",
+  "Encéphalopathie de Wernicke",
 
   // Pneumologie
   "Pneumonie communautaire",
