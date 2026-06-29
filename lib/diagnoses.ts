@@ -258,4 +258,17 @@ export const DIAGNOSES = [
   "Delirium",
   "Syndrome de sevrage alcoolique",
   "Delirium tremens",
+  // Pédiatrie
+ "Bronchiolite",
+ "Asthme de l'enfant",
+ "Crise convulsive fébrile",
+ "Gastro-entérite aiguë de l'enfant",
+ "Déshydratation aiguë",
+ "Pneumonie de l'enfant",
+ "Otite moyenne aiguë",
+ "Coqueluche",
+ "Rougeole",
+ "Varicelle",
+ "Méningite de l'enfant",
+ "Invagination intestinale",
 ]
