@@ -77,6 +77,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
   const [gameState, setGameState] = useState<'playing' | 'won' | 'lost'>('playing')
   const [showSummary, setShowSummary] = useState(false)
   const [showSuggestions, setShowSuggestions] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   const MAX_ATTEMPTS = 6
 
@@ -288,12 +289,28 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <p className="text-sm text-green-600 mb-4">
             Trouvé en {guesses.length} tentative{guesses.length > 1 ? 's' : ''}
           </p>
-          <button
-            onClick={() => setShowSummary(true)}
-            className="bg-green-600 text-white px-6 py-2.5 rounded-xl text-sm font-medium"
-          >
-            Voir le résumé éducatif
-          </button>
+          <div className="flex gap-2 justify-center">
+            <button
+              onClick={() => setShowSummary(true)}
+              className="bg-green-600 text-white px-6 py-2.5 rounded-xl text-sm font-medium"
+            >
+              Voir le résumé
+            </button>
+            <button
+              onClick={() => {
+                const emojis = guesses.map(g =>
+                  g.result === 'correct' ? '🟩' : g.result === 'proche' ? '🟨' : '🟥'
+                ).join('')
+                const text = `🩺 ClinIQ\n${new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}\nTrouvé en ${guesses.length} tentative${guesses.length > 1 ? 's' : ''}\n${emojis}\nhttps://cliniq-blond-nu.vercel.app`
+                navigator.clipboard.writeText(text)
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2000)
+              }}
+              className="bg-white text-green-700 border border-green-200 px-6 py-2.5 rounded-xl text-sm font-medium"
+            >
+              {copied ? 'Copié !' : 'Partager'}
+            </button>
+          </div>
         </div>
       )}
 
@@ -302,12 +319,28 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <p className="text-lg font-semibold text-red-700 mb-1">Perdu</p>
           <p className="text-sm text-red-600 mb-1">Le diagnostic était :</p>
           <p className="text-base font-semibold text-red-800 mb-4">{cas.diagnosis_exact}</p>
-          <button
-            onClick={() => setShowSummary(true)}
-            className="bg-red-600 text-white px-6 py-2.5 rounded-xl text-sm font-medium"
-          >
-            Voir le résumé éducatif
-          </button>
+          <div className="flex gap-2 justify-center">
+            <button
+              onClick={() => setShowSummary(true)}
+              className="bg-red-600 text-white px-6 py-2.5 rounded-xl text-sm font-medium"
+            >
+              Voir le résumé
+            </button>
+            <button
+              onClick={() => {
+                const emojis = guesses.map(g =>
+                  g.result === 'correct' ? '🟩' : g.result === 'proche' ? '🟨' : '🟥'
+                ).join('')
+                const text = `🩺 ClinIQ\n${new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}\nNon trouvé\n${emojis}\nhttps://cliniq-blond-nu.vercel.app`
+                navigator.clipboard.writeText(text)
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2000)
+              }}
+              className="bg-white text-red-700 border border-red-200 px-6 py-2.5 rounded-xl text-sm font-medium"
+            >
+              {copied ? 'Copié !' : 'Partager'}
+            </button>
+          </div>
         </div>
       )}
 
