@@ -95,9 +95,10 @@ export default function GameBoard({ cas }: { cas: Case }) {
     setShowSuggestions(false)
 
     if (result === 'correct') {
-      setGameState('won')
-      return
-    }
+  setRevealedClues(cas.clues)
+  setGameState('won')
+  return
+}
 
     const nextClueIndex = revealedClues.length
     if (nextClueIndex < cas.clues.length) {
@@ -353,9 +354,12 @@ export default function GameBoard({ cas }: { cas: Case }) {
               </div>
             )}
           </div>
-          {guesses.length > 0 && guesses[guesses.length - 1].result !== 'correct' && (
-            <p className="text-xs text-gray-400 mt-2">{cas.wrong_answer_hint}</p>
-          )}
+          {guesses.length >= 3 &&
+  guesses[guesses.length - 1].result !== 'correct' && (
+    <p className="text-xs text-gray-400 mt-2">
+      {cas.wrong_answer_hint}
+    </p>
+)}
         </div>
       )}
     </div>
