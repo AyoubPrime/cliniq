@@ -343,18 +343,31 @@ export default function GameBoard({ cas }: { cas: Case }) {
             </div>
             {showSuggestions && suggestions.length > 0 && (
               <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-                {suggestions.map((s, i) => (
-                  <div
-                    key={i}
-                    className="px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 cursor-pointer border-b border-gray-50 last:border-0"
-                    onMouseDown={() => {
-                      setCurrentGuess(s)
-                      setShowSuggestions(false)
-                    }}
-                  >
-                    {s}
-                  </div>
-                ))}
+                {suggestions.map((s, i) => {
+                  const alreadyGuessed = guesses.some(
+                    g => normalize(g.text) === normalize(s)
+                  )
+                  return (
+                    <div
+                      key={i}
+                      className={`px-4 py-2.5 text-sm border-b border-gray-50 last:border-0 ${
+                        alreadyGuessed
+                          ? 'text-gray-300 cursor-not-allowed bg-gray-50'
+                          : 'text-gray-700 hover:bg-gray-50 cursor-pointer'
+                      }`}
+                      onMouseDown={() => {
+                        if (alreadyGuessed) return
+                        setCurrentGuess(s)
+                        setShowSuggestions(false)
+                      }}
+                    >
+                      {s}
+                      {alreadyGuessed && (
+                        <span className="ml-2 text-xs text-gray-300">déjà essayé</span>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
             )}
           </div>
