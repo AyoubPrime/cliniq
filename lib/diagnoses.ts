@@ -258,6 +258,7 @@ export const DIAGNOSES = [
   "Delirium",
   "Syndrome de sevrage alcoolique",
   "Delirium tremens",
+  
   // Pédiatrie
  "Bronchiolite",
  "Asthme de l'enfant",
