@@ -8,7 +8,6 @@ export default function AdminPage() {
   const [message, setMessage] = useState('')
   const [authenticated, setAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
-
   const [form, setForm] = useState({
     id: '',
     title: '',
@@ -182,7 +181,6 @@ export default function AdminPage() {
   return (
     <main className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-lg mx-auto">
-
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-semibold text-gray-900">ClinIQ</h1>
@@ -190,7 +188,6 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Identity */}
         <div className={sectionClass}>
           <p className={sectionTitle}>Identité du cas</p>
           <div className="grid grid-cols-2 gap-3 mb-3">
@@ -207,7 +204,7 @@ export default function AdminPage() {
             <label className={labelClass}>Titre interne</label>
             <input className={inputClass} placeholder="ex: Pneumothorax spontané" value={form.title} onChange={e => update('title', e.target.value)} />
           </div>
-          <div className="grid grid-cols-2 gap-3 mb-3">
+          <div className="grid grid-cols-2 gap-3">
             <div>
               <label className={labelClass}>Spécialité</label>
               <select className={inputClass} value={form.specialty} onChange={e => update('specialty', e.target.value)}>
@@ -240,7 +237,6 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Patient */}
         <div className={sectionClass}>
           <p className={sectionTitle}>Patient</p>
           <div className="grid grid-cols-3 gap-3 mb-3">
@@ -271,7 +267,7 @@ export default function AdminPage() {
           </div>
           <div className="mb-3">
             <label className={labelClass}>Contexte et antécédents</label>
-            <textarea className={inputClass} rows={2} placeholder="Apparition il y a 2 heures. Pas d'antécédents notables." value={form.context} onChange={e => update('context', e.target.value)} />
+            <textarea className={inputClass} rows={2} placeholder="Apparition il y a 2 heures..." value={form.context} onChange={e => update('context', e.target.value)} />
           </div>
           <div className="grid grid-cols-4 gap-2">
             <div>
@@ -293,7 +289,6 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Clues */}
         <div className={sectionClass}>
           <p className={sectionTitle}>Indices</p>
           <p className="text-xs text-gray-400 mb-3">L'indice 1 est révélé automatiquement. Les autres se débloquent après chaque tentative.</p>
@@ -305,7 +300,6 @@ export default function AdminPage() {
           ))}
         </div>
 
-        {/* Diagnosis */}
         <div className={sectionClass}>
           <p className={sectionTitle}>Diagnostic</p>
           <div className="mb-3">
@@ -354,7 +348,6 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Summary */}
         <div className={sectionClass}>
           <p className={sectionTitle}>Résumé éducatif</p>
           <div className="mb-3">
@@ -408,11 +401,10 @@ export default function AdminPage() {
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-3.5 rounded-xl text-sm font-medium disabled:opacity-50"
+          className="w-full bg-blue-600 text-white py-3.5 rounded-xl text-sm font-medium disabled:opacity-50 mb-8"
         >
           {loading ? 'Publication en cours...' : 'Publier le cas'}
         </button>
-
       </div>
     </main>
   )
