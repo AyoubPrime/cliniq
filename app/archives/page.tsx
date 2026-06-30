@@ -6,7 +6,7 @@ async function getAllCases() {
 
   const { data, error } = await supabase
     .from('cases')
-    .select('id, title, specialty, difficulty, publish_date, age, sex, setting, chief_complaint')
+    .select('id, title, specialty, difficulty, publish_date, age, age_unit, sex, setting, chief_complaint')
     .eq('status', 'published')
     .lte('publish_date', today)
     .order('publish_date', { ascending: false })
@@ -57,7 +57,7 @@ export default async function ArchivesPage() {
                     <div>
                       <p className="text-xs text-gray-400 mb-1">{cas.specialty}</p>
                       <p className="text-sm font-medium text-gray-900">
-                        {cas.sex === 'F' ? 'Femme' : 'Homme'}, {cas.age} ans — {cas.setting}
+                        {cas.sex === 'F' ? 'Femme' : 'Homme'}, {cas.age} {cas.age_unit} — {cas.setting}
                       </p>
                     </div>
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full border flex-shrink-0 ${diff.class}`}>

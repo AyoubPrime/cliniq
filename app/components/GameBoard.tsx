@@ -17,6 +17,7 @@ type Differential = {
 
 type Case = {
   age: number
+  age_unit: string
   sex: string
   setting: string
   chief_complaint: string
@@ -219,7 +220,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <div>
             <p className="text-xs text-gray-400 mb-1">Présentation</p>
             <p className="text-base font-medium text-gray-900">
-              {cas.sex === 'F' ? 'Femme' : 'Homme'}, {cas.age} ans
+              {cas.sex === 'F' ? 'Femme' : 'Homme'}, {cas.age} {cas.age_unit}
             </p>
           </div>
           <span className="text-xs font-medium bg-blue-50 text-blue-600 px-3 py-1 rounded-full border border-blue-100">

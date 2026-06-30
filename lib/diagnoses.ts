@@ -260,7 +260,7 @@ export const DIAGNOSES = [
   "Delirium tremens",
   
   // Pédiatrie
- "Bronchiolite",
+ "Bronchiolite aiguë",
  "Asthme de l'enfant",
  "Crise convulsive fébrile",
  "Gastro-entérite aiguë de l'enfant",

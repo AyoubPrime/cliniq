@@ -17,6 +17,7 @@ export default function AdminPage() {
     difficulty: 2,
     publish_date: '',
     age: '',
+    age_unit: 'ans',
     sex: 'F',
     setting: 'Urgences',
     chief_complaint: '',
@@ -123,6 +124,7 @@ export default function AdminPage() {
       status: 'published',
       reviewed: true,
       age: parseInt(form.age),
+      age_unit: form.age_unit,
       sex: form.sex,
       setting: form.setting,
       chief_complaint: form.chief_complaint,
@@ -271,9 +273,16 @@ export default function AdminPage() {
         <div className={sectionClass}>
           <p className={sectionTitle}>Patient</p>
           <div className="grid grid-cols-3 gap-3 mb-3">
-            <div>
+            <div className="col-span-2">
               <label className={labelClass}>Âge</label>
-              <input className={inputClass} type="number" placeholder="34" value={form.age} onChange={e => update('age', e.target.value)} />
+              <div className="flex gap-2">
+                <input className={inputClass} type="number" placeholder="34" value={form.age} onChange={e => update('age', e.target.value)} />
+                <select className={inputClass} value={form.age_unit} onChange={e => update('age_unit', e.target.value)} style={{ maxWidth: '110px' }}>
+                  <option value="ans">ans</option>
+                  <option value="mois">mois</option>
+                  <option value="jours">jours</option>
+                </select>
+              </div>
             </div>
             <div>
               <label className={labelClass}>Sexe</label>
