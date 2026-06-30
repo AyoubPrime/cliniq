@@ -154,7 +154,7 @@ export default function AdminPage() {
       setMessage('Cas publié avec succès!')
       setForm({
         id: '', title: '', specialty: '', difficulty: 2, publish_date: '',
-        age: '', sex: 'F', setting: 'Urgences', chief_complaint: '', context: '',
+        age: '', age_unit: 'ans', sex: 'F', setting: 'Urgences', chief_complaint: '', context: '',
         bp: '', hr: '', temp: '', spo2: '',
         clue1: '', clue2: '', clue3: '', clue4: '', clue5: '', clue6: '',
         diagnosis_exact: '', alias1: '', alias2: '', alias3: '',
