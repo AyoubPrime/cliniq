@@ -376,7 +376,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
               </button>
             </div>
             {showSuggestions && suggestions.length > 0 && (
-              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+              <div className="absolute z-10 w-full bottom-full mb-1 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
                 {suggestions.map((s, i) => {
                   const alreadyGuessed = guesses.some(
                     g => normalize(g.text) === normalize(s)
