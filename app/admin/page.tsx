@@ -6,6 +6,8 @@ import { supabase } from '@/lib/supabase'
 export default function AdminPage() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
+  const [idExists, setIdExists] = useState(false)
+  const [checkingId, setCheckingId] = useState(false)
   const [authenticated, setAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
   const [form, setForm] = useState({
@@ -62,7 +64,26 @@ export default function AdminPage() {
     setForm(prev => ({ ...prev, [field]: value }))
   }
 
+  const checkId = async (id: string) => {
+    if (!id.trim()) {
+      setIdExists(false)
+      return
+    }
+    setCheckingId(true)
+    const { data } = await supabase
+      .from('cases')
+      .select('id')
+      .eq('id', id)
+      .maybeSingle()
+    setIdExists(!!data)
+    setCheckingId(false)
+  }
+
   const handleSubmit = async () => {
+    if (idExists) {
+      setMessage('Erreur: cet ID existe déjà, changez-le avant de publier')
+      return
+    }
     setLoading(true)
     setMessage('')
 
@@ -193,7 +214,17 @@ export default function AdminPage() {
           <div className="grid grid-cols-2 gap-3 mb-3">
             <div>
               <label className={labelClass}>ID unique</label>
-              <input className={inputClass} placeholder="ex: pneumo-001" value={form.id} onChange={e => update('id', e.target.value)} />
+              <input
+                className={`${inputClass} ${idExists ? 'border-red-300' : ''}`}
+                placeholder="ex: pneumo-001"
+                value={form.id}
+                onChange={e => {
+                  update('id', e.target.value)
+                  checkId(e.target.value)
+                }}
+              />
+              {checkingId && <p className="text-xs text-gray-300 mt-1">Vérification...</p>}
+              {idExists && <p className="text-xs text-red-500 mt-1">Cet ID existe déjà, choisissez-en un autre</p>}
             </div>
             <div>
               <label className={labelClass}>Date de publication</label>
