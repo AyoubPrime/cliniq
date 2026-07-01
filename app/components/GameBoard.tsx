@@ -204,7 +204,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
 
   return (
     <div className="max-w-lg mx-auto">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-3">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">ClinIQ</h1>
           <p className="text-sm text-gray-400">Cas du jour</p>
@@ -214,6 +214,13 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <span className="text-sm font-medium text-orange-500">🔥 Série</span>
         </div>
       </div>
+      {guesses.length === 0 && (
+        <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 mb-4">
+          <p className="text-xs text-blue-600 leading-relaxed">
+            Analysez le cas et tapez votre diagnostic. Chaque tentative révèle un nouvel indice. 6 essais maximum.
+          </p>
+        </div>
+      )}
 
       <div className="bg-white rounded-2xl border border-gray-100 p-5 mb-4">
         <div className="flex justify-between items-start mb-3">
@@ -405,11 +412,12 @@ export default function GameBoard({ cas }: { cas: Case }) {
               </div>
             )}
           </div>
-          {guesses.length >= 3 &&
+          {guesses.length > 0 &&
   guesses[guesses.length - 1].result !== 'correct' && (
-    <p className="text-xs text-gray-400 mt-2">
-      {cas.wrong_answer_hint}
-    </p>
+    <div className="mt-3 flex gap-2 items-start">
+      <span className="text-base">💡</span>
+      <p className="text-xs text-gray-500 leading-relaxed">{cas.wrong_answer_hint}</p>
+    </div>
 )}
         </div>
       )}
