@@ -287,6 +287,7 @@ export const DIAGNOSES = [
 "Syndrome HELLP",
 "Hématome rétroplacentaire",
 "Placenta prævia",
+"Rupture utérine",
 "Rupture prématurée des membranes",
 "Chorioamniotite",
 "Menace d'accouchement prématuré",

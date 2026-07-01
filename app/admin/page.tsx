@@ -246,6 +246,7 @@ export default function AdminPage() {
                 <option>Neurologie</option>
                 <option>Pneumologie</option>
                 <option>Gastroentérologie</option>
+                <option>Psychiatrie</option>
                 <option>Infectiologie</option>
                 <option>Néphrologie</option>
                 <option>Endocrinologie</option>
@@ -363,9 +364,11 @@ export default function AdminPage() {
                 <option>Neurologie</option>
                 <option>Pneumologie</option>
                 <option>Gastroentérologie</option>
+                <option>Psychiatrie</option>
                 <option>Infectiologie</option>
                 <option>Néphrologie</option>
                 <option>Endocrinologie</option>
+                <option>Gynécologie</option>
                 <option>Rhumatologie</option>
                 <option>Hématologie</option>
                 <option>Urgences</option>
