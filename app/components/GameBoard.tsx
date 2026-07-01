@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DIAGNOSES } from '@/lib/diagnoses'
 
 type Clue = {
@@ -79,6 +79,30 @@ export default function GameBoard({ cas }: { cas: Case }) {
   const [showSummary, setShowSummary] = useState(false)
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [streak, setStreak] = useState(0)
+
+  useEffect(() => {
+    const today = new Date().toISOString().split('T')[0]
+    const lastVisit = localStorage.getItem('lastVisitDate')
+    const currentStreak = parseInt(localStorage.getItem('currentStreak') || '0')
+
+    const yesterday = new Date()
+    yesterday.setDate(yesterday.getDate() - 1)
+    const yesterdayStr = yesterday.toISOString().split('T')[0]
+
+    let newStreak = 1
+    if (lastVisit === today) {
+      newStreak = currentStreak
+    } else if (lastVisit === yesterdayStr) {
+      newStreak = currentStreak + 1
+    } else {
+      newStreak = 1
+    }
+
+    localStorage.setItem('lastVisitDate', today)
+    localStorage.setItem('currentStreak', newStreak.toString())
+    setStreak(newStreak)
+  }, [])
 
   const MAX_ATTEMPTS = 6
 
@@ -211,7 +235,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
         </div>
         <div className="flex items-center gap-3">
           <a href="/archives" className="text-sm text-blue-600 font-medium">Archives</a>
-          <span className="text-sm font-medium text-orange-500">🔥 Série</span>
+          <span className="text-sm font-medium text-orange-500">🔥 {streak} jour{streak > 1 ? 's' : ''}</span>
         </div>
       </div>
       {guesses.length === 0 && (
