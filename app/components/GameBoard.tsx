@@ -417,10 +417,10 @@ export default function GameBoard({ cas }: { cas: Case }) {
           </div>
           <div className="flex justify-between items-center mt-3">
             <p className="text-xs text-gray-400">
-              {guesses.length > 0 && guesses[guesses.length - 1].result !== 'correct' && (
-                <span>💡 {cas.wrong_answer_hint}</span>
-              )}
-            </p>
+  {guesses.length > 0 && guesses.length >= 3 && guesses[guesses.length - 1].result !== 'correct' && (
+    <span>💡 {cas.wrong_answer_hint}</span>
+  )}
+</p>
             <p className="text-xs text-gray-300">{guesses.length}/{MAX_ATTEMPTS}</p>
           </div>
         </div>
