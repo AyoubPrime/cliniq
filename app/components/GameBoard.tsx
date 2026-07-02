@@ -105,6 +105,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [copied, setCopied] = useState(false)
   const [streak, setStreak] = useState(0)
+  const [submitting, setSubmitting] = useState(false)
 
   const MAX_ATTEMPTS = 6
 
@@ -133,20 +134,30 @@ export default function GameBoard({ cas }: { cas: Case }) {
     ].slice(0, 5)
   : []
 
-  const handleGuess = () => {
-    if (!currentGuess.trim() || gameState !== 'playing') return
+  const handleGuess = async () => {
+    if (!currentGuess.trim() || gameState !== 'playing' || submitting) return
+    setSubmitting(true)
+    
     const result = judgeGuess(currentGuess, cas)
     const newGuess: GuessResult = { text: currentGuess, result }
     const newGuesses = [...guesses, newGuess]
     setGuesses(newGuesses)
     setCurrentGuess('')
     setShowSuggestions(false)
-    if (result === 'correct') { setGameState('won'); return }
+    
+    if (result === 'correct') { 
+      setGameState('won')
+      setSubmitting(false)
+      return 
+    }
+    
     const nextClueIndex = revealedClues.length
     if (nextClueIndex < cas.clues.length) {
       setRevealedClues([...revealedClues, cas.clues[nextClueIndex]])
     }
     if (newGuesses.length >= MAX_ATTEMPTS) setGameState('lost')
+    
+    setSubmitting(false)
   }
 
   const handleShare = (won: boolean) => {
@@ -268,7 +279,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <p className="text-xs text-gray-400 mt-0.5">Cas du jour</p>
         </div>
         <div className="flex items-center gap-3">
-          <a href="/archives" className="text-sm text-gray-500 hover:text-gray-700 transition-colors">Archives</a>
+          <a href="/archives" className="text-sm text-gray-500 hover:text-gray-700 transition-colors hidden sm:inline">Archives</a>
           <div className="flex items-center gap-1.5 bg-orange-50 border border-orange-200 text-orange-600 text-xs font-medium px-3 py-1.5 rounded-full">
             🔥 {streak} jour{streak > 1 ? 's' : ''}
           </div>
@@ -323,7 +334,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
           const revealed = i < revealedClues.length
           return (
             <div key={clue.id} className="flex gap-3 items-start py-2.5 border-b border-gray-50 last:border-0">
-              <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-medium mt-0.5 ${revealed ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-gray-50 text-gray-300 border border-gray-100'}`}>
+              <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-medium mt-0.5 ${revealed ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-gray-100 text-gray-300 border border-gray-200'}`}>
                 {i + 1}
               </div>
               {revealed
@@ -358,11 +369,11 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <p className="text-sm text-green-600 mb-4">
             Trouvé en {guesses.length} tentative{guesses.length > 1 ? 's' : ''}
           </p>
-          <div className="flex gap-2 justify-center">
-            <button onClick={() => setShowSummary(true)} className="bg-green-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium">
+          <div className="flex gap-2 justify-center flex-wrap">
+            <button onClick={() => setShowSummary(true)} className="bg-green-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium touch-none">
               Voir le résumé
             </button>
-            <button onClick={() => handleShare(true)} className="bg-white text-green-700 border border-green-200 px-5 py-2.5 rounded-xl text-sm font-medium">
+            <button onClick={() => handleShare(true)} className="bg-white text-green-700 border border-green-200 px-5 py-2.5 rounded-xl text-sm font-medium touch-none">
               {copied ? 'Copié !' : 'Partager'}
             </button>
           </div>
@@ -374,11 +385,11 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <p className="text-lg font-semibold text-red-800 mb-1">Perdu</p>
           <p className="text-sm text-red-600 mb-1">Le diagnostic était :</p>
           <p className="text-base font-semibold text-red-900 mb-4">{cas.diagnosis_exact}</p>
-          <div className="flex gap-2 justify-center">
-            <button onClick={() => setShowSummary(true)} className="bg-red-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium">
+          <div className="flex gap-2 justify-center flex-wrap">
+            <button onClick={() => setShowSummary(true)} className="bg-red-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium touch-none">
               Voir le résumé
             </button>
-            <button onClick={() => handleShare(false)} className="bg-white text-red-700 border border-red-200 px-5 py-2.5 rounded-xl text-sm font-medium">
+            <button onClick={() => handleShare(false)} className="bg-white text-red-700 border border-red-200 px-5 py-2.5 rounded-xl text-sm font-medium touch-none">
               {copied ? 'Copié !' : 'Partager'}
             </button>
           </div>
@@ -393,7 +404,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
               <input
                 type="text"
                 placeholder="Tapez votre diagnostic..."
-                className="flex-1 border border-gray-200 rounded-xl px-4 py-2.5 text-sm text-gray-900 outline-none focus:border-blue-300 bg-white transition-colors"
+                className="flex-1 border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-gray-900 outline-none focus:border-blue-300 bg-white transition-colors"
                 value={currentGuess}
                 onChange={e => { setCurrentGuess(e.target.value); setShowSuggestions(true) }}
                 onKeyDown={e => {
@@ -401,22 +412,30 @@ export default function GameBoard({ cas }: { cas: Case }) {
                   if (e.key === 'Escape') setShowSuggestions(false)
                 }}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                disabled={submitting}
               />
               <button
                 onClick={handleGuess}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2.5 rounded-xl text-sm font-medium transition-colors"
+                disabled={submitting}
+                className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-5 py-3.5 rounded-xl text-sm font-medium transition-colors disabled:opacity-60 flex items-center justify-center gap-2 min-w-[100px] touch-none"
               >
-                Valider
+                {submitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  </>
+                ) : (
+                  'Valider'
+                )}
               </button>
             </div>
             {showSuggestions && suggestions.length > 0 && (
-              <div className="absolute z-10 w-full bottom-full mb-1 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+              <div className="absolute z-10 w-full bottom-full mb-1 bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden">
                 {suggestions.map((s, i) => {
                   const alreadyGuessed = guesses.some(g => normalize(g.text) === normalize(s))
                   return (
                     <div
                       key={i}
-                      className={`px-4 py-2.5 text-sm border-b border-gray-50 last:border-0 ${alreadyGuessed ? 'text-gray-300 cursor-not-allowed bg-gray-50' : 'text-gray-700 hover:bg-gray-50 cursor-pointer'}`}
+                      className={`px-4 py-3 text-sm border-b border-gray-50 last:border-0 ${alreadyGuessed ? 'text-gray-300 cursor-not-allowed bg-gray-50' : 'text-gray-700 hover:bg-gray-50 cursor-pointer active:bg-blue-50'}`}
                       onMouseDown={() => {
                         if (alreadyGuessed) return
                         setCurrentGuess(s)
@@ -431,13 +450,13 @@ export default function GameBoard({ cas }: { cas: Case }) {
               </div>
             )}
           </div>
-          <div className="flex justify-between items-center mt-3">
-            <p className="text-xs text-gray-400">
-  {guesses.length > 0 && guesses.length >= 3 && guesses[guesses.length - 1].result !== 'correct' && (
-    <span>💡 {cas.wrong_answer_hint}</span>
-  )}
-</p>
-            <p className="text-xs text-gray-300">{guesses.length}/{MAX_ATTEMPTS}</p>
+          <div className="flex justify-between items-center mt-4">
+            <p className="text-xs text-gray-500">
+              {guesses.length > 0 && guesses.length >= 3 && guesses[guesses.length - 1].result !== 'correct' && (
+                <span>💡 {cas.wrong_answer_hint}</span>
+              )}
+            </p>
+            <p className="text-sm font-medium text-gray-600">{guesses.length}/{MAX_ATTEMPTS}</p>
           </div>
         </div>
       )}
