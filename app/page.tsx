@@ -17,6 +17,8 @@ async function getTodayCase() {
   return data
 }
 
+export const revalidate = 3600
+
 export default async function Home() {
   const cas = await getTodayCase()
 
