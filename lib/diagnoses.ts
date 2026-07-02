@@ -338,3 +338,25 @@ export const DIAGNOSES = [
 "Lombosciatique",
 "Sciatique",
 ]
+// Common abbreviations and aliases for diagnoses
+export const ABBREVIATIONS: Record<string, string[]> = {
+  'HSA': ['Hémorragie sous-arachnoïdienne'],
+  'AVC': ['Accident vasculaire cérébral ischémique', 'Accident vasculaire cérébral hémorragique'],
+  'IAT': ['Accident ischémique transitoire'],
+  'AIT': ['Accident ischémique transitoire'],
+  'SCA': ['Syndrome coronarien aigu'],
+  'IDM': ['Infarctus du myocarde'],
+  'IM': ['Insuffisance mitrale'],
+  'RAO': ['Rétrécissement aortique'],
+  'BPCO': ['Bronchopneumopathie chronique obstructive'],
+  'PE': ['Embolie pulmonaire'],
+  'EP': ['Embolie pulmonaire'],
+  'TVP': ['Thrombose veineuse profonde'],
+  'IRC': ['Insuffisance rénale chronique'],
+  'IRA': ['Insuffisance rénale aiguë'],
+  'LES': ['Lupus érythémateux systémique'],
+  'PR': ['Polyarthrite rhumatoïde'],
+  'TB': ['Tuberculose pulmonaire'],
+  'VIH': ['VIH'],
+  'COVID': ['COVID-19'],
+}

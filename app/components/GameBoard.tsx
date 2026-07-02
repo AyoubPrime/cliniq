@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { DIAGNOSES } from '@/lib/diagnoses'
+import { DIAGNOSES, ABBREVIATIONS } from '@/lib/diagnoses'
 
 type Clue = {
   id: number
@@ -60,10 +60,21 @@ function judgeGuess(guess: string, cas: Case): 'correct' | 'proche' | 'faux' {
   const normalizedExact = normalize(cas.diagnosis_exact)
   const normalizedAliases = cas.diagnosis_aliases.map(normalize)
 
+  // Exact match
   if (normalizedGuess === normalizedExact || normalizedAliases.includes(normalizedGuess)) {
     return 'correct'
   }
 
+  // Check abbreviations (case-insensitive)
+  const abbreviations = ABBREVIATIONS[guess.toUpperCase()] || []
+  for (const abbrev of abbreviations) {
+    const normalizedAbbrev = normalize(abbrev)
+    if (normalizedAbbrev === normalizedExact || normalizedAliases.includes(normalizedAbbrev)) {
+      return 'correct'
+    }
+  }
+
+  // Partial word match (3+ char words)
   const guessWords = normalizedGuess.split(' ')
   const exactWords = normalizedExact.split(' ')
   const commonWords = guessWords.filter(w => exactWords.includes(w) && w.length > 3)
@@ -114,8 +125,13 @@ export default function GameBoard({ cas }: { cas: Case }) {
   }, [])
 
   const suggestions = currentGuess.length >= 2
-    ? DIAGNOSES.filter(d => normalize(d).includes(normalize(currentGuess))).slice(0, 5)
-    : []
+  ? [
+      ...DIAGNOSES.filter(d => normalize(d).includes(normalize(currentGuess))),
+      ...Object.keys(ABBREVIATIONS)
+        .filter(abbr => abbr.includes(currentGuess.toUpperCase()))
+        .flatMap(abbr => ABBREVIATIONS[abbr]),
+    ].slice(0, 5)
+  : []
 
   const handleGuess = () => {
     if (!currentGuess.trim() || gameState !== 'playing') return
