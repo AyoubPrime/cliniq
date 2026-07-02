@@ -370,6 +370,7 @@ export default function AdminPage() {
                 <option>Endocrinologie</option>
                 <option>Gynécologie</option>
                 <option>Rhumatologie</option>
+                <option>Orthopédie - Traumatologie</option>
                 <option>Hématologie</option>
                 <option>Urgences</option>
               </select>
