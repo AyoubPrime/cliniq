@@ -146,10 +146,12 @@ export default function GameBoard({ cas }: { cas: Case }) {
     setShowSuggestions(false)
     
     if (result === 'correct') { 
-      setGameState('won')
-      setSubmitting(false)
-      return 
-    }
+  // Reveal ALL clues when correct
+  setRevealedClues(cas.clues)
+  setGameState('won')
+  setSubmitting(false)
+  return 
+}
     
     const nextClueIndex = revealedClues.length
     if (nextClueIndex < cas.clues.length) {
