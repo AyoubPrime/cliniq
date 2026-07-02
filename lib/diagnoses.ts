@@ -146,9 +146,11 @@ export const DIAGNOSES = [
   "Cystite aiguë",
   "Prostatite aiguë",
   "Infection sexuellement transmissible",
-  "Syphilis",
+  "Syphilis (Treponema pallidum)",
   "Gonorrhée (Neisseria gonorrhoeae)",
   "Urétrite gonococcique",
+  "Chlamydiose (Chlamydia trachomatis)",
+  "Herpès génital (Herpes simplex HSV-1/HSV-2)",
 
   // Néphrologie
   "Insuffisance rénale aiguë",
