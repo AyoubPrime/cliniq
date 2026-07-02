@@ -359,4 +359,12 @@ export const ABBREVIATIONS: Record<string, string[]> = {
   'TB': ['Tuberculose pulmonaire'],
   'VIH': ['VIH'],
   'COVID': ['COVID-19'],
+  'FCF': ['Fracture du col du fémur'],
+  'GEU': ['Grossesse extra-utérine'],
+  'LH': ['Lymphome de Hodgkin'],
+  'LNH': ['Lymphome non hodgkinien'],
+  'LAL': ['Leucémie aiguë lymphoblastique'],
+  'LAA': ['Leucémie aiguë myéloblastique'],
+  'LMC':['Leucémie myéloïde chronique'],
+  'LLC': ['Leucémie lymphoïde chronique'],
 }

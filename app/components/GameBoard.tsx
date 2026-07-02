@@ -279,7 +279,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <p className="text-xs text-gray-400 mt-0.5">Cas du jour</p>
         </div>
         <div className="flex items-center gap-3">
-          <a href="/archives" className="text-sm text-gray-500 hover:text-gray-700 transition-colors hidden sm:inline">Archives</a>
+          <a href="/archives" className="text-sm text-gray-500 hover:text-gray-700 transition-colors">Archives</a>
           <div className="flex items-center gap-1.5 bg-orange-50 border border-orange-200 text-orange-600 text-xs font-medium px-3 py-1.5 rounded-full">
             🔥 {streak} jour{streak > 1 ? 's' : ''}
           </div>
