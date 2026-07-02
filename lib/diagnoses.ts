@@ -1,7 +1,8 @@
 export const DIAGNOSES = [
   // Cardiologie
   "Infarctus du myocarde",
-  "Syndrome coronarien aigu",
+  "Syndrome coronarien aigu avec sus décalage ST",
+  "Syndrome coronarien aigu sans sus décalage ST",
   "Angor instable",
   "Angor stable",
   "Fibrillation auriculaire",
@@ -367,4 +368,6 @@ export const ABBREVIATIONS: Record<string, string[]> = {
   'LAA': ['Leucémie aiguë myéloblastique'],
   'LMC':['Leucémie myéloïde chronique'],
   'LLC': ['Leucémie lymphoïde chronique'],
+  'STEMI': ['Syndrome coronarien aigu avec sus décalage ST'],
+  'NSTEMI': ['Syndrome coronarien aigu sans sus décalage ST'],
 }
