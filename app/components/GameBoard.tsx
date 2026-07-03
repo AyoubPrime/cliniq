@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { DIAGNOSES } from '@/lib/diagnoses'
-import SchemaViewer from './SchemaViewer'
-
+import DiagnosticApproach from './SchemaViewer'
 type Clue = {
   id: number
   text: string
@@ -40,10 +39,11 @@ type Case = {
   differentials: Differential[]
   management: string[]
   common_mistakes: string[]
-  schema?: {
-    nodes: Array<{ id: string; label: string; sublabel?: string; type: 'cause' | 'mechanism' | 'consequence' | 'complication' }>
-    edges: Array<{ from: string; to: string }>
-  }
+  diagnostic_approach?: Array<{
+    step: number
+    title: string
+    detail: string
+  }>
 }
 
 type GuessResult = {
@@ -186,8 +186,8 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <p className="text-sm text-gray-600 leading-relaxed">{cas.explanation}</p>
         </div>
 
-         {cas.schema && cas.schema.nodes && cas.schema.nodes.length > 0 && (
-          <SchemaViewer schema={cas.schema as any} />
+         {cas.diagnostic_approach && cas.diagnostic_approach.length > 0 && (
+          <DiagnosticApproach steps={cas.diagnostic_approach} />
         )}
 
         {cas.red_flags?.length > 0 && (
