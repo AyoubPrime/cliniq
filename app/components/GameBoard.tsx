@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { DIAGNOSES, ABBREVIATIONS } from '@/lib/diagnoses'
+import { DIAGNOSES } from '@/lib/diagnoses'
 
 type Clue = {
   id: number
@@ -60,21 +60,10 @@ function judgeGuess(guess: string, cas: Case): 'correct' | 'proche' | 'faux' {
   const normalizedExact = normalize(cas.diagnosis_exact)
   const normalizedAliases = cas.diagnosis_aliases.map(normalize)
 
-  // Exact match
   if (normalizedGuess === normalizedExact || normalizedAliases.includes(normalizedGuess)) {
     return 'correct'
   }
 
-  // Check abbreviations (case-insensitive)
-  const abbreviations = ABBREVIATIONS[guess.toUpperCase()] || []
-  for (const abbrev of abbreviations) {
-    const normalizedAbbrev = normalize(abbrev)
-    if (normalizedAbbrev === normalizedExact || normalizedAliases.includes(normalizedAbbrev)) {
-      return 'correct'
-    }
-  }
-
-  // Partial word match (3+ char words)
   const guessWords = normalizedGuess.split(' ')
   const exactWords = normalizedExact.split(' ')
   const commonWords = guessWords.filter(w => exactWords.includes(w) && w.length > 3)
@@ -126,40 +115,26 @@ export default function GameBoard({ cas }: { cas: Case }) {
   }, [])
 
   const suggestions = currentGuess.length >= 2
-  ? [
-      ...DIAGNOSES.filter(d => normalize(d).includes(normalize(currentGuess))),
-      ...Object.keys(ABBREVIATIONS)
-        .filter(abbr => abbr.includes(currentGuess.toUpperCase()))
-        .flatMap(abbr => ABBREVIATIONS[abbr]),
-    ].slice(0, 5)
-  : []
+    ? DIAGNOSES.filter(d => normalize(d).includes(normalize(currentGuess))).slice(0, 5)
+    : []
 
   const handleGuess = async () => {
     if (!currentGuess.trim() || gameState !== 'playing' || submitting) return
     setSubmitting(true)
-    
+    await new Promise(r => setTimeout(r, 300))
     const result = judgeGuess(currentGuess, cas)
     const newGuess: GuessResult = { text: currentGuess, result }
     const newGuesses = [...guesses, newGuess]
     setGuesses(newGuesses)
     setCurrentGuess('')
     setShowSuggestions(false)
-    
-    if (result === 'correct') { 
-  // Reveal ALL clues when correct
-  setRevealedClues(cas.clues)
-  setGameState('won')
-  setSubmitting(false)
-  return 
-}
-    
+    setSubmitting(false)
+    if (result === 'correct') { setGameState('won'); return }
     const nextClueIndex = revealedClues.length
     if (nextClueIndex < cas.clues.length) {
       setRevealedClues([...revealedClues, cas.clues[nextClueIndex]])
     }
     if (newGuesses.length >= MAX_ATTEMPTS) setGameState('lost')
-    
-    setSubmitting(false)
   }
 
   const handleShare = (won: boolean) => {
@@ -175,15 +150,17 @@ export default function GameBoard({ cas }: { cas: Case }) {
   }
 
   const card = 'bg-white rounded-2xl border border-gray-100 p-5 mb-3'
-  const label = 'text-xs font-medium uppercase tracking-wide text-gray-400 mb-3'
+  const label = 'text-xs font-medium uppercase tracking-wide text-gray-400 mb-3 block'
 
   if (showSummary) {
     return (
       <div className="max-w-lg mx-auto">
         <div className="flex justify-between items-center mb-5">
           <div>
-            <span className="text-xl font-semibold text-gray-900">Clin</span>
-            <span className="text-xl font-semibold text-blue-600">IQ</span>
+            <div>
+              <span className="text-xl font-semibold text-gray-900">Clin</span>
+              <span className="text-xl font-semibold text-blue-600">IQ</span>
+            </div>
             <p className="text-xs text-gray-400 mt-0.5">Résumé du cas</p>
           </div>
           <button
@@ -234,7 +211,9 @@ export default function GameBoard({ cas }: { cas: Case }) {
             <p className={label}>Prise en charge initiale</p>
             {cas.management.map((step, i) => (
               <div key={i} className="flex gap-3 items-start mb-2.5 last:mb-0">
-                <span className="text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-100 rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                <span className="text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-100 rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  {i + 1}
+                </span>
                 <p className="text-sm text-gray-700 leading-relaxed">{step}</p>
               </div>
             ))}
@@ -261,8 +240,8 @@ export default function GameBoard({ cas }: { cas: Case }) {
         )}
 
         <div className="text-center py-6">
-          <p className="text-sm text-gray-400">Revenez demain pour un nouveau cas</p>
-          <a href="/archives" className="text-sm text-blue-600 font-medium mt-2 inline-block">
+          <p className="text-sm text-gray-400 mb-2">Revenez demain pour un nouveau cas</p>
+          <a href="/archives" className="text-sm text-blue-600 font-medium">
             Explorer les archives
           </a>
         </div>
@@ -281,7 +260,9 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <p className="text-xs text-gray-400 mt-0.5">Cas du jour</p>
         </div>
         <div className="flex items-center gap-3">
-          <a href="/archives" className="text-sm text-gray-500 hover:text-gray-700 transition-colors">Archives</a>
+          <a href="/archives" className="text-sm text-gray-500 hover:text-gray-700 transition-colors">
+            Archives
+          </a>
           <div className="flex items-center gap-1.5 bg-orange-50 border border-orange-200 text-orange-600 text-xs font-medium px-3 py-1.5 rounded-full">
             🔥 {streak} jour{streak > 1 ? 's' : ''}
           </div>
@@ -336,7 +317,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
           const revealed = i < revealedClues.length
           return (
             <div key={clue.id} className="flex gap-3 items-start py-2.5 border-b border-gray-50 last:border-0">
-              <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-medium mt-0.5 ${revealed ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-gray-100 text-gray-300 border border-gray-200'}`}>
+              <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-medium mt-0.5 ${revealed ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-gray-50 text-gray-300 border border-gray-100'}`}>
                 {i + 1}
               </div>
               {revealed
@@ -372,10 +353,10 @@ export default function GameBoard({ cas }: { cas: Case }) {
             Trouvé en {guesses.length} tentative{guesses.length > 1 ? 's' : ''}
           </p>
           <div className="flex gap-2 justify-center flex-wrap">
-            <button onClick={() => setShowSummary(true)} className="bg-green-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium touch-none">
+            <button onClick={() => setShowSummary(true)} className="bg-green-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium">
               Voir le résumé
             </button>
-            <button onClick={() => handleShare(true)} className="bg-white text-green-700 border border-green-200 px-5 py-2.5 rounded-xl text-sm font-medium touch-none">
+            <button onClick={() => handleShare(true)} className="bg-white text-green-700 border border-green-200 px-5 py-2.5 rounded-xl text-sm font-medium">
               {copied ? 'Copié !' : 'Partager'}
             </button>
           </div>
@@ -388,10 +369,10 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <p className="text-sm text-red-600 mb-1">Le diagnostic était :</p>
           <p className="text-base font-semibold text-red-900 mb-4">{cas.diagnosis_exact}</p>
           <div className="flex gap-2 justify-center flex-wrap">
-            <button onClick={() => setShowSummary(true)} className="bg-red-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium touch-none">
+            <button onClick={() => setShowSummary(true)} className="bg-red-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium">
               Voir le résumé
             </button>
-            <button onClick={() => handleShare(false)} className="bg-white text-red-700 border border-red-200 px-5 py-2.5 rounded-xl text-sm font-medium touch-none">
+            <button onClick={() => handleShare(false)} className="bg-white text-red-700 border border-red-200 px-5 py-2.5 rounded-xl text-sm font-medium">
               {copied ? 'Copié !' : 'Partager'}
             </button>
           </div>
@@ -419,19 +400,17 @@ export default function GameBoard({ cas }: { cas: Case }) {
               <button
                 onClick={handleGuess}
                 disabled={submitting}
-                className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-5 py-3.5 rounded-xl text-sm font-medium transition-colors disabled:opacity-60 flex items-center justify-center gap-2 min-w-[100px] touch-none"
+                className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-5 py-3.5 rounded-xl text-sm font-medium transition-colors disabled:opacity-60 flex items-center justify-center gap-2 min-w-[100px]"
               >
                 {submitting ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  </>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 ) : (
                   'Valider'
                 )}
               </button>
             </div>
             {showSuggestions && suggestions.length > 0 && (
-              <div className="absolute z-10 w-full bottom-full mb-1 bg-white border border-gray-200 rounded-xl shadow-md overflow-hidden">
+              <div className="absolute z-10 w-full bottom-full mb-1 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
                 {suggestions.map((s, i) => {
                   const alreadyGuessed = guesses.some(g => normalize(g.text) === normalize(s))
                   return (
@@ -454,7 +433,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
           </div>
           <div className="flex justify-between items-center mt-4">
             <p className="text-xs text-gray-500">
-              {guesses.length > 0 && guesses.length >= 3 && guesses[guesses.length - 1].result !== 'correct' && (
+              {guesses.length >= 3 && guesses[guesses.length - 1].result !== 'correct' && (
                 <span>💡 {cas.wrong_answer_hint}</span>
               )}
             </p>
