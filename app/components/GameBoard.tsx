@@ -41,7 +41,7 @@ type Case = {
   management: string[]
   common_mistakes: string[]
   schema?: {
-    nodes: Array<{ id: string; label: string; sublabel?: string; type: string }>
+    nodes: Array<{ id: string; label: string; sublabel?: string; type: 'cause' | 'mechanism' | 'consequence' | 'complication' }>
     edges: Array<{ from: string; to: string }>
   }
 }
@@ -187,7 +187,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
         </div>
 
         {cas.schema && cas.schema.nodes && cas.schema.nodes.length > 0 && (
-          <SchemaViewer schema={cas.schema} />
+          <SchemaViewer schema={cas.schema as any} />
         )}
 
         {cas.red_flags?.length > 0 && (
