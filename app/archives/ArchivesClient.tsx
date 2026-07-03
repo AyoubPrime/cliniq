@@ -33,12 +33,15 @@ export default function ArchivesClient({ cases }: { cases: Case[] }) {
 
   return (
     <div className="max-w-lg mx-auto">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-5">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">ClinIQ</h1>
-          <p className="text-sm text-gray-400">Archives — {filtered.length} cas</p>
+          <div>
+            <span className="text-xl font-semibold text-gray-900">Clin</span>
+            <span className="text-xl font-semibold text-blue-600">IQ</span>
+          </div>
+          <p className="text-xs text-gray-400 mt-0.5">Archives — {filtered.length} cas</p>
         </div>
-        <Link href="/" className="text-sm text-blue-600 font-medium">
+        <Link href="/" className="text-sm text-gray-500 hover:text-gray-700 transition-colors">
           Cas du jour
         </Link>
       </div>
@@ -51,7 +54,7 @@ export default function ArchivesClient({ cases }: { cases: Case[] }) {
             className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
               selectedSpecialty === s
                 ? 'bg-blue-600 text-white border-blue-600'
-                : 'bg-white text-gray-600 border-gray-200 hover:border-blue-300'
+                : 'bg-white text-gray-500 border-gray-200 hover:border-blue-300'
             }`}
           >
             {s}
@@ -78,7 +81,7 @@ export default function ArchivesClient({ cases }: { cases: Case[] }) {
                       {cas.sex === 'F' ? 'Femme' : 'Homme'}, {cas.age} {cas.age_unit} — {cas.setting}
                     </p>
                   </div>
-                  <span className={`text-xs font-medium px-2 py-0.5 rounded-full border flex-shrink-0 ${diff.class}`}>
+                  <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full border flex-shrink-0 ${diff.class}`}>
                     {diff.text}
                   </span>
                 </div>
