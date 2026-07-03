@@ -276,7 +276,7 @@ export const DIAGNOSES = [
  "Otite moyenne aiguë",
  "Coqueluche",
  "Rougeole",
- "Ethmoidite",
+ "Ethmoidite aiguë",
  "Varicelle",
  "Méningite de l'enfant",
  "Invagination intestinale",
