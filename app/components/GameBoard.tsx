@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { DIAGNOSES } from '@/lib/diagnoses'
+import SchemaViewer from './SchemaViewer'
 
 type Clue = {
   id: number
@@ -39,6 +40,10 @@ type Case = {
   differentials: Differential[]
   management: string[]
   common_mistakes: string[]
+  schema?: {
+    nodes: Array<{ id: string; label: string; sublabel?: string; type: string }>
+    edges: Array<{ from: string; to: string }>
+  }
 }
 
 type GuessResult = {
@@ -129,7 +134,11 @@ export default function GameBoard({ cas }: { cas: Case }) {
     setCurrentGuess('')
     setShowSuggestions(false)
     setSubmitting(false)
-    if (result === 'correct') { setGameState('won'); return }
+    if (result === 'correct') {
+      setRevealedClues(cas.clues)
+      setGameState('won')
+      return
+    }
     const nextClueIndex = revealedClues.length
     if (nextClueIndex < cas.clues.length) {
       setRevealedClues([...revealedClues, cas.clues[nextClueIndex]])
@@ -176,6 +185,10 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <p className="text-xl font-semibold text-gray-900 mb-3">{cas.diagnosis_exact}</p>
           <p className="text-sm text-gray-600 leading-relaxed">{cas.explanation}</p>
         </div>
+
+        {cas.schema && cas.schema.nodes && cas.schema.nodes.length > 0 && (
+          <SchemaViewer schema={cas.schema} />
+        )}
 
         {cas.red_flags?.length > 0 && (
           <div className={card}>
