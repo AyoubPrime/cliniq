@@ -337,6 +337,7 @@ export const DIAGNOSES = [
 "Spondylodiscite",
 "Hernie discale lombaire",
 "Lombosciatique",
+"Sarcome d'Ewing",
 "Sciatique",
 ]
 // Common abbreviations and aliases for diagnoses
