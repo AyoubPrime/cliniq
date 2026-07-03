@@ -186,7 +186,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <p className="text-sm text-gray-600 leading-relaxed">{cas.explanation}</p>
         </div>
 
-        {cas.schema && cas.schema.nodes && cas.schema.nodes.length > 0 && (
+         {cas.schema && cas.schema.nodes && cas.schema.nodes.length > 0 && (
           <SchemaViewer schema={cas.schema as any} />
         )}
 
