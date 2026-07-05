@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { DIAGNOSES } from '@/lib/diagnoses'
+import { DIAGNOSES, ABBREVIATIONS } from '@/lib/diagnoses'
 import DiagnosticApproach from './SchemaViewer'
 type Clue = {
   id: number
@@ -120,9 +120,18 @@ export default function GameBoard({ cas }: { cas: Case }) {
   }, [])
 
   const suggestions = currentGuess.length >= 2
-    ? DIAGNOSES.filter(d => normalize(d).includes(normalize(currentGuess))).slice(0, 5)
+    ? (() => {
+        const upper = currentGuess.toUpperCase().trim()
+        const abbrevMatches = ABBREVIATIONS[upper]
+          ? ABBREVIATIONS[upper]
+          : []
+        const textMatches = DIAGNOSES.filter(d =>
+          normalize(d).includes(normalize(currentGuess)) &&
+          !abbrevMatches.includes(d)
+        )
+        return [...abbrevMatches, ...textMatches].slice(0, 6)
+      })()
     : []
-
   const handleGuess = async () => {
     if (!currentGuess.trim() || gameState !== 'playing' || submitting) return
     setSubmitting(true)
