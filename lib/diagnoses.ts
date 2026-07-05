@@ -311,6 +311,7 @@ export const DIAGNOSES = [
 "Cancer du col de l'utérus",
 "Cancer de l'endomètre",
 "Cancer de l'ovaire",
+
 // Orthopédie - Traumatologie
 "Fracture du col du fémur",
 "Fracture de la diaphyse fémorale",
@@ -339,6 +340,34 @@ export const DIAGNOSES = [
 "Lombosciatique",
 "Sarcome d'Ewing",
 "Sciatique",
+
+// Ophtalmologie
+"Conjonctivite virale",
+"Conjonctivite bactérienne",
+"Conjonctivite allergique",
+"Kératite infectieuse",
+"Ulcère cornéen",
+"Abrasion cornéenne",
+"Corps étranger cornéen",
+"Glaucome aigu par fermeture de l'angle",
+"Uvéite antérieure",
+"Hémorragie sous-conjonctivale",
+"Occlusion de l'artère centrale de la rétine",
+"Occlusion de la veine centrale de la rétine",
+"Décollement de rétine",
+"Névrite optique",
+"Neuropathie optique ischémique antérieure",
+"Cellulite orbitaire",
+"Cellulite préseptale",
+"Endophtalmie",
+"Chalazion",
+"Orgelet",
+"Paralysie du nerf oculomoteur (III)",
+"Paralysie du nerf trochléaire (IV)",
+"Paralysie du nerf abducens (VI)",
+"Rétinopathie diabétique",
+"Dégénérescence maculaire liée à l'âge",
+"Cataracte",
 ]
 // Common abbreviations and aliases for diagnoses
 export const ABBREVIATIONS: Record<string, string[]> = {
