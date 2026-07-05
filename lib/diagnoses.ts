@@ -368,6 +368,7 @@ export const DIAGNOSES = [
 "Rétinopathie diabétique",
 "Dégénérescence maculaire liée à l'âge",
 "Cataracte",
+"kérato-conjonctivite (Trachome)"
 ]
 // Common abbreviations and aliases for diagnoses
 export const ABBREVIATIONS: Record<string, string[]> = {
