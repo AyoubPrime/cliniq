@@ -401,4 +401,5 @@ export const ABBREVIATIONS: Record<string, string[]> = {
   'LLC': ['Leucémie lymphoïde chronique'],
   'STEMI': ['Syndrome coronarien aigu avec sus décalage ST'],
   'NSTEMI': ['Syndrome coronarien aigu sans sus décalage ST'],
+  'GAFA': ['galuacome aigue par fermeture de l-angle'],
 }
