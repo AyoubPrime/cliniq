@@ -334,21 +334,85 @@ export default function GameBoard({ cas }: { cas: Case }) {
       </div>
 
       <div className={card}>
-        <p className={label}>Indices — {revealedClues.length}/{cas.clues.length}</p>
-        {cas.clues.map((clue, i) => {
-          const revealed = i < revealedClues.length
-          return (
-            <div key={clue.id} className="flex gap-3 items-start py-2.5 border-b border-gray-50 last:border-0">
-              <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-medium mt-0.5 ${revealed ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-gray-50 text-gray-300 border border-gray-100'}`}>
-                {i + 1}
+        <p className={label}>Raisonnement — {revealedClues.length}/{cas.clues.length}</p>
+        <div className="relative">
+          {cas.clues.map((clue, i) => {
+            const revealed = i < revealedClues.length
+            const isLast = i === cas.clues.length - 1
+            return (
+              <div
+                key={clue.id}
+                className="relative flex gap-3 items-start"
+                style={{
+                  opacity: revealed ? 1 : 0.35,
+                  transform: revealed ? 'translateY(0)' : 'translateY(4px)',
+                  transition: revealed ? 'opacity 0.4s ease, transform 0.4s ease' : 'none',
+                }}
+              >
+                {/* Vertical line */}
+                {!isLast && (
+                  <div
+                    className="absolute left-[9px] top-[22px] w-px"
+                    style={{
+                      height: 'calc(100% + 4px)',
+                      background: revealed ? '#BFDBFE' : '#F3F4F6',
+                      transition: 'background 0.4s ease',
+                    }}
+                  />
+                )}
+
+                {/* Node */}
+                <div className="relative z-10 flex-shrink-0 mt-1">
+                  <div
+                    className={`w-[18px] h-[18px] rounded-full flex items-center justify-center text-[10px] font-semibold border transition-all duration-400 ${
+                      revealed
+                        ? 'bg-blue-600 border-blue-600 text-white'
+                        : 'bg-white border-gray-200 text-gray-300'
+                    }`}
+                  >
+                    {i + 1}
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="pb-4 flex-1 min-w-0">
+                  {revealed ? (
+                    <p className="text-sm text-gray-700 leading-relaxed">{clue.text}</p>
+                  ) : (
+                    <p className="text-sm text-gray-300 italic">
+                      {i === revealedClues.length
+                        ? 'Débloquez avec votre prochaine tentative'
+                        : '···'}
+                    </p>
+                  )}
+                </div>
               </div>
-              {revealed
-                ? <p className="text-sm text-gray-700 leading-relaxed">{clue.text}</p>
-                : <p className="text-sm text-gray-300 italic">Débloquez après votre prochaine tentative</p>
-              }
+            )
+          })}
+
+          {/* Final diagnosis node — only after game ends */}
+          {(gameState === 'won' || gameState === 'lost') && (
+            <div
+              className="relative flex gap-3 items-start"
+              style={{ opacity: 1, transform: 'translateY(0)', transition: 'opacity 0.4s ease' }}
+            >
+              <div className="relative z-10 flex-shrink-0 mt-1">
+                <div className={`w-[18px] h-[18px] rounded-full flex items-center justify-center border-2 transition-all duration-400 ${
+                  gameState === 'won'
+                    ? 'bg-green-600 border-green-600'
+                    : 'bg-red-500 border-red-500'
+                }`}>
+                  <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                </div>
+              </div>
+              <div className="pb-2 flex-1">
+                <p className={`text-sm font-medium ${gameState === 'won' ? 'text-green-700' : 'text-red-600'}`}>
+                  {gameState === 'won' ? cas.diagnosis_exact : `Diagnostic : ${cas.diagnosis_exact}`}
+                </p>
+              </div>
             </div>
-          )
-        })}
+          )}
+        </div>
       </div>
 
       {guesses.length > 0 && (
