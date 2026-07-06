@@ -58,10 +58,12 @@ const sectionTitle = "text-sm font-medium text-gray-900 mb-4"
 
 const specialties = ['Cardiologie','Neurologie','Pneumologie','Gastroentérologie','Infectiologie','Néphrologie','Endocrinologie','Rhumatologie','Hématologie','Urgences','Réanimation','Chirurgie','Pédiatrie','Gynécologie','Dermatologie','Orthopédie','Psychiatrie','Ophtalmologie','ORL']
 
-function CaseForm({ form, update, isEdit }: {
+function CaseForm({ form, update, isEdit, idExists, checkingId }: {
   form: FormType
   update: (field: string, value: string | number) => void
   isEdit: boolean
+  idExists?: boolean
+  checkingId?: boolean
 }) {
   return (
     <div>
@@ -72,6 +74,8 @@ function CaseForm({ form, update, isEdit }: {
             <div>
               <label className={labelClass}>ID unique</label>
               <input className={inputClass} placeholder="ex: pneumo-001" value={form.id} onChange={e => update('id', e.target.value)} />
+              {checkingId && <p className="text-xs text-gray-300 mt-1">Vérification...</p>}
+              {idExists && !checkingId && <p className="text-xs text-red-500 mt-1">ID déjà utilisé</p>}
             </div>
             <div>
               <label className={labelClass}>Date de publication</label>
@@ -289,7 +293,13 @@ export default function AdminPage() {
     setIdExists(!!data)
     setCheckingId(false)
   }
-
+useEffect(() => {
+  if (tab !== 'create' || editingId) return
+  const timeout = setTimeout(() => {
+    checkId(form.id)
+  }, 500)
+  return () => clearTimeout(timeout)
+}, [form.id, tab, editingId])
   const loadCases = async () => {
     const { data } = await supabase
       .from('cases')
@@ -460,15 +470,13 @@ export default function AdminPage() {
 
         {tab === 'create' && (
           <div>
-            <CaseForm form={form} update={update} isEdit={false} />
-            {idExists && <p className="text-xs text-red-500 mb-2">ID déjà utilisé</p>}
-            {checkingId && <p className="text-xs text-gray-300 mb-2">Vérification ID...</p>}
+            <CaseForm form={form} update={update} isEdit={false} idExists={idExists} checkingId={checkingId} />
             {message && (
               <div className={`p-4 rounded-xl mb-4 text-sm font-medium ${message.includes('Erreur') ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
                 {message}
               </div>
             )}
-            <button onClick={handleCreate} disabled={loading} className="w-full bg-blue-600 text-white py-3.5 rounded-xl text-sm font-medium disabled:opacity-50 mb-8">
+            <button onClick={handleCreate} disabled={loading || idExists || checkingId} className="w-full bg-blue-600 text-white py-3.5 rounded-xl text-sm font-medium disabled:opacity-50 mb-8">
               {loading ? 'Publication en cours...' : 'Publier le cas'}
             </button>
           </div>
