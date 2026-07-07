@@ -231,7 +231,7 @@ export const DIAGNOSES = [
   "Lymphome non hodgkinien",
   "Myélome multiple",
   "Purpura thrombopénique immunologique",
-  "Coagulation intravasculaire disséminée",
+  "Coagulation intravasculaire disséminée (CIVD)",
   "Hémophilie",
   "Thrombocytémie essentielle",
   "Polyglobulie de Vaquez",
@@ -402,4 +402,7 @@ export const ABBREVIATIONS: Record<string, string[]> = {
   'STEMI': ['Syndrome coronarien aigu avec sus décalage ST'],
   'NSTEMI': ['Syndrome coronarien aigu sans sus décalage ST'],
   'GAFA': ['galuacome aigue par fermeture de l-angle'],
+  'Heat stroke': ['Coup de chaleur'],
+  'PTI':['Purpura thrombopénique immunologique'],
+  'CIVD': ['Coagulation intravasculaire disséminée'],
 }
