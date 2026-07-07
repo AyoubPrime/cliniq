@@ -274,7 +274,7 @@ export const DIAGNOSES = [
  "Déshydratation aiguë",
  "Pneumonie de l'enfant",
  "Otite moyenne aiguë",
- "Coqueluche",
+ "Coqueluche (Bordetella pertussis)",
  "Rougeole",
  "Ethmoidite aiguë",
  "Varicelle",
