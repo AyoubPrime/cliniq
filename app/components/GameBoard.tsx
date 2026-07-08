@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { DIAGNOSES, ABBREVIATIONS } from '@/lib/diagnoses'
+import AuthButton from './AuthButton'
 import DiagnosticApproach from './SchemaViewer'
 type Clue = {
   id: number
@@ -288,6 +289,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <div className="flex items-center gap-1.5 bg-orange-50 border border-orange-200 text-orange-600 text-xs font-medium px-3 py-1.5 rounded-full">
             🔥 {streak} jour{streak > 1 ? 's' : ''}
           </div>
+          <AuthButton />
         </div>
       </div>
 
