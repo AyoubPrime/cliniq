@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { DIAGNOSES, ABBREVIATIONS } from '@/lib/diagnoses'
+import { supabase } from '@/lib/supabase'
 import AuthButton from './AuthButton'
 import DiagnosticApproach from './SchemaViewer'
 type Clue = {
@@ -51,7 +52,58 @@ type GuessResult = {
   text: string
   result: 'correct' | 'proche' | 'faux'
 }
+function SaveProgressPrompt({ streak }: { streak: number }) {
+  const [user, setUser] = useState<boolean | null>(null)
+  const [dismissed, setDismissed] = useState(false)
 
+  useEffect(() => {
+    const { createClient } = require('@supabase/supabase-js')
+    const client = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+    client.auth.getUser().then(({ data }: any) => {
+      setUser(!!data.user)
+    })
+  }, [])
+
+  if (user === null || user === true || dismissed) return null
+
+  return (
+    <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5 mb-3">
+      <p className="text-sm font-medium text-blue-900 mb-1">
+        Sauvegardez votre progression
+      </p>
+      <p className="text-xs text-blue-600 mb-4 leading-relaxed">
+        Créez un compte pour ne jamais perdre votre série de {streak} jour{streak > 1 ? 's' : ''} et suivre vos progrès sur tous vos appareils.
+      </p>
+      <div className="flex gap-2">
+        <button
+          onClick={async () => {
+            const { createClient } = require('@supabase/supabase-js')
+            const client = createClient(
+              process.env.NEXT_PUBLIC_SUPABASE_URL!,
+              process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+            )
+            await client.auth.signInWithOAuth({
+              provider: 'google',
+              options: { redirectTo: `${window.location.origin}/auth/callback` }
+            })
+          }}
+          className="flex-1 bg-blue-600 text-white py-2.5 rounded-xl text-sm font-medium"
+        >
+          Continuer avec Google
+        </button>
+        <button
+          onClick={() => setDismissed(true)}
+          className="px-4 py-2.5 rounded-xl text-sm text-blue-400 hover:text-blue-600 transition-colors"
+        >
+          Plus tard
+        </button>
+      </div>
+    </div>
+  )
+}
 function normalize(text: string) {
   return text
     .toLowerCase()
@@ -118,6 +170,12 @@ export default function GameBoard({ cas }: { cas: Case }) {
     localStorage.setItem('lastVisitDate', today)
     localStorage.setItem('currentStreak', newStreak.toString())
     setStreak(newStreak)
+    supabase.from('events').insert({
+      user_id: null,
+      event_type: 'case_started',
+      case_id: (cas as any).id || null,
+      metadata: null,
+    }).then(() => {})
   }, [])
 
   const suggestions = currentGuess.length >= 2
@@ -133,6 +191,18 @@ export default function GameBoard({ cas }: { cas: Case }) {
         return [...abbrevMatches, ...textMatches].slice(0, 6)
       })()
     : []
+  const trackEvent = async (eventType: string, metadata?: object) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      await supabase.from('events').insert({
+        user_id: user?.id || null,
+        event_type: eventType,
+        case_id: (cas as any).id || null,
+        metadata: metadata || null,
+      })
+    } catch (e) {}
+  }
+
   const handleGuess = async () => {
     if (!currentGuess.trim() || gameState !== 'playing' || submitting) return
     setSubmitting(true)
@@ -144,16 +214,33 @@ export default function GameBoard({ cas }: { cas: Case }) {
     setCurrentGuess('')
     setShowSuggestions(false)
     setSubmitting(false)
+
+    await trackEvent('guess_submitted', {
+      guess: currentGuess,
+      result,
+      attempt_number: newGuesses.length,
+    })
+
     if (result === 'correct') {
       setRevealedClues(cas.clues)
       setGameState('won')
+      await trackEvent('case_completed', {
+        result: 'won',
+        attempts: newGuesses.length,
+      })
       return
     }
     const nextClueIndex = revealedClues.length
     if (nextClueIndex < cas.clues.length) {
       setRevealedClues([...revealedClues, cas.clues[nextClueIndex]])
     }
-    if (newGuesses.length >= MAX_ATTEMPTS) setGameState('lost')
+    if (newGuesses.length >= MAX_ATTEMPTS) {
+      setGameState('lost')
+      await trackEvent('case_completed', {
+        result: 'lost',
+        attempts: newGuesses.length,
+      })
+    }
   }
 
   const handleShare = (won: boolean) => {
@@ -268,6 +355,8 @@ export default function GameBoard({ cas }: { cas: Case }) {
             Explorer les archives
           </a>
         </div>
+
+        <SaveProgressPrompt streak={streak} />
       </div>
     )
   }
