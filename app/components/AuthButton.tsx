@@ -17,8 +17,13 @@ export default function AuthButton() {
 
   useEffect(() => {
     checkUser()
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       checkUser()
+      if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+        if (window.location.hash.includes('access_token')) {
+          window.history.replaceState(null, '', window.location.pathname)
+        }
+      }
     })
     return () => subscription.unsubscribe()
   }, [])
@@ -66,7 +71,7 @@ export default function AuthButton() {
     await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: window.location.origin,
       },
     })
   }

@@ -79,7 +79,7 @@ function SaveProgressPrompt({ streak }: { streak: number }) {
           onClick={async () => {
             await supabase.auth.signInWithOAuth({
               provider: 'google',
-              options: { redirectTo: `${window.location.origin}/auth/callback` }
+              options: { redirectTo: window.location.origin }
             })
           }}
           className="flex-1 bg-[#0066CC] text-white py-2.5 rounded-xl text-sm font-medium hover:bg-[#0055AA] transition-colors"

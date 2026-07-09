@@ -90,7 +90,7 @@ export default function ProfilePage() {
             <button
               onClick={() => supabase.auth.signInWithOAuth({
                 provider: 'google',
-                options: { redirectTo: `${window.location.origin}/auth/callback` },
+                options: { redirectTo: window.location.origin },
               })}
               className="inline-flex items-center gap-2 bg-[#0066CC] text-white text-sm font-medium px-6 py-2.5 rounded-xl hover:bg-[#0055AA] transition-colors"
             >
