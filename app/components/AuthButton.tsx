@@ -31,8 +31,9 @@ export default function AuthButton() {
         .eq('id', user.id)
         .single()
 
+      const localStreak = parseInt(localStorage.getItem('currentStreak') || '0')
+
       if (data) {
-        const localStreak = parseInt(localStorage.getItem('currentStreak') || '0')
         if (localStreak > (data.streak || 0)) {
           await supabase
             .from('profiles')
@@ -42,6 +43,17 @@ export default function AuthButton() {
         } else {
           setProfile(data)
         }
+      } else {
+        // First login — create the profile from Google account data
+        const display_name = user.user_metadata?.full_name || user.email || 'Utilisateur'
+        const avatar_url = user.user_metadata?.avatar_url || ''
+        await supabase.from('profiles').upsert({
+          id: user.id,
+          display_name,
+          avatar_url,
+          streak: localStreak,
+        })
+        setProfile({ display_name, avatar_url, streak: localStreak })
       }
     } else {
       setProfile(null)
@@ -50,13 +62,15 @@ export default function AuthButton() {
   }
 
   const signInWithGoogle = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      }
-    })
-  }
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `${window.location.origin}/auth/callback`,
+    },
+  })
+
+  console.log("OAuth error:", error)
+}
 
   const signOut = async () => {
     await supabase.auth.signOut()
