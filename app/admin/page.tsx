@@ -301,12 +301,16 @@ useEffect(() => {
   return () => clearTimeout(timeout)
 }, [form.id, tab, editingId])
   const loadCases = async () => {
-    const { data } = await supabase
-      .from('cases')
-      .select('id, title, specialty, difficulty, publish_date, status')
-      .order('publish_date', { ascending: false })
-    if (data) setCases(data)
-  }
+  const { data, error } = await supabase
+    .from('cases')
+    .select('id, title, specialty, difficulty, publish_date, status')
+    .order('publish_date', { ascending: false })
+
+  console.log('Cases:', data)
+  console.log('Error:', error)
+
+  if (data) setCases(data)
+}
 
   const loadCase = async (id: string) => {
     const { data } = await supabase.from('cases').select('*').eq('id', id).single()
