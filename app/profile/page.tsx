@@ -71,7 +71,7 @@ export default function ProfilePage() {
     ])
 
     setProfile(profileRes.data)
-    setSessions((sessionsRes.data || []) as Session[])
+    setSessions((sessionsRes.data || []) as unknown as Session[])
     setLoading(false)
   }
 
