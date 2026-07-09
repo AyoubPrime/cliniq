@@ -301,13 +301,10 @@ useEffect(() => {
   return () => clearTimeout(timeout)
 }, [form.id, tab, editingId])
   const loadCases = async () => {
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('cases')
     .select('id, title, specialty, difficulty, publish_date, status')
     .order('publish_date', { ascending: false })
-
-  console.log('Cases:', data)
-  console.log('Error:', error)
 
   if (data) setCases(data)
 }
@@ -439,9 +436,9 @@ useEffect(() => {
             placeholder="Mot de passe..."
             value={password}
             onChange={e => setPassword(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && setAuthenticated(password === 'cliniq2026')}
+            onKeyDown={e => e.key === 'Enter' && setAuthenticated(password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD)}
           />
-          <button onClick={() => setAuthenticated(password === 'cliniq2026')} className="w-full bg-blue-600 text-white py-2.5 rounded-xl text-sm font-medium">
+          <button onClick={() => setAuthenticated(password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD)} className="w-full bg-blue-600 text-white py-2.5 rounded-xl text-sm font-medium">
             Entrer
           </button>
         </div>
@@ -458,6 +455,15 @@ useEffect(() => {
             <span className="text-xl font-semibold text-blue-600">IQ</span>
             <p className="text-sm text-gray-400 mt-0.5">Admin</p>
           </div>
+          <a
+            href="/admin/analytics"
+            className="flex items-center gap-1.5 text-xs font-medium text-[#6E6E73] border border-gray-200 rounded-xl px-3.5 py-2 hover:border-blue-300 hover:text-blue-600 transition-all bg-white"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/>
+            </svg>
+            Analytiques
+          </a>
         </div>
 
         <div className="flex gap-2 mb-6">

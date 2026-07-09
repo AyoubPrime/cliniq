@@ -22,9 +22,9 @@ export default async function ArchiveCasePage({ params }: { params: Promise<{ id
   if (!cas) notFound()
 
   return (
-    <main className="min-h-screen bg-gray-50 py-8 px-4">
+    <main className="min-h-screen py-8 px-4">
       <div className="max-w-lg mx-auto mb-4">
-        <Link href="/archives" className="text-sm text-blue-600 font-medium">
+        <Link href="/archives" className="text-xs font-semibold text-[#0066CC] hover:text-[#0055AA] transition-colors">
           ← Archives
         </Link>
       </div>

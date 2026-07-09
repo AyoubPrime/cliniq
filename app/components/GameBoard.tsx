@@ -5,6 +5,7 @@ import { DIAGNOSES, ABBREVIATIONS } from '@/lib/diagnoses'
 import { supabase } from '@/lib/supabase'
 import AuthButton from './AuthButton'
 import DiagnosticApproach from './SchemaViewer'
+
 type Clue = {
   id: number
   text: string
@@ -52,17 +53,13 @@ type GuessResult = {
   text: string
   result: 'correct' | 'proche' | 'faux'
 }
+
 function SaveProgressPrompt({ streak }: { streak: number }) {
   const [user, setUser] = useState<boolean | null>(null)
   const [dismissed, setDismissed] = useState(false)
 
   useEffect(() => {
-    const { createClient } = require('@supabase/supabase-js')
-    const client = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
-    client.auth.getUser().then(({ data }: any) => {
+    supabase.auth.getUser().then(({ data }) => {
       setUser(!!data.user)
     })
   }, [])
@@ -70,33 +67,28 @@ function SaveProgressPrompt({ streak }: { streak: number }) {
   if (user === null || user === true || dismissed) return null
 
   return (
-    <div className="bg-blue-50 border border-blue-100 rounded-2xl p-5 mb-3">
-      <p className="text-sm font-medium text-blue-900 mb-1">
+    <div className="bg-white rounded-2xl border border-[#E8E8ED] p-5 mb-3">
+      <p className="text-sm font-semibold text-[#1D1D1F] mb-1">
         Sauvegardez votre progression
       </p>
-      <p className="text-xs text-blue-600 mb-4 leading-relaxed">
+      <p className="text-xs text-[#6E6E73] mb-4 leading-relaxed">
         Créez un compte pour ne jamais perdre votre série de {streak} jour{streak > 1 ? 's' : ''} et suivre vos progrès sur tous vos appareils.
       </p>
       <div className="flex gap-2">
         <button
           onClick={async () => {
-            const { createClient } = require('@supabase/supabase-js')
-            const client = createClient(
-              process.env.NEXT_PUBLIC_SUPABASE_URL!,
-              process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-            )
-            await client.auth.signInWithOAuth({
+            await supabase.auth.signInWithOAuth({
               provider: 'google',
               options: { redirectTo: `${window.location.origin}/auth/callback` }
             })
           }}
-          className="flex-1 bg-blue-600 text-white py-2.5 rounded-xl text-sm font-medium"
+          className="flex-1 bg-[#0066CC] text-white py-2.5 rounded-xl text-sm font-medium hover:bg-[#0055AA] transition-colors"
         >
           Continuer avec Google
         </button>
         <button
           onClick={() => setDismissed(true)}
-          className="px-4 py-2.5 rounded-xl text-sm text-blue-400 hover:text-blue-600 transition-colors"
+          className="px-4 py-2.5 rounded-xl text-sm text-[#AEAEB2] hover:text-[#6E6E73] transition-colors"
         >
           Plus tard
         </button>
@@ -104,6 +96,7 @@ function SaveProgressPrompt({ streak }: { streak: number }) {
     </div>
   )
 }
+
 function normalize(text: string) {
   return text
     .toLowerCase()
@@ -131,16 +124,16 @@ function judgeGuess(guess: string, cas: Case): 'correct' | 'proche' | 'faux' {
 }
 
 const urgencyColor: Record<string, string> = {
-  'Urgence vitale': 'bg-red-50 text-red-700 border-red-200',
-  'Urgence différée': 'bg-orange-50 text-orange-700 border-orange-200',
-  'Semi-urgent': 'bg-yellow-50 text-yellow-700 border-yellow-200',
-  'Non urgent': 'bg-green-50 text-green-700 border-green-200',
+  'Urgence vitale':    'bg-[#FEF2F2] text-[#B91C1C] border-[#FECACA]',
+  'Urgence différée':  'bg-[#FFF7ED] text-[#C2410C] border-[#FED7AA]',
+  'Semi-urgent':       'bg-[#FFFBEB] text-[#92400E] border-[#FDE68A]',
+  'Non urgent':        'bg-[#F0FDF4] text-[#166534] border-[#BBF7D0]',
 }
 
-const resultStyle: Record<string, { label: string; style: string }> = {
-  correct: { label: 'Correct', style: 'bg-green-50 text-green-700 border-green-200' },
-  proche:  { label: 'Proche',  style: 'bg-yellow-50 text-yellow-700 border-yellow-200' },
-  faux:    { label: 'Faux',    style: 'bg-red-50 text-red-700 border-red-200' },
+const resultConfig: Record<string, { label: string; icon: string; style: string }> = {
+  correct: { label: 'Correct', icon: '✓', style: 'bg-[#F0FDF4] text-[#166534] border-[#BBF7D0]' },
+  proche:  { label: 'Proche',  icon: '≈', style: 'bg-[#FFFBEB] text-[#92400E] border-[#FDE68A]' },
+  faux:    { label: 'Faux',    icon: '×', style: 'bg-[#FEF2F2] text-[#B91C1C] border-[#FECACA]' },
 }
 
 export default function GameBoard({ cas }: { cas: Case }) {
@@ -181,16 +174,14 @@ export default function GameBoard({ cas }: { cas: Case }) {
   const suggestions = currentGuess.length >= 2
     ? (() => {
         const upper = currentGuess.toUpperCase().trim()
-        const abbrevMatches = ABBREVIATIONS[upper]
-          ? ABBREVIATIONS[upper]
-          : []
+        const abbrevMatches = ABBREVIATIONS[upper] ? ABBREVIATIONS[upper] : []
         const textMatches = DIAGNOSES.filter(d =>
-          normalize(d).includes(normalize(currentGuess)) &&
-          !abbrevMatches.includes(d)
+          normalize(d).includes(normalize(currentGuess)) && !abbrevMatches.includes(d)
         )
         return [...abbrevMatches, ...textMatches].slice(0, 6)
       })()
     : []
+
   const trackEvent = async (eventType: string, metadata?: object) => {
     try {
       const { data: { user } } = await supabase.auth.getUser()
@@ -200,6 +191,35 @@ export default function GameBoard({ cas }: { cas: Case }) {
         case_id: (cas as any).id || null,
         metadata: metadata || null,
       })
+    } catch (e) {}
+  }
+
+  const saveGameSession = async (result: 'won' | 'lost', attempts: number) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const caseId = (cas as any).id || null
+      const today = new Date().toISOString().split('T')[0]
+
+      await supabase.from('game_sessions').insert({
+        user_id: user.id,
+        case_id: caseId,
+        attempts,
+        result,
+      })
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('total_cases_played')
+        .eq('id', user.id)
+        .single()
+
+      await supabase.from('profiles').update({
+        last_played: today,
+        total_cases_played: (profile?.total_cases_played || 0) + 1,
+      }).eq('id', user.id)
+
     } catch (e) {}
   }
 
@@ -224,10 +244,8 @@ export default function GameBoard({ cas }: { cas: Case }) {
     if (result === 'correct') {
       setRevealedClues(cas.clues)
       setGameState('won')
-      await trackEvent('case_completed', {
-        result: 'won',
-        attempts: newGuesses.length,
-      })
+      await trackEvent('case_completed', { result: 'won', attempts: newGuesses.length })
+      await saveGameSession('won', newGuesses.length)
       return
     }
     const nextClueIndex = revealedClues.length
@@ -236,10 +254,8 @@ export default function GameBoard({ cas }: { cas: Case }) {
     }
     if (newGuesses.length >= MAX_ATTEMPTS) {
       setGameState('lost')
-      await trackEvent('case_completed', {
-        result: 'lost',
-        attempts: newGuesses.length,
-      })
+      await trackEvent('case_completed', { result: 'lost', attempts: newGuesses.length })
+      await saveGameSession('lost', newGuesses.length)
     }
   }
 
@@ -255,104 +271,114 @@ export default function GameBoard({ cas }: { cas: Case }) {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  const card = 'bg-white rounded-2xl border border-gray-100 p-5 mb-3'
-  const label = 'text-xs font-medium uppercase tracking-wide text-gray-400 mb-3 block'
+  // ─── Design tokens ────────────────────────────────────────────────────────
+  const card = 'bg-white rounded-2xl border border-[#E8E8ED] p-5 mb-3'
+  const sectionLabel = 'text-[10px] font-semibold uppercase tracking-[0.08em] text-[#AEAEB2] mb-3 block'
 
+  // ─── Summary view ─────────────────────────────────────────────────────────
   if (showSummary) {
     return (
       <div className="max-w-lg mx-auto">
-        <div className="flex justify-between items-center mb-5">
+
+        {/* Header */}
+        <div className="flex justify-between items-center mb-6">
           <div>
-            <div>
-              <span className="text-xl font-semibold text-gray-900">Clin</span>
-              <span className="text-xl font-semibold text-blue-600">IQ</span>
-            </div>
-            <p className="text-xs text-gray-400 mt-0.5">Résumé du cas</p>
+            <span className="text-[17px] font-semibold tracking-tight text-[#1D1D1F]">Clin</span>
+            <span className="text-[17px] font-semibold tracking-tight text-[#0066CC]">IQ</span>
+            <p className="text-[11px] text-[#AEAEB2] mt-0.5">Résumé du cas</p>
           </div>
           <button
             onClick={() => handleShare(gameState === 'won')}
-            className="flex items-center gap-1.5 text-sm text-gray-500 border border-gray-200 rounded-xl px-4 py-2 hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-1.5 text-xs font-medium text-[#6E6E73] border border-[#E8E8ED] rounded-xl px-4 py-2 hover:border-[#D2D2D7] hover:text-[#1D1D1F] transition-all bg-white"
           >
             {copied ? '✓ Copié' : 'Partager'}
           </button>
         </div>
 
+        {/* Diagnosis */}
         <div className={card}>
-          <p className={label}>Diagnostic</p>
-          <p className="text-xl font-semibold text-gray-900 mb-3">{cas.diagnosis_exact}</p>
-          <p className="text-sm text-gray-600 leading-relaxed">{cas.explanation}</p>
+          <span className={sectionLabel}>Diagnostic</span>
+          <p className="text-xl font-semibold text-[#1D1D1F] mb-3 tracking-tight leading-snug">{cas.diagnosis_exact}</p>
+          <p className="text-sm text-[#6E6E73] leading-relaxed">{cas.explanation}</p>
         </div>
 
-         {cas.diagnostic_approach && cas.diagnostic_approach.length > 0 && (
+        {/* Diagnostic approach */}
+        {cas.diagnostic_approach && cas.diagnostic_approach.length > 0 && (
           <DiagnosticApproach steps={cas.diagnostic_approach} />
         )}
 
+        {/* Red flags */}
         {cas.red_flags?.length > 0 && (
           <div className={card}>
-            <p className={label}>Signes d'alarme</p>
+            <span className={sectionLabel}>Signes d'alarme</span>
             {cas.red_flags.map((flag, i) => (
-              <div key={i} className="flex gap-3 items-start mb-2 last:mb-0">
-                <div className="w-1.5 h-1.5 rounded-full bg-red-400 mt-2 flex-shrink-0" />
-                <p className="text-sm text-gray-700 leading-relaxed">{flag}</p>
+              <div key={i} className="flex gap-3 items-start mb-2.5 last:mb-0">
+                <div className="w-1 h-1 rounded-full bg-[#FF3B30] mt-[7px] flex-shrink-0" />
+                <p className="text-sm text-[#1D1D1F] leading-relaxed">{flag}</p>
               </div>
             ))}
           </div>
         )}
 
+        {/* Differentials */}
         {cas.differentials?.length > 0 && (
           <div className={card}>
-            <p className={label}>Diagnostics différentiels</p>
+            <span className={sectionLabel}>Diagnostics différentiels</span>
             {cas.differentials.map((diff, i) => (
-              <div key={i} className="flex gap-3 items-start py-2.5 border-b border-gray-50 last:border-0">
-                <span className={`text-xs font-medium px-2 py-0.5 rounded-full border flex-shrink-0 mt-0.5 ${diff.proximity === 'proche' ? 'bg-yellow-50 text-yellow-700 border-yellow-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
+              <div key={i} className="flex gap-3 items-start py-3 border-b border-[#F5F5F7] last:border-0 last:pb-0 first:pt-0">
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border flex-shrink-0 mt-0.5 uppercase tracking-widest ${diff.proximity === 'proche' ? 'bg-[#FFFBEB] text-[#92400E] border-[#FDE68A]' : 'bg-[#FEF2F2] text-[#B91C1C] border-[#FECACA]'}`}>
                   {diff.proximity === 'proche' ? 'Proche' : 'Écarté'}
                 </span>
                 <div>
-                  <p className="text-sm font-medium text-gray-900">{diff.diagnosis}</p>
-                  <p className="text-xs text-gray-400 mt-0.5 leading-relaxed">{diff.distinction}</p>
+                  <p className="text-sm font-semibold text-[#1D1D1F]">{diff.diagnosis}</p>
+                  <p className="text-xs text-[#6E6E73] mt-0.5 leading-relaxed">{diff.distinction}</p>
                 </div>
               </div>
             ))}
           </div>
         )}
 
+        {/* Management */}
         {cas.management?.length > 0 && (
           <div className={card}>
-            <p className={label}>Prise en charge initiale</p>
+            <span className={sectionLabel}>Prise en charge initiale</span>
             {cas.management.map((step, i) => (
-              <div key={i} className="flex gap-3 items-start mb-2.5 last:mb-0">
-                <span className="text-xs font-semibold text-blue-600 bg-blue-50 border border-blue-100 rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <div key={i} className="flex gap-3 items-start mb-3 last:mb-0">
+                <span className="text-[11px] font-bold text-[#0066CC] bg-[#EBF4FF] rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0 mt-0.5">
                   {i + 1}
                 </span>
-                <p className="text-sm text-gray-700 leading-relaxed">{step}</p>
+                <p className="text-sm text-[#1D1D1F] leading-relaxed">{step}</p>
               </div>
             ))}
           </div>
         )}
 
+        {/* Pearl */}
         {cas.pearl && (
-          <div className="bg-blue-50 rounded-2xl border border-blue-100 p-5 mb-3">
-            <p className="text-xs font-medium uppercase tracking-wide text-blue-500 mb-2">Perle clinique</p>
-            <p className="text-sm text-blue-900 leading-relaxed">{cas.pearl}</p>
+          <div className="bg-[#EBF4FF] rounded-2xl border border-[#C7DEFF] p-5 mb-3">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-[#0066CC] mb-2 block">Perle clinique</span>
+            <p className="text-sm text-[#003D82] leading-relaxed">{cas.pearl}</p>
           </div>
         )}
 
+        {/* Common mistakes */}
         {cas.common_mistakes?.length > 0 && (
           <div className={card}>
-            <p className={label}>Erreurs classiques</p>
+            <span className={sectionLabel}>Erreurs classiques</span>
             {cas.common_mistakes.map((mistake, i) => (
-              <div key={i} className="flex gap-3 items-start mb-2 last:mb-0">
-                <div className="w-1.5 h-1.5 rounded-full bg-orange-400 mt-2 flex-shrink-0" />
-                <p className="text-sm text-gray-700 leading-relaxed">{mistake}</p>
+              <div key={i} className="flex gap-3 items-start mb-2.5 last:mb-0">
+                <div className="w-1 h-1 rounded-full bg-[#FF9F0A] mt-[7px] flex-shrink-0" />
+                <p className="text-sm text-[#1D1D1F] leading-relaxed">{mistake}</p>
               </div>
             ))}
           </div>
         )}
 
-        <div className="text-center py-6">
-          <p className="text-sm text-gray-400 mb-2">Revenez demain pour un nouveau cas</p>
-          <a href="/archives" className="text-sm text-blue-600 font-medium">
-            Explorer les archives
+        {/* Footer */}
+        <div className="text-center py-8">
+          <p className="text-xs text-[#AEAEB2] mb-2">Revenez demain pour un nouveau cas</p>
+          <a href="/archives" className="text-xs font-semibold text-[#0066CC] hover:text-[#0055AA] transition-colors">
+            Explorer les archives →
           </a>
         </div>
 
@@ -361,55 +387,60 @@ export default function GameBoard({ cas }: { cas: Case }) {
     )
   }
 
+  // ─── Game view ────────────────────────────────────────────────────────────
   return (
     <div className="max-w-lg mx-auto">
-      <div className="flex justify-between items-center mb-5">
+
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6">
         <div>
           <div>
-            <span className="text-xl font-semibold text-gray-900">Clin</span>
-            <span className="text-xl font-semibold text-blue-600">IQ</span>
+            <span className="text-[17px] font-semibold tracking-tight text-[#1D1D1F]">Clin</span>
+            <span className="text-[17px] font-semibold tracking-tight text-[#0066CC]">IQ</span>
           </div>
-          <p className="text-xs text-gray-400 mt-0.5">Cas du jour</p>
+          <p className="text-[11px] text-[#AEAEB2] mt-0.5">Cas du jour</p>
         </div>
         <div className="flex items-center gap-3">
-          <a href="/archives" className="text-sm text-gray-500 hover:text-gray-700 transition-colors">
+          <a href="/archives" className="text-xs font-medium text-[#6E6E73] hover:text-[#1D1D1F] transition-colors">
             Archives
           </a>
-          <div className="flex items-center gap-1.5 bg-orange-50 border border-orange-200 text-orange-600 text-xs font-medium px-3 py-1.5 rounded-full">
+          <div className="flex items-center gap-1.5 bg-[#FFF7ED] border border-[#FED7AA] text-[#C2410C] text-xs font-semibold px-3 py-1.5 rounded-full">
             🔥 {streak} jour{streak > 1 ? 's' : ''}
           </div>
           <AuthButton />
         </div>
       </div>
 
+      {/* Instruction banner */}
       {guesses.length === 0 && (
-        <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 mb-3 flex gap-2 items-start">
-          <p className="text-xs text-blue-600 leading-relaxed">
+        <div className="bg-[#EBF4FF] border border-[#C7DEFF] rounded-xl px-4 py-3 mb-3">
+          <p className="text-xs text-[#003D82] leading-relaxed">
             Analysez le cas et tapez votre diagnostic. Chaque tentative révèle un nouvel indice. 6 essais maximum.
           </p>
         </div>
       )}
 
+      {/* Patient card */}
       <div className={card}>
-        <div className="flex justify-between items-start mb-3">
+        <div className="flex justify-between items-start mb-4">
           <div>
-            <p className="text-base font-medium text-gray-900">
+            <p className="text-[15px] font-semibold text-[#1D1D1F] tracking-tight">
               {cas.sex === 'F' ? 'Femme' : 'Homme'}, {cas.age} {cas.age_unit}
             </p>
-            <p className="text-xs text-gray-400 mt-0.5">
+            <p className="text-[11px] text-[#AEAEB2] mt-0.5">
               {cas.setting}{cas.specialty ? ` · ${cas.specialty}` : ''}
             </p>
           </div>
           {cas.diagnosis_urgency && (
-            <span className={`text-xs font-medium px-2.5 py-1 rounded-full border flex-shrink-0 ${urgencyColor[cas.diagnosis_urgency] || 'bg-gray-50 text-gray-600 border-gray-200'}`}>
+            <span className={`text-[9px] font-bold px-2.5 py-1 rounded-full border flex-shrink-0 uppercase tracking-widest ${urgencyColor[cas.diagnosis_urgency] || 'bg-[#F5F5F7] text-[#6E6E73] border-[#E8E8ED]'}`}>
               {cas.diagnosis_urgency}
             </span>
           )}
         </div>
-        <p className="text-sm text-gray-700 leading-relaxed border-t border-gray-50 pt-3 mb-4">
+        <p className="text-sm text-[#1D1D1F] leading-relaxed border-t border-[#F5F5F7] pt-4 mb-4">
           {cas.chief_complaint}. {cas.context}
         </p>
-        <div className="grid grid-cols-4 gap-2 border-t border-gray-50 pt-3">
+        <div className="grid grid-cols-4 gap-3 border-t border-[#F5F5F7] pt-4">
           {[
             { value: cas.bp, label: 'TA' },
             { value: cas.hr, label: 'FC' },
@@ -417,15 +448,16 @@ export default function GameBoard({ cas }: { cas: Case }) {
             { value: `${cas.spo2}%`, label: 'SpO2' },
           ].map((v, i) => (
             <div key={i} className="text-center">
-              <p className="text-sm font-medium text-gray-900">{v.value}</p>
-              <p className="text-xs text-gray-400 mt-0.5">{v.label}</p>
+              <p className="text-sm font-semibold text-[#1D1D1F]">{v.value}</p>
+              <p className="text-[9px] text-[#AEAEB2] mt-0.5 font-semibold uppercase tracking-widest">{v.label}</p>
             </div>
           ))}
         </div>
       </div>
 
+      {/* Clues timeline */}
       <div className={card}>
-        <p className={label}>Raisonnement — {revealedClues.length}/{cas.clues.length}</p>
+        <span className={sectionLabel}>Raisonnement — {revealedClues.length}/{cas.clues.length}</span>
         <div className="relative">
           {cas.clues.map((clue, i) => {
             const revealed = i < revealedClues.length
@@ -435,45 +467,39 @@ export default function GameBoard({ cas }: { cas: Case }) {
                 key={clue.id}
                 className="relative flex gap-3 items-start"
                 style={{
-                  opacity: revealed ? 1 : 0.35,
-                  transform: revealed ? 'translateY(0)' : 'translateY(4px)',
-                  transition: revealed ? 'opacity 0.4s ease, transform 0.4s ease' : 'none',
+                  opacity: revealed ? 1 : 0.3,
+                  transform: revealed ? 'translateY(0)' : 'translateY(3px)',
+                  transition: revealed ? 'opacity 0.5s ease, transform 0.5s ease' : 'none',
                 }}
               >
-                {/* Vertical line */}
+                {/* Connector line */}
                 {!isLast && (
                   <div
-                    className="absolute left-[9px] top-[22px] w-px"
+                    className="absolute left-[9px] top-[20px] w-px"
                     style={{
-                      height: 'calc(100% + 4px)',
-                      background: revealed ? '#BFDBFE' : '#F3F4F6',
-                      transition: 'background 0.4s ease',
+                      height: 'calc(100% + 2px)',
+                      background: revealed ? '#C7DEFF' : '#F2F2F7',
+                      transition: 'background 0.5s ease',
                     }}
                   />
                 )}
-
                 {/* Node */}
                 <div className="relative z-10 flex-shrink-0 mt-1">
-                  <div
-                    className={`w-[18px] h-[18px] rounded-full flex items-center justify-center text-[10px] font-semibold border transition-all duration-400 ${
-                      revealed
-                        ? 'bg-blue-600 border-blue-600 text-white'
-                        : 'bg-white border-gray-200 text-gray-300'
-                    }`}
-                  >
+                  <div className={`w-[18px] h-[18px] rounded-full flex items-center justify-center text-[9px] font-bold border transition-all duration-500 ${
+                    revealed
+                      ? 'bg-[#0066CC] border-[#0066CC] text-white'
+                      : 'bg-white border-[#D2D2D7] text-[#AEAEB2]'
+                  }`}>
                     {i + 1}
                   </div>
                 </div>
-
-                {/* Content */}
+                {/* Text */}
                 <div className="pb-4 flex-1 min-w-0">
                   {revealed ? (
-                    <p className="text-sm text-gray-700 leading-relaxed">{clue.text}</p>
+                    <p className="text-sm text-[#1D1D1F] leading-relaxed">{clue.text}</p>
                   ) : (
-                    <p className="text-sm text-gray-300 italic">
-                      {i === revealedClues.length
-                        ? 'Débloquez avec votre prochaine tentative'
-                        : '···'}
+                    <p className="text-sm text-[#D2D2D7] italic">
+                      {i === revealedClues.length ? 'Débloqué à la prochaine tentative' : '···'}
                     </p>
                   )}
                 </div>
@@ -481,23 +507,21 @@ export default function GameBoard({ cas }: { cas: Case }) {
             )
           })}
 
-          {/* Final diagnosis node — only after game ends */}
+          {/* Final node — game over */}
           {(gameState === 'won' || gameState === 'lost') && (
             <div
               className="relative flex gap-3 items-start"
-              style={{ opacity: 1, transform: 'translateY(0)', transition: 'opacity 0.4s ease' }}
+              style={{ opacity: 1, transform: 'translateY(0)', transition: 'opacity 0.5s ease' }}
             >
               <div className="relative z-10 flex-shrink-0 mt-1">
-                <div className={`w-[18px] h-[18px] rounded-full flex items-center justify-center border-2 transition-all duration-400 ${
-                  gameState === 'won'
-                    ? 'bg-green-600 border-green-600'
-                    : 'bg-red-500 border-red-500'
+                <div className={`w-[18px] h-[18px] rounded-full flex items-center justify-center border-2 transition-all duration-500 ${
+                  gameState === 'won' ? 'bg-[#34C759] border-[#34C759]' : 'bg-[#FF3B30] border-[#FF3B30]'
                 }`}>
                   <div className="w-1.5 h-1.5 rounded-full bg-white" />
                 </div>
               </div>
               <div className="pb-2 flex-1">
-                <p className={`text-sm font-medium ${gameState === 'won' ? 'text-green-700' : 'text-red-600'}`}>
+                <p className={`text-sm font-semibold ${gameState === 'won' ? 'text-[#166534]' : 'text-[#B91C1C]'}`}>
                   {gameState === 'won' ? cas.diagnosis_exact : `Diagnostic : ${cas.diagnosis_exact}`}
                 </p>
               </div>
@@ -506,65 +530,69 @@ export default function GameBoard({ cas }: { cas: Case }) {
         </div>
       </div>
 
+      {/* Guesses history */}
       {guesses.length > 0 && (
         <div className={card}>
-          <p className={label}>Tentatives</p>
+          <span className={sectionLabel}>Tentatives</span>
           {guesses.map((guess, i) => (
-            <div key={i} className="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0">
+            <div key={i} className="flex items-center justify-between py-2.5 border-b border-[#F5F5F7] last:border-0">
               <div className="flex items-center gap-3">
-                <span className="text-xs text-gray-300 min-w-[14px]">{i + 1}</span>
-                <p className="text-sm text-gray-700">{guess.text}</p>
+                <span className="text-[11px] text-[#AEAEB2] min-w-[16px] font-semibold">{i + 1}</span>
+                <p className="text-sm text-[#1D1D1F]">{guess.text}</p>
               </div>
-              <span className={`text-xs font-medium px-2.5 py-0.5 rounded-full border flex-shrink-0 ${resultStyle[guess.result].style}`}>
-                {resultStyle[guess.result].label}
+              <span className={`text-[9px] font-bold px-2.5 py-0.5 rounded-full border flex-shrink-0 uppercase tracking-widest ${resultConfig[guess.result].style}`}>
+                {resultConfig[guess.result].icon} {resultConfig[guess.result].label}
               </span>
             </div>
           ))}
         </div>
       )}
 
+      {/* Win state */}
       {gameState === 'won' && (
-        <div className="bg-green-50 rounded-2xl border border-green-100 p-5 mb-3 text-center">
-          <p className="text-lg font-semibold text-green-800 mb-1">Bravo !</p>
-          <p className="text-sm text-green-600 mb-4">
+        <div className="bg-[#F0FDF4] rounded-2xl border border-[#BBF7D0] p-5 mb-3 text-center">
+          <p className="text-base font-semibold text-[#166534] mb-1">Diagnostic réussi</p>
+          <p className="text-xs text-[#6E6E73] mb-4">
             Trouvé en {guesses.length} tentative{guesses.length > 1 ? 's' : ''}
           </p>
           <div className="flex gap-2 justify-center flex-wrap">
-            <button onClick={() => setShowSummary(true)} className="bg-green-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium">
+            <button onClick={() => setShowSummary(true)} className="bg-[#166534] text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#14532D] transition-colors">
               Voir le résumé
             </button>
-            <button onClick={() => handleShare(true)} className="bg-white text-green-700 border border-green-200 px-5 py-2.5 rounded-xl text-sm font-medium">
+            <button onClick={() => handleShare(true)} className="bg-white text-[#166534] border border-[#BBF7D0] px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#F0FDF4] transition-colors">
               {copied ? 'Copié !' : 'Partager'}
             </button>
           </div>
         </div>
       )}
 
+      {/* Lost state */}
       {gameState === 'lost' && (
-        <div className="bg-red-50 rounded-2xl border border-red-100 p-5 mb-3 text-center">
-          <p className="text-lg font-semibold text-red-800 mb-1">Perdu</p>
-          <p className="text-sm text-red-600 mb-1">Le diagnostic était :</p>
-          <p className="text-base font-semibold text-red-900 mb-4">{cas.diagnosis_exact}</p>
+        <div className="bg-[#FEF2F2] rounded-2xl border border-[#FECACA] p-5 mb-3 text-center">
+          <p className="text-base font-semibold text-[#B91C1C] mb-1">Diagnostic manqué</p>
+          <p className="text-xs text-[#6E6E73] mb-1">Le diagnostic était :</p>
+          <p className="text-sm font-semibold text-[#1D1D1F] mb-4">{cas.diagnosis_exact}</p>
           <div className="flex gap-2 justify-center flex-wrap">
-            <button onClick={() => setShowSummary(true)} className="bg-red-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium">
+            <button onClick={() => setShowSummary(true)} className="bg-[#B91C1C] text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#991B1B] transition-colors">
               Voir le résumé
             </button>
-            <button onClick={() => handleShare(false)} className="bg-white text-red-700 border border-red-200 px-5 py-2.5 rounded-xl text-sm font-medium">
+            <button onClick={() => handleShare(false)} className="bg-white text-[#B91C1C] border border-[#FECACA] px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#FEF2F2] transition-colors">
               {copied ? 'Copié !' : 'Partager'}
             </button>
           </div>
         </div>
       )}
 
+      {/* Input */}
       {gameState === 'playing' && (
         <div className={card}>
-          <p className={label}>Votre diagnostic</p>
+          <span className={sectionLabel}>Votre diagnostic</span>
           <div className="relative">
             <div className="flex gap-2">
               <input
                 type="text"
                 placeholder="Tapez votre diagnostic..."
-                className="flex-1 border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-gray-900 outline-none focus:border-blue-300 bg-white transition-colors"
+                className="flex-1 border border-[#E8E8ED] rounded-xl px-4 py-3.5 text-sm text-[#1D1D1F] outline-none focus:border-[#0066CC] focus:ring-2 focus:ring-[#0066CC]/10 bg-white transition-all placeholder:text-[#AEAEB2]"
                 value={currentGuess}
                 onChange={e => { setCurrentGuess(e.target.value); setShowSuggestions(true) }}
                 onKeyDown={e => {
@@ -577,7 +605,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
               <button
                 onClick={handleGuess}
                 disabled={submitting}
-                className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-5 py-3.5 rounded-xl text-sm font-medium transition-colors disabled:opacity-60 flex items-center justify-center gap-2 min-w-[100px]"
+                className="bg-[#0066CC] hover:bg-[#0055AA] active:bg-[#004499] text-white px-5 py-3.5 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2 min-w-[100px]"
               >
                 {submitting ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -586,14 +614,20 @@ export default function GameBoard({ cas }: { cas: Case }) {
                 )}
               </button>
             </div>
+
+            {/* Suggestions dropdown */}
             {showSuggestions && suggestions.length > 0 && (
-              <div className="absolute z-10 w-full bottom-full mb-1 bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+              <div className="absolute z-10 w-full bottom-full mb-1.5 bg-white border border-[#E8E8ED] rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.08)] overflow-hidden">
                 {suggestions.map((s, i) => {
                   const alreadyGuessed = guesses.some(g => normalize(g.text) === normalize(s))
                   return (
                     <div
                       key={i}
-                      className={`px-4 py-3 text-sm border-b border-gray-50 last:border-0 ${alreadyGuessed ? 'text-gray-300 cursor-not-allowed bg-gray-50' : 'text-gray-700 hover:bg-gray-50 cursor-pointer active:bg-blue-50'}`}
+                      className={`px-4 py-3 text-sm border-b border-[#F5F5F7] last:border-0 ${
+                        alreadyGuessed
+                          ? 'text-[#AEAEB2] cursor-not-allowed bg-[#F5F5F7]'
+                          : 'text-[#1D1D1F] hover:bg-[#F5F5F7] cursor-pointer active:bg-[#EBF4FF]'
+                      }`}
                       onMouseDown={() => {
                         if (alreadyGuessed) return
                         setCurrentGuess(s)
@@ -601,23 +635,26 @@ export default function GameBoard({ cas }: { cas: Case }) {
                       }}
                     >
                       {s}
-                      {alreadyGuessed && <span className="ml-2 text-xs text-gray-300">déjà essayé</span>}
+                      {alreadyGuessed && <span className="ml-2 text-xs text-[#AEAEB2]">déjà essayé</span>}
                     </div>
                   )
                 })}
               </div>
             )}
           </div>
+
+          {/* Hint + counter */}
           <div className="flex justify-between items-center mt-4">
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-[#6E6E73]">
               {guesses.length >= 3 && guesses[guesses.length - 1].result !== 'correct' && (
                 <span>💡 {cas.wrong_answer_hint}</span>
               )}
             </p>
-            <p className="text-sm font-medium text-gray-600">{guesses.length}/{MAX_ATTEMPTS}</p>
+            <p className="text-xs font-semibold text-[#AEAEB2]">{guesses.length}/{MAX_ATTEMPTS}</p>
           </div>
         </div>
       )}
+
     </div>
   )
 }

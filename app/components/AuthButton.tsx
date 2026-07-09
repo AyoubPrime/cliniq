@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 
 type Profile = {
@@ -44,7 +45,7 @@ export default function AuthButton() {
           setProfile(data)
         }
       } else {
-        // First login — create the profile from Google account data
+        // First login — create profile from Google account data
         const display_name = user.user_metadata?.full_name || user.email || 'Utilisateur'
         const avatar_url = user.user_metadata?.avatar_url || ''
         await supabase.from('profiles').upsert({
@@ -62,15 +63,13 @@ export default function AuthButton() {
   }
 
   const signInWithGoogle = async () => {
-  const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: `${window.location.origin}/auth/callback`,
-    },
-  })
-
-  console.log("OAuth error:", error)
-}
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
+  }
 
   const signOut = async () => {
     await supabase.auth.signOut()
@@ -83,7 +82,7 @@ export default function AuthButton() {
     return (
       <button
         onClick={signInWithGoogle}
-        className="flex items-center gap-1.5 text-xs font-medium text-gray-500 border border-gray-200 rounded-full px-3 py-1.5 hover:border-blue-300 hover:text-blue-600 transition-colors bg-white"
+        className="flex items-center gap-1.5 text-xs font-medium text-[#6E6E73] border border-[#E8E8ED] rounded-full px-3 py-1.5 hover:border-[#D2D2D7] hover:text-[#1D1D1F] transition-all bg-white"
       >
         <svg width="12" height="12" viewBox="0 0 24 24">
           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -106,22 +105,31 @@ export default function AuthButton() {
           <img
             src={profile.avatar_url}
             alt={profile.display_name}
-            className="w-7 h-7 rounded-full border border-gray-200"
+            className="w-7 h-7 rounded-full border border-[#E8E8ED]"
           />
         ) : (
-          <div className="w-7 h-7 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center text-xs font-medium text-blue-600">
+          <div className="w-7 h-7 rounded-full bg-[#EBF4FF] border border-[#C7DEFF] flex items-center justify-center text-xs font-semibold text-[#0066CC]">
             {profile.display_name?.[0]?.toUpperCase()}
           </div>
         )}
       </button>
 
       {showMenu && (
-        <div className="absolute right-0 top-9 bg-white border border-gray-100 rounded-xl shadow-sm p-3 w-48 z-20">
-          <p className="text-xs font-medium text-gray-900 mb-0.5 truncate">{profile.display_name}</p>
-          <p className="text-xs text-gray-400 mb-3">🔥 {profile.streak} jour{profile.streak !== 1 ? 's' : ''} de série</p>
+        <div className="absolute right-0 top-9 bg-white border border-[#E8E8ED] rounded-xl shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-3 w-52 z-20">
+          <p className="text-xs font-semibold text-[#1D1D1F] mb-0.5 truncate">{profile.display_name}</p>
+          <p className="text-xs text-[#AEAEB2] mb-3">🔥 {profile.streak} jour{profile.streak !== 1 ? 's' : ''} de série</p>
+          <Link
+            href="/profile"
+            onClick={() => setShowMenu(false)}
+            className="flex items-center gap-2 w-full text-xs font-medium text-[#1D1D1F] hover:text-[#0066CC] transition-colors mb-2.5"
+          >
+            <span className="text-[#AEAEB2]">👤</span>
+            Mon profil
+          </Link>
+          <div className="h-px bg-[#F5F5F7] mb-2.5" />
           <button
             onClick={signOut}
-            className="w-full text-left text-xs text-red-500 hover:text-red-600 transition-colors"
+            className="w-full text-left text-xs text-[#FF3B30] hover:text-[#CC0000] transition-colors font-medium"
           >
             Se déconnecter
           </button>

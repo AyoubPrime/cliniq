@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase'
 import GameBoard from './components/GameBoard'
+import WelcomeScreen from './components/WelcomeScreen'
 
 async function getTodayCase() {
   const today = new Date().toISOString().split('T')[0]
@@ -25,13 +26,14 @@ export default async function Home() {
   if (!cas) {
     return (
       <main className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-500">Aucun cas disponible aujourd'hui.</p>
+        <p className="text-sm text-[#AEAEB2]">Aucun cas disponible aujourd'hui.</p>
       </main>
     )
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 py-8 px-4">
+    <main className="min-h-screen py-8 px-4">
+      <WelcomeScreen />
       <GameBoard cas={cas} />
     </main>
   )

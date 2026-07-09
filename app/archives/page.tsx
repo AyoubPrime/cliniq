@@ -18,7 +18,7 @@ async function getAllCases() {
 export default async function ArchivesPage() {
   const cases = await getAllCases()
   return (
-    <main className="min-h-screen bg-gray-50 py-8 px-4">
+    <main className="min-h-screen py-8 px-4">
       <ArchivesClient cases={cases} />
     </main>
   )
