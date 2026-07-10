@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { supabase } from '@/lib/supabase'
 import GameBoard from '@/app/components/GameBoard'
 import Link from 'next/link'
@@ -14,6 +15,35 @@ async function getCase(id: string) {
   if (error) return null
   return data
 }
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ id: string }> }
+): Promise<Metadata> {
+  const { id } = await params
+  const cas = await getCase(id)
+
+  if (!cas) return {}
+
+  const sex = cas.sex === 'M' ? 'masculin' : 'féminin'
+  const description = `Patient de ${cas.age} ans (${sex}), ${cas.setting}. Motif : ${cas.chief_complaint}. Analysez les indices et posez le bon diagnostic.`
+
+  return {
+    title: `ClinIQ — ${cas.specialty} · Cas d'archive`,
+    description,
+    openGraph: {
+      title: `ClinIQ — ${cas.specialty} · Cas d'archive`,
+      description,
+      images: [{ url: '/og-image.jpg', width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `ClinIQ — ${cas.specialty} · Cas d'archive`,
+      description,
+      images: ['/og-image.jpg'],
+    },
+  }
+}
+
 
 export default async function ArchiveCasePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params

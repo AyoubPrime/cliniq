@@ -9,8 +9,31 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'ClinIQ — Cas clinique du jour',
-  description: 'Jeu de raisonnement clinique pour étudiants en médecine francophones',
+  metadataBase: new URL('https://cliniq-blond-nu.vercel.app'),
+  title: 'ClinIQ — Un cas clinique par jour',
+  description: 'Analysez les indices, posez votre diagnostic, apprenez. Un cas clinique par jour pour les étudiants en médecine francophones.',
+  openGraph: {
+    title: 'ClinIQ — Un cas clinique par jour',
+    description: 'Analysez les indices, posez votre diagnostic, apprenez. Un cas clinique par jour pour les étudiants en médecine francophones.',
+    url: 'https://cliniq-blond-nu.vercel.app',
+    siteName: 'ClinIQ',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'ClinIQ — Un cas clinique par jour',
+      },
+    ],
+    locale: 'fr_FR',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ClinIQ — Un cas clinique par jour',
+    description: 'Analysez les indices, posez votre diagnostic, apprenez.',
+    images: ['/og-image.jpg'],
+  },
 }
 
 export default function RootLayout({
