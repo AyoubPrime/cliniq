@@ -283,6 +283,9 @@ export default function AdminPage() {
   const [message, setMessage] = useState('')
   const [cases, setCases] = useState<CaseRow[]>([])
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [aiDisease, setAiDisease] = useState('')
+  const [aiLoading, setAiLoading] = useState(false)
+  const [aiError, setAiError] = useState('')
   const [idExists, setIdExists] = useState(false)
   const [checkingId, setCheckingId] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
@@ -411,6 +414,66 @@ useEffect(() => {
     setLoading(false)
   }
 
+  const handleGenerate = async () => {
+    if (!aiDisease.trim()) return
+    setAiLoading(true)
+    setAiError('')
+    try {
+      const res = await fetch('/api/generate-case', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          disease: aiDisease,
+          password: process.env.NEXT_PUBLIC_ADMIN_PASSWORD,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setAiError(data.error || 'Erreur inconnue'); return }
+      const c = data.case
+      setForm(prev => ({
+        ...prev,
+        title: c.title || '',
+        specialty: c.specialty || '',
+        difficulty: c.difficulty || 2,
+        age: String(c.age || ''),
+        age_unit: c.age_unit || 'ans',
+        sex: c.sex || 'M',
+        setting: c.setting || 'Urgences',
+        chief_complaint: c.chief_complaint || '',
+        context: c.context || '',
+        bp: c.bp || '',
+        hr: String(c.hr || ''),
+        temp: String(c.temp || ''),
+        spo2: String(c.spo2 || ''),
+        clue1: c.clue1 || '', clue2: c.clue2 || '', clue3: c.clue3 || '',
+        clue4: c.clue4 || '', clue5: c.clue5 || '', clue6: c.clue6 || '',
+        diagnosis_exact: c.diagnosis_exact || '',
+        alias1: c.alias1 || '', alias2: c.alias2 || '', alias3: c.alias3 || '',
+        diagnosis_category: c.diagnosis_category || '',
+        diagnosis_urgency: c.diagnosis_urgency || '',
+        wrong_answer_hint: c.wrong_answer_hint || '',
+        explanation: c.explanation || '',
+        pearl: c.pearl || '',
+        red_flag1: c.red_flag1 || '', red_flag2: c.red_flag2 || '', red_flag3: c.red_flag3 || '',
+        management1: c.management1 || '', management2: c.management2 || '',
+        management3: c.management3 || '', management4: c.management4 || '',
+        mistake1: c.mistake1 || '', mistake2: c.mistake2 || '',
+        diff1_diagnosis: c.diff1_diagnosis || '', diff1_proximity: c.diff1_proximity || 'proche', diff1_distinction: c.diff1_distinction || '',
+        diff2_diagnosis: c.diff2_diagnosis || '', diff2_proximity: c.diff2_proximity || 'faux', diff2_distinction: c.diff2_distinction || '',
+        diff3_diagnosis: c.diff3_diagnosis || '', diff3_proximity: c.diff3_proximity || 'proche', diff3_distinction: c.diff3_distinction || '',
+        approach1_title: c.approach1_title || '', approach1_detail: c.approach1_detail || '',
+        approach2_title: c.approach2_title || '', approach2_detail: c.approach2_detail || '',
+        approach3_title: c.approach3_title || '', approach3_detail: c.approach3_detail || '',
+        approach4_title: c.approach4_title || '', approach4_detail: c.approach4_detail || '',
+        approach5_title: c.approach5_title || '', approach5_detail: c.approach5_detail || '',
+      }))
+    } catch (e: any) {
+      setAiError('Erreur réseau: ' + e.message)
+    } finally {
+      setAiLoading(false)
+    }
+  }
+
   const handleUpdate = async () => {
     if (!editingId) return
     setLoading(true); setMessage('')
@@ -488,6 +551,45 @@ useEffect(() => {
 
         {tab === 'create' && (
           <div>
+            {/* ── AI Generator ── */}
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100 p-5 mb-4">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-base">✨</span>
+                <p className="text-sm font-semibold text-gray-900">Générer avec l'IA</p>
+                <span className="text-[10px] text-blue-500 font-medium bg-blue-100 px-2 py-0.5 rounded-full ml-auto">Gemini</span>
+              </div>
+              <p className="text-xs text-gray-400 mb-3">Entrez une maladie — l'IA remplit tout le formulaire. Révisez et ajoutez l'ID avant de publier.</p>
+              <div className="flex gap-2">
+                <input
+                  className="flex-1 border border-blue-200 rounded-xl px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-400 bg-white placeholder:text-gray-300"
+                  placeholder="ex: Endocardite infectieuse"
+                  value={aiDisease}
+                  onChange={e => setAiDisease(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleGenerate()}
+                  disabled={aiLoading}
+                />
+                <button
+                  onClick={handleGenerate}
+                  disabled={aiLoading || !aiDisease.trim()}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-1.5 whitespace-nowrap"
+                >
+                  {aiLoading ? (
+                    <>
+                      <svg className="animate-spin w-3.5 h-3.5" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+                      </svg>
+                      Génération...
+                    </>
+                  ) : 'Générer'}
+                </button>
+              </div>
+              {aiError && <p className="text-xs text-red-500 mt-2">{aiError}</p>}
+              {aiLoading && (
+                <p className="text-xs text-blue-500 mt-2 animate-pulse">L'IA rédige le cas... ~15 secondes</p>
+              )}
+            </div>
+
             <CaseForm form={form} update={update} isEdit={false} idExists={idExists} checkingId={checkingId} />
             {message && (
               <div className={`p-4 rounded-xl mb-4 text-sm font-medium ${message.includes('Erreur') ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
