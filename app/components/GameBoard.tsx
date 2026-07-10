@@ -47,6 +47,7 @@ type Case = {
     title: string
     detail: string
   }>
+  schema_svg?: string
 }
 
 type GuessResult = {
@@ -300,6 +301,12 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <span className={sectionLabel}>Diagnostic</span>
           <p className="text-xl font-semibold text-[#1D1D1F] mb-3 tracking-tight leading-snug">{cas.diagnosis_exact}</p>
           <p className="text-sm text-[#6E6E73] leading-relaxed">{cas.explanation}</p>
+          {cas.schema_svg && (
+            <div 
+              className="mt-4 flex justify-center [&>svg]:w-full [&>svg]:h-auto [&>svg]:max-w-xs"
+              dangerouslySetInnerHTML={{ __html: cas.schema_svg }} 
+            />
+          )}
         </div>
 
         {/* Diagnostic approach */}

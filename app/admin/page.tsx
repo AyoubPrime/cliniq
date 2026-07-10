@@ -47,6 +47,7 @@ const emptyForm = {
   approach3_title: '', approach3_detail: '',
   approach4_title: '', approach4_detail: '',
   approach5_title: '', approach5_detail: '',
+  schema_svg: '',
 }
 
 type FormType = typeof emptyForm
@@ -264,6 +265,11 @@ function CaseForm({ form, update, isEdit, idExists, checkingId }: {
             </div>
           ))}
         </div>
+        <div className="mb-3">
+          <label className={labelClass}>Schéma SVG (Optionnel)</label>
+          <p className="text-xs text-gray-300 mb-1">Collez le code SVG brut ici</p>
+          <textarea className={inputClass + ' font-mono text-xs'} rows={4} placeholder="<svg>...</svg>" value={form.schema_svg as string} onChange={e => update('schema_svg', e.target.value)} />
+        </div>
       </div>
     </div>
   )
@@ -334,6 +340,7 @@ useEffect(() => {
       diagnosis_category: data.diagnosis_category || '',
       diagnosis_urgency: data.diagnosis_urgency || '',
       wrong_answer_hint: data.wrong_answer_hint || '',
+      schema_svg: data.schema_svg || '',
       explanation: data.explanation || '', pearl: data.pearl || '',
       red_flag1: getFlag(1), red_flag2: getFlag(2), red_flag3: getFlag(3),
       management1: getMgmt(1), management2: getMgmt(2),
@@ -376,6 +383,7 @@ useEffect(() => {
     diagnosis_category: form.diagnosis_category,
     diagnosis_urgency: form.diagnosis_urgency,
     wrong_answer_hint: form.wrong_answer_hint,
+    schema_svg: form.schema_svg,
     explanation: form.explanation, pearl: form.pearl,
     red_flags: [form.red_flag1, form.red_flag2, form.red_flag3].filter(r => r.trim() !== ''),
     management: [form.management1, form.management2, form.management3, form.management4].filter(m => m.trim() !== ''),
