@@ -1,8 +1,5 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import Groq from 'groq-sdk'
 import { NextResponse } from 'next/server'
-
-// Use ADMIN_PASSWORD (server-only) for validation — more secure than NEXT_PUBLIC_
-// Add this to .env.local: ADMIN_PASSWORD=cliniqisfordoctors
 
 const SYSTEM_PROMPT = `Tu es un professeur de médecine expert qui crée des cas cliniques pour des étudiants francophones en médecine.
 
@@ -31,12 +28,12 @@ Format JSON attendu:
   "clue6": "Sixième indice — élément confirmateur",
   "diagnosis_exact": "Nom exact du diagnostic (ex: Pneumothorax spontané primaire)",
   "alias1": "Synonyme ou abréviation acceptée 1",
-  "alias2": "Synonyme 2 (optionnel, laisser vide si aucun)",
-  "alias3": "Synonyme 3 (optionnel, laisser vide si aucun)",
-  "diagnosis_category": "Catégorie (ex: Respiratory, Cardiac, Infectious, etc.)",
+  "alias2": "Synonyme 2 (laisser vide si aucun)",
+  "alias3": "Synonyme 3 (laisser vide si aucun)",
+  "diagnosis_category": "Catégorie (ex: Respiratory, Cardiac, Infectious)",
   "diagnosis_urgency": "Urgence vitale",
   "wrong_answer_hint": "Indice à donner si la réponse est incorrecte (1 phrase, sans révéler le diagnostic)",
-  "explanation": "Explication pédagogique complète du diagnostic en 3-4 phrases. Mécanisme, présentation typique, pourquoi les indices pointent vers ce diagnostic.",
+  "explanation": "Explication pédagogique complète en 3-4 phrases. Mécanisme, présentation typique, pourquoi les indices pointent vers ce diagnostic.",
   "pearl": "Une perle clinique mémorable et pratique en 1-2 phrases.",
   "red_flag1": "Premier signe d'alarme à surveiller absolument",
   "red_flag2": "Deuxième signe d'alarme",
@@ -75,12 +72,10 @@ Règles importantes:
 - Les valeurs numériques (age, hr, temp, spo2, difficulty) sont des nombres, pas des strings
 - "sex" est soit "M" soit "F"
 - "diagnosis_urgency" est l'une de: "Urgence vitale", "Urgence différée", "Semi-urgent", "Non urgent"
-- "diff1_proximity" et "diff3_proximity" sont "proche", "diff2_proximity" est "faux"
 - Ne génère QUE le JSON brut, sans aucun texte avant ou après`
 
 export async function POST(request: Request) {
   try {
-    // Validate admin password
     const body = await request.json()
     const { disease, password } = body
 
@@ -92,23 +87,26 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Maladie manquante' }, { status: 400 })
     }
 
-    const apiKey = process.env.GEMINI_API_KEY
+    const apiKey = process.env.GROQ_API_KEY
     if (!apiKey) {
-      return NextResponse.json({ error: 'Clé API Gemini manquante' }, { status: 500 })
+      return NextResponse.json({ error: 'Clé API Groq manquante dans .env.local' }, { status: 500 })
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey)
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' })
+    const groq = new Groq({ apiKey })
 
-    const prompt = `${SYSTEM_PROMPT}\n\nGénère un cas clinique complet sur : ${disease}`
+    const completion = await groq.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: `Génère un cas clinique complet sur : ${disease}` },
+      ],
+      temperature: 0.7,
+      max_tokens: 2048,
+      response_format: { type: 'json_object' },
+    })
 
-    const result = await model.generateContent(prompt)
-    const text = result.response.text().trim()
-
-    // Strip any accidental markdown fences
-    const clean = text.replace(/^```json\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim()
-
-    const parsed = JSON.parse(clean)
+    const text = completion.choices[0]?.message?.content?.trim() || ''
+    const parsed = JSON.parse(text)
 
     return NextResponse.json({ case: parsed })
   } catch (error: any) {
