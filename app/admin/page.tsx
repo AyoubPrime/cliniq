@@ -284,6 +284,7 @@ export default function AdminPage() {
   const [cases, setCases] = useState<CaseRow[]>([])
   const [editingId, setEditingId] = useState<string | null>(null)
   const [aiDisease, setAiDisease] = useState('')
+  const [aiDifficulty, setAiDifficulty] = useState(2)
   const [aiLoading, setAiLoading] = useState(false)
   const [aiError, setAiError] = useState('')
   const [idExists, setIdExists] = useState(false)
@@ -369,10 +370,10 @@ useEffect(() => {
   const buildPayload = () => ({
     title: form.title, specialty: form.specialty, difficulty: form.difficulty,
     publish_date: form.publish_date, status: 'published', reviewed: true,
-    age: parseInt(form.age), age_unit: form.age_unit, sex: form.sex,
+    age: parseInt(form.age) || null, age_unit: form.age_unit, sex: form.sex,
     setting: form.setting, chief_complaint: form.chief_complaint,
-    context: form.context, bp: form.bp, hr: parseInt(form.hr),
-    temp: parseFloat(form.temp), spo2: parseInt(form.spo2),
+    context: form.context, bp: form.bp, hr: parseInt(form.hr) || null,
+    temp: parseFloat(form.temp) || null, spo2: parseInt(form.spo2) || null,
     clues: [
       { id: 1, text: form.clue1, auto_reveal: true },
       { id: 2, text: form.clue2, auto_reveal: false },
@@ -410,7 +411,7 @@ useEffect(() => {
     setLoading(true); setMessage('')
     const { error } = await supabase.from('cases').insert({ id: form.id, ...buildPayload() })
     if (error) setMessage('Erreur: ' + error.message)
-    else { setMessage('Cas publié avec succès!'); setForm(emptyForm); setIdExists(false) }
+    else { setMessage('Cas publié avec succès!'); setForm(emptyForm); setIdExists(false); loadCases() }
     setLoading(false)
   }
 
@@ -424,6 +425,7 @@ useEffect(() => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           disease: aiDisease,
+          difficulty: aiDifficulty,
           password: process.env.NEXT_PUBLIC_ADMIN_PASSWORD,
         }),
       })
@@ -524,7 +526,7 @@ useEffect(() => {
           <div>
             <span className="text-xl font-semibold text-gray-900">Clin</span>
             <span className="text-xl font-semibold text-blue-600">IQ</span>
-            <p className="text-sm text-gray-400 mt-0.5">Admin</p>
+            <p className="text-sm text-gray-400 mt-0.5">Admin • Total: {cases.length} cas</p>
           </div>
           <a
             href="/admin/analytics"
@@ -556,9 +558,9 @@ useEffect(() => {
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-base">✨</span>
                 <p className="text-sm font-semibold text-gray-900">Générer avec l'IA</p>
-                <span className="text-[10px] text-blue-500 font-medium bg-blue-100 px-2 py-0.5 rounded-full ml-auto">Gemini</span>
+                <span className="text-[10px] text-blue-500 font-medium bg-blue-100 px-2 py-0.5 rounded-full ml-auto">Groq</span>
               </div>
-              <p className="text-xs text-gray-400 mb-3">Entrez une maladie — l'IA remplit tout le formulaire. Révisez et ajoutez l'ID avant de publier.</p>
+              <p className="text-xs text-gray-400 mb-3">Entrez une maladie et la difficulté cible — l'IA remplit tout le formulaire.</p>
               <div className="flex gap-2">
                 <input
                   className="flex-1 border border-blue-200 rounded-xl px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-400 bg-white placeholder:text-gray-300"
@@ -568,6 +570,16 @@ useEffect(() => {
                   onKeyDown={e => e.key === 'Enter' && handleGenerate()}
                   disabled={aiLoading}
                 />
+                <select
+                  className="border border-blue-200 rounded-xl px-2 py-2 text-sm text-gray-900 outline-none focus:border-blue-400 bg-white"
+                  value={aiDifficulty}
+                  onChange={e => setAiDifficulty(Number(e.target.value))}
+                  disabled={aiLoading}
+                >
+                  <option value={1}>1 - Facile</option>
+                  <option value={2}>2 - Moyen</option>
+                  <option value={3}>3 - Difficile</option>
+                </select>
                 <button
                   onClick={handleGenerate}
                   disabled={aiLoading || !aiDisease.trim()}

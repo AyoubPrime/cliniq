@@ -3,6 +3,9 @@ export const DIAGNOSES = [
   "Infarctus du myocarde",
   "Syndrome coronarien aigu avec sus décalage ST",
   "Syndrome coronarien aigu sans sus décalage ST",
+  "Insuffisance cardiaque congestive",
+  "Cardiomyopathie restrictive",
+  "Insuffisance cardiaque chronique",
   "Angor instable",
   "Angor stable",
   "Fibrillation auriculaire",
@@ -154,7 +157,9 @@ export const DIAGNOSES = [
   "Herpès génital (Herpes simplex HSV-1/HSV-2)",
 
   // Néphrologie
-  "Insuffisance rénale aiguë",
+  "Insuffisance rénale aiguë Organique",
+  "Insuffisance rénale aiguë Obstructive",
+  "Insuffisance rénale aiguë Fonctionnelle",
   "Insuffisance rénale chronique",
   "Syndrome néphrotique",
   "Syndrome néphritique",
@@ -342,6 +347,7 @@ export const DIAGNOSES = [
 "Hernie discale lombaire",
 "Lombosciatique",
 "Sarcome d'Ewing",
+"Ostéosarcome",
 "Sciatique",
 
 // Ophtalmologie
@@ -388,7 +394,6 @@ export const ABBREVIATIONS: Record<string, string[]> = {
   'EP': ['Embolie pulmonaire'],
   'TVP': ['Thrombose veineuse profonde'],
   'IRC': ['Insuffisance rénale chronique'],
-  'IRA': ['Insuffisance rénale aiguë'],
   'LES': ['Lupus érythémateux systémique'],
   'PR': ['Polyarthrite rhumatoïde'],
   'TB': ['Tuberculose pulmonaire'],
@@ -409,4 +414,5 @@ export const ABBREVIATIONS: Record<string, string[]> = {
   'PTI':['Purpura thrombopénique immunologique'],
   'CIVD': ['Coagulation intravasculaire disséminée'],
   'SMD':['Syndromes myélodysplasiques'],
+  'IRA':['Insuffisance rénale aiguë Organique','Insuffisance rénale aiguë Obstructive','Insuffisance rénale aiguë Fonctionnelle'],
 }

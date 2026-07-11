@@ -84,7 +84,7 @@ CONTRAINTES TECHNIQUES:
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { disease, password } = body
+    const { disease, difficulty = 2, password } = body
 
     if (password !== process.env.NEXT_PUBLIC_ADMIN_PASSWORD && password !== process.env.ADMIN_PASSWORD) {
       return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
@@ -99,6 +99,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Clé API Groq manquante dans .env.local' }, { status: 500 })
     }
 
+    let difficultyInstruction = "Niveau 2 (Moyen) : Présentation subtile. Quelques signes typiques peuvent manquer ou le patient a des comorbidités qui masquent l'évidence. Nécessite une réflexion clinique approfondie."
+    if (difficulty === 1) difficultyInstruction = "Niveau 1 (Facile) : Présentation classique et typique (cas d'école). Signes évidents, parfait pour les étudiants débutants."
+    if (difficulty === 3) difficultyInstruction = "Niveau 3 (Difficile) : Présentation atypique, complexe, avec des fausses pistes (red herrings) ou une complication rare. Exige une grande expertise diagnostique."
+
     const groq = new Groq({ apiKey })
 
     const completion = await groq.chat.completions.create({
@@ -109,6 +113,9 @@ export async function POST(request: Request) {
           role: 'user',
           content: `Génère un cas clinique complet, médicalement rigoureux et pédagogiquement excellent sur : ${disease}. 
           
+NIVEAU DE DIFFICULTÉ CIBLE : ${difficultyInstruction}
+          
+Assure-toi que la valeur "difficulty" dans le JSON soit exactement ${difficulty}.
 Applique toutes les règles de qualité. Les indices doivent être spécifiques avec des valeurs chiffrées réelles. L'explication doit être celle d'un professeur agrégé, pas d'un wiki.`
         },
       ],
