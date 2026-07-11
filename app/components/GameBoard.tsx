@@ -265,8 +265,8 @@ export default function GameBoard({ cas }: { cas: Case }) {
       g.result === 'correct' ? '🟩' : g.result === 'proche' ? '🟨' : '🟥'
     ).join('')
     const text = won
-      ? `🩺 ClinIQ\n${new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}\nTrouvé en ${guesses.length} tentative${guesses.length > 1 ? 's' : ''}\n${emojis}\nhttps://cliniq-blond-nu.vercel.app`
-      : `🩺 ClinIQ\n${new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}\nNon trouvé\n${emojis}\nhttps://cliniq-blond-nu.vercel.app`
+      ? `🩺 ClinIQ\n${new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}\nTrouvé en ${guesses.length} tentative${guesses.length > 1 ? 's' : ''}\n${emojis}\n${window.location.href}`
+      : `🩺 ClinIQ\n${new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}\nNon trouvé\n${emojis}\n${window.location.href}`
     navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
