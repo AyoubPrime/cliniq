@@ -5,6 +5,7 @@ import { DIAGNOSES, ABBREVIATIONS } from '@/lib/diagnoses'
 import { supabase } from '@/lib/supabase'
 import AuthButton from './AuthButton'
 import DiagnosticApproach from './SchemaViewer'
+import ReferenceValuesModal from './ReferenceValuesModal'
 
 type Clue = {
   id: number
@@ -147,6 +148,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
   const [copied, setCopied] = useState(false)
   const [streak, setStreak] = useState(0)
   const [submitting, setSubmitting] = useState(false)
+  const [showRefModal, setShowRefModal] = useState(false)
 
   const MAX_ATTEMPTS = 6
 
@@ -460,6 +462,16 @@ export default function GameBoard({ cas }: { cas: Case }) {
             </div>
           ))}
         </div>
+        
+        <button 
+          onClick={() => setShowRefModal(true)}
+          className="w-full mt-4 flex items-center justify-center gap-2 bg-[#F5F5F7] text-[#1D1D1F] hover:bg-[#E8E8ED] py-2.5 rounded-xl text-xs font-semibold transition-colors"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M10 2v7.31M14 9.31V2M8.5 2h7M14 9.31l6.4 9.6A2 2 0 0 1 18.73 22H5.27a2 2 0 0 1-1.66-3.09L10 9.31"/><path d="M7 16h10"/>
+          </svg>
+          Valeurs Normales (Cheat Sheet)
+        </button>
       </div>
 
       {/* Clues timeline */}
@@ -662,6 +674,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
         </div>
       )}
 
+      <ReferenceValuesModal isOpen={showRefModal} onClose={() => setShowRefModal(false)} />
     </div>
   )
 }
