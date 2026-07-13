@@ -39,24 +39,44 @@ MISSION: Générer un cas clinique complet, médicalement rigoureux. JSON brut u
   "red_flag2": "SpO2 < 90% ou détresse respiratoire progressive → exsufflation ou drainage en urgence",
   "red_flag3": "Hypotension associée → tamponnade ou pneumothorax bilatéral à éliminer",
   "management1": "Oxygénothérapie haut débit (accélère la résorption de l'air pleural)",
-  "management2": "Si décollement < 2cm et patient stable : surveillance 6h, radio de contrôle",
-  "management3": "Si décollement ≥ 2cm : exsufflation à l'aiguille ou drainage thoracique",
-  "management4": "Contre-indication formelle au vol en avion et à la plongée jusqu'à guérison complète",
-  "mistake1": "Confondre avec une pleurite : la pleurite n'entraîne pas de tympanisme ni d'hyperclarté radiologique",
-  "mistake2": "Omettre la radio de contrôle à 6h chez un patient stable traité par surveillance simple",
+  "spo2": 96,
+  "clue1": "Douleur thoracique droite d'apparition brutale, rythmée par la respiration",
+  "clue2": "Patient longiligne, fumeur occasionnel (3 PA)",
+  "clue3": "Tympanisme et abolition du murmure vésiculaire à l'hémithorax droit",
+  "clue4": "Pas de turgescence jugulaire, pas de signes de choc",
+  "clue5": "Radiographie thoracique de face : hyperclarté avasculaire apicale droite avec liseré de décollement pleural",
+  "clue6": "Échographie pleurale : absence de glissement pleural (signe de la stratosphère) en antérieur droit",
+  "diagnosis_exact": "Pneumothorax spontané primaire droit",
+  "alias1": "Pneumothorax spontané",
+  "alias2": "Pneumothorax droit",
+  "alias3": "PNO",
+  "diagnosis_category": "Pneumologie",
+  "diagnosis_urgency": "Semi-urgent",
+  "wrong_answer_hint": "L'abolition asymétrique du murmure vésiculaire chez un sujet jeune et longiligne doit vous faire penser à un problème pleural mécanique.",
+  "explanation": "Le pneumothorax spontané primaire (PSP) survient typiquement chez des hommes jeunes, grands et minces, souvent fumeurs. La rupture d'une bulle sous-pleurale (bleb) crée une brèche permettant à l'air de pénétrer dans l'espace pleural, entraînant un collapsus partiel du poumon. L'examen clinique classique associe une abolition du murmure vésiculaire, un tympanisme et une diminution des vibrations vocales du côté atteint.",
+  "pearl": "Devant une douleur thoracique unilatérale brutale chez un sujet jeune, l'absence de glissement pleural à l'échographie est très sensible pour le diagnostic de pneumothorax, avant même la radiographie.",
+  "red_flag1": "Signes de gravité clinique (choc, cyanose, polypnée > 30/min) évoquant un pneumothorax compressif",
+  "red_flag2": "Turgescence des veines jugulaires évoquant un retentissement hémodynamique (tamponnade gazeuse)",
+  "red_flag3": "Pneumothorax bilatéral d'emblée",
+  "management1": "Oxygénothérapie si SpO2 < 94%",
+  "management2": "Exsufflation à l'aiguille ou drainage pleural si décollement important (> 2cm) ou mal toléré",
+  "management3": "Surveillance en milieu hospitalier ou externe selon la tolérance et la taille",
+  "management4": "Conseils à la sortie : sevrage tabagique, arrêt définitif de la plongée avec bouteille",
+  "mistake1": "Attendre une radiographie thoracique si des signes de choc compressif sont présents",
+  "mistake2": "Autoriser un voyage en avion avant la guérison complète et radiologiquement confirmée",
   "diff1_diagnosis": "Embolie pulmonaire",
   "diff1_proximity": "proche",
-  "diff1_distinction": "L'EP donne une douleur pleurale similaire mais sans tympanisme ni hyperclarté — le D-dimères et l'angio-TDM tranchent",
-  "diff2_diagnosis": "Infarctus du myocarde",
+  "diff1_distinction": "L'abolition localisée du murmure vésiculaire et le tympanisme orientent vers un pneumothorax plutôt qu'une atteinte vasculaire.",
+  "diff2_diagnosis": "Syndrome coronarien aigu",
   "diff2_proximity": "faux",
-  "diff2_distinction": "L'IDM est rare à 22 ans, l'ECG et les troponines sont normaux, et l'auscultation pulmonaire asymétrique oriente d'emblée vers une cause pleurale",
-  "diff3_diagnosis": "Pleurite aiguë",
+  "diff2_distinction": "Rare chez un sujet de 22 ans sans facteurs de risque lourds ; la douleur pleurétique (rythmée par la respiration) est atypique pour un SCA.",
+  "diff3_diagnosis": "Pneumonie franche lobaire aiguë",
   "diff3_proximity": "proche",
-  "diff3_distinction": "La pleurite donne une douleur à l'inspiration mais sans tympanisme ni disparition du murmure vésiculaire — la radio est normale",
-  "approach1_title": "Évaluation immédiate de la détresse",
-  "approach1_detail": "Avant tout : SpO2, FR, FC, PA. Rechercher les signes de pneumothorax compressif (tachycardie, hypotension, déviation trachéale) qui imposent une décompression sans attendre la radio.",
-  "approach2_title": "Examen clinique orienté",
-  "approach2_detail": "Auscultation comparative des deux champs pulmonaires. Percussion : tympanisme unilatéral est pathognomonique. Inspection : regarder si la trachée est médiane.",
+  "diff3_distinction": "L'absence de fièvre et le tympanisme (au lieu d'une matité) permettent d'écarter le diagnostic de condensation pulmonaire.",
+  "approach1_title": "Évaluation initiale et gravité",
+  "approach1_detail": "Rechercher d'emblée des signes de détresse respiratoire aiguë ou de choc (turgescence jugulaire, tachycardie > 120, PAS < 90). Leur présence signe un pneumothorax compressif nécessitant une décompression immédiate.",
+  "approach2_title": "Examen physique orienté",
+  "approach2_detail": "L'auscultation et la percussion pulmonaire sont clés. L'association tympanisme + abolition du murmure vésiculaire est pathognomonique.",
   "approach3_title": "Confirmation radiologique",
   "approach3_detail": "Radiographie thoracique face debout en inspiration. Rechercher le liseré de décollement (ligne pleurale séparée de la paroi). Mesurer le décollement pour guider la prise en charge.",
   "approach4_title": "Classification et décision thérapeutique",
@@ -67,7 +87,7 @@ MISSION: Générer un cas clinique complet, médicalement rigoureux. JSON brut u
 ━━━ FIN EXEMPLE ━━━
 
 RÈGLES DE QUALITÉ ABSOLUES:
-1. MINIMALISME EXTRÊME POUR L'OUVERTURE: "chief_complaint" doit être TRÈS court, style Doctordle. Ex: "Un homme de 58 ans se présente avec une douleur thoracique soudaine et un essoufflement." PAS de détails excessifs, pas de surcharge. "context" doit être VIDE ("").
+1. MINIMALISME EXTRÊME POUR L'OUVERTURE: "chief_complaint" doit être TRÈS court, style Doctordle. NE RÉPÉTEZ PAS l'âge ni le sexe du patient (c'est déjà affiché dans l'UI). Utilisez plutôt une citation directe du patient ou un motif brut. Ex: "Docteur, j'ai une douleur atroce dans la poitrine depuis 2 heures." ou "Douleur thoracique brutale et essoufflement." PAS de détails excessifs. "context" doit être VIDE ("").
 2. NE JAMAIS RÉVÉLER LE DIAGNOSTIC TROP TÔT: Les indices (clues) doivent faire réfléchir dans l'incertitude. Le diagnostic final ne doit devenir clair qu'aux indices 5 ou 6.
 3. CONSEIL APRÈS MAUVAISE RÉPONSE: "wrong_answer_hint" s'affiche après l'indice 3. Il doit guider la réflexion à ce stade précis, sans donner la réponse.
 4. COHÉRENCE CLINIQUE: Les constantes (PA, FC, T°, SpO2) doivent refléter le tableau.
@@ -94,21 +114,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Maladie manquante' }, { status: 400 })
     }
 
-    const apiKey = process.env.GROQ_API_KEY
+    const apiKey = process.env.ANTHROPIC_API_KEY
     if (!apiKey) {
-      return NextResponse.json({ error: 'Clé API Groq manquante dans .env.local' }, { status: 500 })
+      return NextResponse.json({ error: 'Clé API Anthropic manquante dans .env.local' }, { status: 500 })
     }
 
     let difficultyInstruction = "Niveau 2 (Moyen) : Présentation subtile. Quelques signes typiques peuvent manquer ou le patient a des comorbidités qui masquent l'évidence. Nécessite une réflexion clinique approfondie."
     if (difficulty === 1) difficultyInstruction = "Niveau 1 (Facile) : Présentation classique et typique (cas d'école). Signes évidents, parfait pour les étudiants débutants."
     if (difficulty === 3) difficultyInstruction = "Niveau 3 (Difficile) : Présentation atypique, complexe, avec des fausses pistes (red herrings) ou une complication rare. Exige une grande expertise diagnostique."
 
-    const groq = new Groq({ apiKey })
+    const anthropic = new Anthropic({ apiKey })
 
-    const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
+    const completion = await anthropic.messages.create({
+      model: 'claude-3-5-sonnet-20241022',
+      max_tokens: 4000,
+      temperature: 0.2,
+      system: SYSTEM_PROMPT,
       messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
         {
           role: 'user',
           content: `Génère un cas clinique complet, médicalement rigoureux et pédagogiquement excellent sur : ${disease}. 
@@ -118,13 +140,11 @@ NIVEAU DE DIFFICULTÉ CIBLE : ${difficultyInstruction}
 Assure-toi que la valeur "difficulty" dans le JSON soit exactement ${difficulty}.
 Applique toutes les règles de qualité. Les indices doivent être spécifiques avec des valeurs chiffrées réelles. L'explication doit être celle d'un professeur agrégé, pas d'un wiki.`
         },
-      ],
-      temperature: 0.4,
-      max_tokens: 3000,
-      response_format: { type: 'json_object' },
+        { role: 'assistant', content: '{' }
+      ]
     })
 
-    const text = completion.choices[0]?.message?.content?.trim() || ''
+    const text = '{' + (completion.content[0] as any).text
     const parsed = JSON.parse(text)
 
     return NextResponse.json({ case: parsed })
