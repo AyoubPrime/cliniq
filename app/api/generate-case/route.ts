@@ -68,8 +68,8 @@ MISSION: Générer un cas clinique complet, médicalement rigoureux. JSON brut u
 
 RÈGLES DE QUALITÉ ABSOLUES:
 1. MINIMALISME EXTRÊME POUR L'OUVERTURE: "chief_complaint" doit être TRÈS court, style Doctordle. NE RÉPÉTEZ PAS l'âge ni le sexe du patient (c'est déjà affiché dans l'UI). Utilisez plutôt une citation directe du patient ou un motif brut. Ex: "Docteur, j'ai une douleur atroce dans la poitrine depuis 2 heures." ou "Douleur thoracique brutale et essoufflement." PAS de détails excessifs. "context" doit être VIDE ("").
-2. INTERDICTION ABSOLUE DE RÉVÉLER LE DIAGNOSTIC TROP TÔT: C'est un jeu de déduction. Vous avez STRICTEMENT INTERDIT de donner un signe pathognomonique ou spécifique dans les indices 1, 2 ou 3 (ex: ne dites JAMAIS "douleur calmée en antéflexion" pour un pancréas dans l'indice 1). Les premiers indices doivent être vagues (ex: "Douleur abdominale diffuse"). Le diagnostic final ne doit devenir clair qu'aux indices 5 ou 6.
-3. CONSEIL APRÈS MAUVAISE RÉPONSE: "wrong_answer_hint" s'affiche après l'indice 3. Il doit guider la réflexion à ce stade précis, sans donner la réponse.
+2. INTERDICTION ABSOLUE DE NOMMER LE DIAGNOSTIC DANS LES INDICES: C'est un jeu de déduction. Ne révélez JAMAIS explicitement le diagnostic exact dans les indices, même dans les derniers. Les indices (clues) doivent fournir des preuves cliniques, biologiques ou radiologiques qui pointent vers le diagnostic, mais le joueur doit faire la déduction lui-même.
+3. CONSEIL APRÈS MAUVAISE RÉPONSE: "wrong_answer_hint" s'affiche après l'indice 3. Il doit guider la réflexion à ce stade précis, sans donner la réponse. IMPORTANT: Ne dites jamais des choses comme "Dans ce 3ème indice..." ou "À ce stade...". Rédigez le conseil de manière naturelle et médicale.
 4. COHÉRENCE CLINIQUE: Les constantes (PA, FC, T°, SpO2) doivent refléter le tableau.
 5. INDICES PROGRESSIFS ET SPÉCIFIQUES: Utilisez de vraies valeurs chiffrées (ex: Troponine à 2.4 ng/mL, pas "Troponines élevées"). Ne faites plus d'indice dédié aux antécédents, intégrez-les naturellement si pertinent dans les indices plus tardifs.
 6. TOUJOURS JSON BRUT UNIQUEMENT.
