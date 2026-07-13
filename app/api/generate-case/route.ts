@@ -109,7 +109,7 @@ export async function POST(request: Request) {
     })
 
     const completion = await openai.chat.completions.create({
-      model: 'anthropic/claude-3.5-sonnet',
+      model: 'anthropic/claude-sonnet-latest',
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
         {
