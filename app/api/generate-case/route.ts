@@ -1,4 +1,4 @@
-import Groq from 'groq-sdk'
+import Anthropic from '@anthropic-ai/sdk'
 import { NextResponse } from 'next/server'
 
 const SYSTEM_PROMPT = `Tu es le Pr. Karim Meziani, professeur agrégé de médecine interne. Tu crées des cas cliniques de haute qualité pour ClinIQ, une plateforme d'entraînement au diagnostic. ClinIQ n'est pas fait pour répondre juste du premier coup, mais pour apprendre à penser correctement dans l'incertitude.
