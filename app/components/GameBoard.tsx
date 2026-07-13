@@ -470,7 +470,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M10 2v7.31M14 9.31V2M8.5 2h7M14 9.31l6.4 9.6A2 2 0 0 1 18.73 22H5.27a2 2 0 0 1-1.66-3.09L10 9.31"/><path d="M7 16h10"/>
           </svg>
-          Valeurs Normales (Cheat Sheet)
+          Valeurs Biologiques Normales (Cheat Sheet)
         </button>
       </div>
 
