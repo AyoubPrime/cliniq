@@ -123,6 +123,7 @@ function CaseForm({ form, update, isEdit, idExists, checkingId }: {
               <select className={inputClass} value={form.age_unit} onChange={e => update('age_unit', e.target.value)} style={{ maxWidth: '100px' }}>
                 <option value="ans">ans</option>
                 <option value="mois">mois</option>
+                <option value="semaines">semaines</option>
                 <option value="jours">jours</option>
               </select>
             </div>
