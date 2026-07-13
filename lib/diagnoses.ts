@@ -194,6 +194,7 @@ export const DIAGNOSES = [
   "Hyperthyroïdie",
   "Thyroïdite de Hashimoto",
   "Maladie de Basedow",
+  "Thyroïdite subaiguë de De Quervain",
   "Crise thyréotoxique",
   "Insuffisance surrénalienne aiguë",
   "Syndrome de Cushing d'origine surrénalienne (ACTH indépendant)",

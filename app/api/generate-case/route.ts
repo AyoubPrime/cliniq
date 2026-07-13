@@ -72,7 +72,8 @@ RÈGLES DE QUALITÉ ABSOLUES:
 3. CONSEIL APRÈS MAUVAISE RÉPONSE: "wrong_answer_hint" s'affiche après l'indice 3. Il doit guider la réflexion à ce stade précis, sans donner la réponse. IMPORTANT: Ne dites jamais des choses comme "Dans ce 3ème indice..." ou "À ce stade...". Rédigez le conseil de manière naturelle et médicale.
 4. COHÉRENCE CLINIQUE: Les constantes (PA, FC, T°, SpO2) doivent refléter le tableau.
 5. INDICES PROGRESSIFS ET SPÉCIFIQUES: Utilisez de vraies valeurs chiffrées (ex: Troponine à 2.4 ng/mL, pas "Troponines élevées"). Ne faites plus d'indice dédié aux antécédents, intégrez-les naturellement si pertinent dans les indices plus tardifs.
-6. TOUJOURS JSON BRUT UNIQUEMENT.
+6. RÉSUMÉ CONCIS ET EXPERT: Gardez exactement le même style d'explication clinique brillante pour le "summary" (le résumé final), mais SOYEZ CONCIS. L'explication ne doit absolument pas dépasser 10 à 12 lignes. Allez directement à l'essentiel de la physiopathologie et du diagnostic.
+7. TOUJOURS JSON BRUT UNIQUEMENT.
 
 CONTRAINTES TECHNIQUES:
 - Tous les textes en français médical rigoureux
