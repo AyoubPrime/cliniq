@@ -432,5 +432,6 @@ export const ABBREVIATIONS: Record<string, string[]> = {
   'PTI':['Purpura thrombopénique immunologique'],
   'CIVD': ['Coagulation intravasculaire disséminée'],
   'SMD':['Syndromes myélodysplasiques'],
+  'SHP':['Sténose hypertrophique du pylore'],
   'IRA':['Insuffisance rénale aiguë Organique','Insuffisance rénale aiguë Obstructive','Insuffisance rénale aiguë Fonctionnelle'],
 }
