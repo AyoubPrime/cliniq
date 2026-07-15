@@ -211,7 +211,7 @@ export const DIAGNOSES = [
 
   // Rhumatologie
   "Polyarthrite rhumatoïde",
-  "Lupus érythémateux systémique",
+  "Lupus érythémateux systémique (LES)",
   "Sclérodermie systémique",
   "Syndrome de Sjögren",
   "Polymyosite",
