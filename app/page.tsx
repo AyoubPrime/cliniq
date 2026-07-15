@@ -3,8 +3,10 @@ import { supabase } from '@/lib/supabase'
 import GameBoard from './components/GameBoard'
 import WelcomeScreen from './components/WelcomeScreen'
 
+import { getAlgiersDateString } from '@/lib/date'
+
 async function getTodayCase() {
-  const today = new Date().toISOString().split('T')[0]
+  const today = getAlgiersDateString()
 
   const { data, error } = await supabase
     .from('cases')

@@ -1,8 +1,9 @@
 import { supabase } from '@/lib/supabase'
 import ArchivesClient from './ArchivesClient'
+import { getAlgiersDateString } from '@/lib/date'
 
 async function getAllCases() {
-  const today = new Date().toISOString().split('T')[0]
+  const today = getAlgiersDateString()
 
   const { data, error } = await supabase
     .from('cases')

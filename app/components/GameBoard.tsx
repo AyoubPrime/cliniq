@@ -153,19 +153,24 @@ export default function GameBoard({ cas }: { cas: Case }) {
   const MAX_ATTEMPTS = 6
 
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0]
-    const lastVisit = localStorage.getItem('lastVisitDate')
-    const currentStreak = parseInt(localStorage.getItem('currentStreak') || '0')
-    const yesterday = new Date()
-    yesterday.setDate(yesterday.getDate() - 1)
-    const yesterdayStr = yesterday.toISOString().split('T')[0]
-    let newStreak = 1
-    if (lastVisit === today) newStreak = currentStreak
-    else if (lastVisit === yesterdayStr) newStreak = currentStreak + 1
-    else newStreak = 1
-    localStorage.setItem('lastVisitDate', today)
-    localStorage.setItem('currentStreak', newStreak.toString())
-    setStreak(newStreak)
+    import('@/lib/date').then(({ getAlgiersDateString }) => {
+      const today = getAlgiersDateString()
+      const lastVisit = localStorage.getItem('lastVisitDate')
+      const currentStreak = parseInt(localStorage.getItem('currentStreak') || '0')
+      
+      const yesterdayDate = new Date()
+      yesterdayDate.setDate(yesterdayDate.getDate() - 1)
+      const yesterdayStr = getAlgiersDateString(yesterdayDate)
+      
+      let newStreak = 1
+      if (lastVisit === today) newStreak = currentStreak
+      else if (lastVisit === yesterdayStr) newStreak = currentStreak + 1
+      else newStreak = 1
+      localStorage.setItem('lastVisitDate', today)
+      localStorage.setItem('currentStreak', newStreak.toString())
+      setStreak(newStreak)
+    })
+    
     supabase.from('events').insert({
       user_id: null,
       event_type: 'case_started',
