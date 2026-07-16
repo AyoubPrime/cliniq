@@ -630,7 +630,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
                 onClick={handleGuess}
                 disabled={submitting}
                 className={`bg-[#0066CC] hover:bg-[#0055AA] active:bg-[#004499] text-white px-5 py-3.5 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2 min-w-[100px] ${
-                  guesses.length === 0 && gameState === 'playing' ? 'animate-pulse' : ''
+                  guesses.length === 0 && gameState === 'playing' ? 'animate-glow' : ''
                 }`}
               >
                 {submitting ? (
