@@ -629,7 +629,9 @@ export default function GameBoard({ cas }: { cas: Case }) {
               <button
                 onClick={handleGuess}
                 disabled={submitting}
-                className="bg-[#0066CC] hover:bg-[#0055AA] active:bg-[#004499] text-white px-5 py-3.5 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2 min-w-[100px]"
+                className={`bg-[#0066CC] hover:bg-[#0055AA] active:bg-[#004499] text-white px-5 py-3.5 rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2 min-w-[100px] ${
+                  guesses.length === 0 && gameState === 'playing' ? 'animate-pulse' : ''
+                }`}
               >
                 {submitting ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
