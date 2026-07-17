@@ -5,6 +5,7 @@ export const DIAGNOSES = [
   "Syndrome coronarien aigu sans sus décalage ST",
   "Insuffisance cardiaque congestive",
   "Cardiomyopathie restrictive",
+  "Syndrome du QT long",
   "Insuffisance cardiaque chronique",
   "Angor instable",
   "Angor stable",
@@ -43,6 +44,7 @@ export const DIAGNOSES = [
   "Méningite virale",
   "Encéphalite",
   "Épilepsie",
+  "Abcès cérébral",
   "État de mal épileptique",
   "Migraine",
   "Migraine avec aura",
@@ -114,6 +116,7 @@ export const DIAGNOSES = [
   "Hépatite virale aiguë",
   "Hépatite alcoolique",
   "Insuffisance hépatique aiguë",
+  "Ischémie mésentérique aiguë",
   "Ascite",
   "Syndrome de Budd-Chiari",
   "Cancer colorectal",
@@ -148,7 +151,6 @@ export const DIAGNOSES = [
   "Érysipèle",
   "Cellulite infectieuse",
   "Fasciite nécrosante",
-  "Ostéomyélite",
   "Arthrite septique",
   "Pyélonéphrite aiguë",
   "Cystite aiguë",
@@ -223,7 +225,7 @@ export const DIAGNOSES = [
   "Arthrose",
   "Fibromyalgie",
   "Vascularite",
-  "Maladie de Horton",
+  "Maladie de Horton (Artérite à cellules géantes)",
   "Périartérite noueuse",
   "Ostéoporose",
   "Ostéomalacie",
@@ -395,7 +397,20 @@ export const DIAGNOSES = [
 "Rétinopathie diabétique",
 "Dégénérescence maculaire liée à l'âge",
 "Cataracte",
-"kérato-conjonctivite (Trachome)"
+"kérato-conjonctivite (Trachome)",
+
+// Dermatologie
+"Zona",
+"Érysipèle",
+"Cellulite bactérienne",
+"Impétigo",
+"Érythème polymorphe",
+"Syndrome de Stevens-Johnson",
+"Nécrolyse épidermique toxique",
+"Érythème noueux",
+"Psoriasis",
+"Dermatite atopique",
+"Urticaire aiguë",
 ]
 // Common abbreviations and aliases for diagnoses
 export const ABBREVIATIONS: Record<string, string[]> = {
