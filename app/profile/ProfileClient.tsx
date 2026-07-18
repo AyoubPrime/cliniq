@@ -42,7 +42,7 @@ export default function ProfileClient() {
         if (!error && data) {
           setSessions(data as unknown as GameSession[])
         } else if (error) {
-          alert('Erreur lors du chargement des statistiques: ' + error.message)
+          console.error('Profile fetch error:', error)
         }
       }
     } catch (e) {
