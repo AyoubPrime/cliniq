@@ -400,11 +400,17 @@ export default function GameBoard({ cas }: { cas: Case }) {
         )}
 
         {/* Footer */}
-        <div className="text-center py-8">
-          <p className="text-xs text-[#AEAEB2] mb-2">Revenez demain pour un nouveau cas</p>
-          <a href="/archives" className="text-xs font-semibold text-[#0066CC] hover:text-[#0055AA] transition-colors">
-            Explorer les archives →
-          </a>
+        <div className="text-center py-8 flex flex-col items-center gap-3">
+          <p className="text-xs text-[#AEAEB2]">🔥 Revenez demain pour garder votre série !</p>
+          <div className="flex items-center gap-4">
+            <a href="/archives" className="text-xs font-semibold text-[#0066CC] hover:text-[#0055AA] transition-colors">
+              Explorer les archives →
+            </a>
+            <span className="text-[#E8E8ED]">|</span>
+            <a href="/profile" className="text-xs font-semibold text-[#0066CC] hover:text-[#0055AA] transition-colors">
+              Voir mes statistiques →
+            </a>
+          </div>
         </div>
 
         <SaveProgressPrompt streak={streak} />
