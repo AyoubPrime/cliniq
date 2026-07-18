@@ -28,16 +28,16 @@ export async function generateMetadata(
   const description = `Patient de ${cas.age} ans (${sex}), ${cas.setting}. Motif : ${cas.chief_complaint}. Analysez les indices et posez le bon diagnostic.`
 
   return {
-    title: `ClinIQ — ${cas.specialty} · Cas d'archive`,
+    title: `CliniQ — ${cas.specialty} · Cas d'archive`,
     description,
     openGraph: {
-      title: `ClinIQ — ${cas.specialty} · Cas d'archive`,
+      title: `CliniQ — ${cas.specialty} · Cas d'archive`,
       description,
       images: [{ url: '/og-image.jpg', width: 1200, height: 630 }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `ClinIQ — ${cas.specialty} · Cas d'archive`,
+      title: `CliniQ — ${cas.specialty} · Cas d'archive`,
       description,
       images: ['/og-image.jpg'],
     },

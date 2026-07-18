@@ -30,16 +30,16 @@ export async function generateMetadata(): Promise<Metadata> {
   const description = `Patient de ${cas.age} ans (${sex}), ${cas.setting}. Motif : ${cas.chief_complaint}. Analysez les indices et posez le bon diagnostic.`
 
   return {
-    title: `ClinIQ — Cas du jour · ${cas.specialty}`,
+    title: `CliniQ — Cas du jour · ${cas.specialty}`,
     description,
     openGraph: {
-      title: `ClinIQ — Cas du jour · ${cas.specialty}`,
+      title: `CliniQ — Cas du jour · ${cas.specialty}`,
       description,
       images: [{ url: '/og-image.jpg', width: 1200, height: 630 }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `ClinIQ — Cas du jour · ${cas.specialty}`,
+      title: `CliniQ — Cas du jour · ${cas.specialty}`,
       description,
       images: ['/og-image.jpg'],
     },

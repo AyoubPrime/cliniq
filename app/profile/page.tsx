@@ -1,7 +1,7 @@
 import ProfileClient from './ProfileClient'
 
 export const metadata = {
-  title: 'ClinIQ | Mon Profil',
+  title: 'CliniQ | Mon Profil',
   description: 'Suivez vos performances et statistiques.',
 }
 
