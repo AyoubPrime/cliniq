@@ -415,9 +415,17 @@ export default function GameBoard({ cas }: { cas: Case }) {
           <p className="text-[11px] text-[#AEAEB2] mt-0.5">Cas du jour</p>
         </div>
         <div className="flex items-center gap-3">
-          <a href="/archives" className="text-xs font-medium text-[#6E6E73] hover:text-[#1D1D1F] transition-colors">
-            Archives
-          </a>
+          <div className="flex items-center gap-4">
+            <a href="/archives" className="text-xs font-medium text-[#6E6E73] hover:text-[#1D1D1F] transition-colors" title="Archives">
+              Archives
+            </a>
+            <a href="/profile" className="text-[#6E6E73] hover:text-[#1D1D1F] transition-colors" title="Mon Profil">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </a>
+          </div>
           <div className="flex items-center gap-1.5 bg-[#FFF7ED] border border-[#FED7AA] text-[#C2410C] text-xs font-semibold px-3 py-1.5 rounded-full">
             🔥 {streak} jour{streak > 1 ? 's' : ''}
           </div>
