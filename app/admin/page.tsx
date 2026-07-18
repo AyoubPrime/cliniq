@@ -505,7 +505,7 @@ useEffect(() => {
         <div className="bg-white rounded-2xl border border-gray-100 p-8 w-full max-w-sm">
           <div className="mb-6">
             <span className="text-xl font-semibold text-gray-900">Clin</span>
-            <span className="text-xl font-semibold text-blue-600">IQ</span>
+            <span className="text-xl font-semibold text-blue-600">iQ</span>
             <p className="text-sm text-gray-400 mt-1">Accès réservé</p>
           </div>
           <input
@@ -530,7 +530,7 @@ useEffect(() => {
         <div className="flex justify-between items-center mb-6">
           <div>
             <span className="text-xl font-semibold text-gray-900">Clin</span>
-            <span className="text-xl font-semibold text-blue-600">IQ</span>
+            <span className="text-xl font-semibold text-blue-600">iQ</span>
             <p className="text-sm text-gray-400 mt-0.5">Admin • Total: {cases.length} cas</p>
           </div>
           <a

@@ -6,7 +6,7 @@ export default function NotFound() {
       <div className="max-w-sm w-full text-center">
         <div className="mb-6">
           <span className="text-xl font-semibold text-gray-900">Clin</span>
-          <span className="text-xl font-semibold text-blue-600">IQ</span>
+          <span className="text-xl font-semibold text-blue-600">iQ</span>
         </div>
 
         <p className="text-4xl font-semibold text-gray-900 mb-2">404</p>

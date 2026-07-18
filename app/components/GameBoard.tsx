@@ -296,7 +296,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
         <div className="flex justify-between items-center mb-6">
           <div>
             <span className="text-[17px] font-semibold tracking-tight text-[#1D1D1F]">Clin</span>
-            <span className="text-[17px] font-semibold tracking-tight text-[#0066CC]">IQ</span>
+            <span className="text-[17px] font-semibold tracking-tight text-[#0066CC]">iQ</span>
             <p className="text-[11px] text-[#AEAEB2] mt-0.5">Résumé du cas</p>
           </div>
           <div className="flex items-center gap-3">
@@ -427,7 +427,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
         <div>
           <div>
             <span className="text-[17px] font-semibold tracking-tight text-[#1D1D1F]">Clin</span>
-            <span className="text-[17px] font-semibold tracking-tight text-[#0066CC]">IQ</span>
+            <span className="text-[17px] font-semibold tracking-tight text-[#0066CC]">iQ</span>
           </div>
           <p className="text-[11px] text-[#AEAEB2] mt-0.5">Cas du jour</p>
         </div>

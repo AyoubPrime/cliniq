@@ -69,7 +69,7 @@ export default function ArchivesClient({ cases }: { cases: Case[] }) {
         <div>
           <div>
             <span className="text-[17px] font-semibold tracking-tight text-[#1D1D1F]">Clin</span>
-            <span className="text-[17px] font-semibold tracking-tight text-[#0066CC]">IQ</span>
+            <span className="text-[17px] font-semibold tracking-tight text-[#0066CC]">iQ</span>
           </div>
           <p className="text-[11px] text-[#AEAEB2] mt-0.5">
             Archives — {completedCount}/{cases.length} complétés

@@ -10,16 +10,16 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://cliniq-blond-nu.vercel.app'),
-  title: 'ClinIQ — Un cas clinique par jour',
+  title: 'CliniQ — Un cas clinique par jour',
   description: 'Analysez les indices, posez votre diagnostic, apprenez. Un cas clinique par jour pour les étudiants en médecine francophones.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'ClinIQ',
+    title: 'CliniQ',
   },
   openGraph: {
-    title: 'ClinIQ — Un cas clinique par jour',
+    title: 'CliniQ — Un cas clinique par jour',
     description: 'Analysez les indices, posez votre diagnostic, apprenez. Un cas clinique par jour pour les étudiants en médecine francophones.',
     url: 'https://cliniq-blond-nu.vercel.app',
     siteName: 'ClinIQ',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'ClinIQ — Un cas clinique par jour',
+        alt: 'CliniQ — Un cas clinique par jour',
       },
     ],
     locale: 'fr_FR',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ClinIQ — Un cas clinique par jour',
+    title: 'CliniQ — Un cas clinique par jour',
     description: 'Analysez les indices, posez votre diagnostic, apprenez.',
     images: ['/og-image.jpg'],
   },
@@ -57,7 +57,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icon-192.jpg" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="ClinIQ" />
+        <meta name="apple-mobile-web-app-title" content="CliniQ" />
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body>

@@ -75,7 +75,7 @@ export default async function AnalyticsPage() {
         <div className="flex justify-between items-center mb-6">
           <div>
             <span className="text-xl font-semibold text-gray-900">Clin</span>
-            <span className="text-xl font-semibold text-blue-600">IQ</span>
+            <span className="text-xl font-semibold text-blue-600">iQ</span>
             <p className="text-sm text-gray-400 mt-0.5">Analytics</p>
           </div>
           <a href="/admin" className="text-sm text-gray-400 hover:text-gray-600">
