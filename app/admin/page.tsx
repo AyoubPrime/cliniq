@@ -489,6 +489,10 @@ useEffect(() => {
   const handleDelete = async () => {
     if (!editingId) return
     setLoading(true)
+    // Manually cascade delete to prevent foreign key constraint errors
+    await supabase.from('events').delete().eq('case_id', editingId)
+    await supabase.from('game_sessions').delete().eq('case_id', editingId)
+    
     const { error } = await supabase.from('cases').delete().eq('id', editingId)
     if (error) setMessage('Erreur: ' + error.message)
     else { setMessage('Cas supprimé.'); setEditingId(null); setForm(emptyForm); setConfirmDelete(false); loadCases() }
