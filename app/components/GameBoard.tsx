@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase'
 import AuthButton from './AuthButton'
 import DiagnosticApproach from './SchemaViewer'
 import ReferenceValuesModal from './ReferenceValuesModal'
+import SimilarCases from './SimilarCases'
 
 type Clue = {
   id: number
@@ -398,6 +399,9 @@ export default function GameBoard({ cas }: { cas: Case }) {
             ))}
           </div>
         )}
+
+        {/* Similar Cases for Retention Loop */}
+        <SimilarCases currentCaseId={(cas as any).id} specialty={cas.specialty} />
 
         {/* Footer */}
         <div className="text-center py-8 flex flex-col items-center gap-3">
