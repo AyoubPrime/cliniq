@@ -210,12 +210,17 @@ export default function GameBoard({ cas }: { cas: Case }) {
       const caseId = (cas as any).id || null
       const today = new Date().toISOString().split('T')[0]
 
-      await supabase.from('game_sessions').insert({
+      const { error } = await supabase.from('game_sessions').insert({
         user_id: user.id,
         case_id: caseId,
         attempts,
         result,
       })
+      
+      if (error) {
+        console.error('Supabase insert error:', error)
+        alert('Erreur lors de la sauvegarde: ' + error.message)
+      }
 
       const { data: profile } = await supabase
         .from('profiles')
