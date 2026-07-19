@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     title: 'CliniQ — Un cas clinique par jour',
     description: 'Analysez les indices, posez votre diagnostic, apprenez. Un cas clinique par jour pour les étudiants en médecine francophones.',
     url: 'https://cliniq-blond-nu.vercel.app',
-    siteName: 'ClinIQ',
+    siteName: 'CliniQ',
     images: [
       {
         url: '/og-image.jpg',

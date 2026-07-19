@@ -1,6 +1,6 @@
 {
-  "name": "ClinIQ",
-  "short_name": "ClinIQ",
+  "name": "CliniQ",
+  "short_name": "CliniQ",
   "description": "Un cas clinique par jour pour les étudiants en médecine.",
   "start_url": "/",
   "display": "standalone",
