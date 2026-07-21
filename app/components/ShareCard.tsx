@@ -9,7 +9,7 @@ const SPECIALTY_ABBR: Record<string, string> = {
   'Gastroentérologie': 'Gastro.',
   'Neurologie': 'Neuro.',
   'Dermatologie': 'Dermato.',
-  'Endocrinologie': 'Endocrino.',
+  'Endocrinologie': 'Endocr.',
   'Hématologie': 'Hémato.',
   'Rhumatologie': 'Rhumato.',
   'Néphrologie': 'Néphro.',
@@ -56,7 +56,7 @@ function RadarSVG({ data }: { data: Array<{ name: string; value: number }> }) {
   const gridLevels = [0.25, 0.5, 0.75, 1]
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ overflow: 'visible' }}>
       {/* Grid polygons */}
       {gridLevels.map(level => {
         const pts = data.map((_, i) => {
@@ -171,7 +171,7 @@ export default function ShareCard({
           width: 300,
           fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
           position: 'relative',
-          overflow: 'hidden',
+          overflow: 'visible',
           boxShadow: '0 24px 64px rgba(0, 102, 204, 0.35), 0 0 0 1px rgba(255,255,255,0.07)',
         }}
       >
@@ -226,7 +226,7 @@ export default function ShareCard({
         </div>
 
         {/* Radar chart */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14, overflow: 'visible', paddingLeft: 30, paddingRight: 30 }}>
           {top6.length >= 3 ? (
             <RadarSVG data={top6} />
           ) : (
