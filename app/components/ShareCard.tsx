@@ -2,11 +2,46 @@
 
 import { useRef, useState } from 'react'
 
+// Abbreviation map for all French medical specialties
+const SPECIALTY_ABBR: Record<string, string> = {
+  'Cardiologie': 'Cardio.',
+  'Pneumologie': 'Pneumo.',
+  'Gastroentérologie': 'Gastro.',
+  'Neurologie': 'Neuro.',
+  'Dermatologie': 'Dermato.',
+  'Endocrinologie': 'Endocrino.',
+  'Hématologie': 'Hémato.',
+  'Rhumatologie': 'Rhumato.',
+  'Néphrologie': 'Néphro.',
+  'Urologie': 'Uro.',
+  'Gynécologie': 'Gynéco.',
+  'Pédiatrie': 'Pédiat.',
+  'Chirurgie': 'Chirur.',
+  'Orthopédie': 'Ortho.',
+  'Ophtalmologie': 'Ophtalmo.',
+  'ORL': 'ORL',
+  'Infectiologie': 'Infect.',
+  'Réanimation': 'Réanim.',
+  'Urgences': 'Urgences',
+  'Psychiatrie': 'Psy.',
+  'Médecine interne': 'Med. Int.',
+  'Oncologie': 'Onco.',
+  'Radiologie': 'Radio.',
+  'Gériatrie': 'Géria.',
+  'Immunologie': 'Immuno.',
+}
+
+function abbr(name: string): string {
+  if (SPECIALTY_ABBR[name]) return SPECIALTY_ABBR[name]
+  // Fallback: first 7 chars + dot
+  return name.length > 8 ? name.substring(0, 7) + '.' : name
+}
+
 // Pure SVG radar chart — no external library needed
 function RadarSVG({ data }: { data: Array<{ name: string; value: number }> }) {
-  const size = 170
+  const size = 200
   const center = size / 2
-  const maxRadius = 58
+  const maxRadius = 62
   const n = data.length
   if (n < 3) return null
 
@@ -57,21 +92,20 @@ function RadarSVG({ data }: { data: Array<{ name: string; value: number }> }) {
 
       {/* Labels */}
       {data.map((d, i) => {
-        const p = getPoint(i, maxRadius + 15)
+        const p = getPoint(i, maxRadius + 18)
         const anchor = p.x < center - 5 ? 'end' : p.x > center + 5 ? 'start' : 'middle'
-        const short = d.name.length > 8 ? d.name.substring(0, 8) + '.' : d.name
         return (
           <text
             key={i}
             x={p.x} y={p.y}
             textAnchor={anchor}
             dominantBaseline="middle"
-            fill="rgba(255,255,255,0.65)"
-            fontSize="7.5"
+            fill="rgba(255,255,255,0.7)"
+            fontSize="8"
             fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
             fontWeight="500"
           >
-            {short}
+            {abbr(d.name)}
           </text>
         )
       })}
