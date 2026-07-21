@@ -401,11 +401,14 @@ export const DIAGNOSES = [
 
 // Dermatologie
 "Zona",
+"Herpès simplex labial",
 "Érysipèle",
 "Teigne des pieds (pied d'athlète)",
 "Teigne du cuir chevelu (à dermatophyte)",
+"Dermatophytose palmaire",
 "Cellulite bactérienne",
-"Impétigo",
+"Impétigo croûteux",
+"Impétigo bulleux",
 "Érythème polymorphe",
 "Syndrome de Stevens-Johnson",
 "Nécrolyse épidermique toxique",
