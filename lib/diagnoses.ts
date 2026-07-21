@@ -402,6 +402,8 @@ export const DIAGNOSES = [
 // Dermatologie
 "Zona",
 "Érysipèle",
+"Teigne des pieds (pied d'athlète)",
+"Teigne du cuir chevelu (à dermatophyte)",
 "Cellulite bactérienne",
 "Impétigo",
 "Érythème polymorphe",
@@ -409,7 +411,11 @@ export const DIAGNOSES = [
 "Nécrolyse épidermique toxique",
 "Érythème noueux",
 "Psoriasis",
-"Dermatite atopique",
+"Eczéma séborrhéique (dermatite séborrhéique)",
+"Eczéma nummulaire",
+"Dermatite atopique (eczéma atopique)",
+"Dermatite de contact (eczéma de contact)",
+"Dyshidrose",
 "Urticaire aiguë",
 ]
 // Common abbreviations and aliases for diagnoses
