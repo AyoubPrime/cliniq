@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { DIAGNOSES, ABBREVIATIONS } from '@/lib/diagnoses'
 import { supabase } from '@/lib/supabase'
 import AuthButton from './AuthButton'
@@ -139,6 +139,19 @@ const resultConfig: Record<string, { label: string; icon: string; style: string 
   faux:    { label: 'Faux',    icon: '×', style: 'bg-[#FEF2F2] text-[#B91C1C] border-[#FECACA]' },
 }
 
+// ─── Badge system ─────────────────────────────────────────────────────────
+type Badge = { emoji: string; label: string; color: string; bg: string; border: string }
+
+function getBadge(attempts: number, cluesUsed: number): Badge | null {
+  if (attempts === 1 && cluesUsed <= 1)
+    return { emoji: '⚡', label: 'INSTINCT ABSOLU', color: '#6D28D9', bg: '#F5F3FF', border: '#DDD6FE' }
+  if (attempts <= 2)
+    return { emoji: '🎯', label: 'PRÉCISION CLINIQUE', color: '#0066CC', bg: '#EBF4FF', border: '#C7DEFF' }
+  if (attempts <= 4)
+    return { emoji: '🩺', label: 'RAISONNEMENT SOLIDE', color: '#166534', bg: '#F0FDF4', border: '#BBF7D0' }
+  return null
+}
+
 export default function GameBoard({ cas }: { cas: Case }) {
   const [revealedClues, setRevealedClues] = useState(cas.clues.filter(c => c.auto_reveal))
   const [guesses, setGuesses] = useState<GuessResult[]>([])
@@ -150,6 +163,10 @@ export default function GameBoard({ cas }: { cas: Case }) {
   const [streak, setStreak] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [showRefModal, setShowRefModal] = useState(false)
+  const [badge, setBadge] = useState<Badge | null>(null)
+  const [showBadge, setShowBadge] = useState(false)
+  const startTimeRef = useRef(Date.now())
+  const [elapsedSec, setElapsedSec] = useState(0)
 
   const MAX_ATTEMPTS = 6
 
@@ -255,8 +272,15 @@ export default function GameBoard({ cas }: { cas: Case }) {
     })
 
     if (result === 'correct') {
+      const elapsed = Math.round((Date.now() - startTimeRef.current) / 1000)
+      setElapsedSec(elapsed)
       setRevealedClues(cas.clues)
       setGameState('won')
+      const earnedBadge = getBadge(newGuesses.length, revealedClues.length)
+      setTimeout(() => {
+        setBadge(earnedBadge)
+        setShowBadge(true)
+      }, 300)
       await trackEvent('case_completed', { result: 'won', attempts: newGuesses.length })
       await saveGameSession('won', newGuesses.length)
       return
@@ -273,12 +297,18 @@ export default function GameBoard({ cas }: { cas: Case }) {
   }
 
   const handleShare = (won: boolean) => {
-    const emojis = guesses.map(g =>
+    const usedEmojis = guesses.map(g =>
       g.result === 'correct' ? '🟩' : g.result === 'proche' ? '🟨' : '🟥'
-    ).join('')
+    )
+    const unusedSlots = Array(MAX_ATTEMPTS - guesses.length).fill('⬜')
+    const emojis = [...usedEmojis, ...unusedSlots].join('')
+    const date = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })
+    const badgeLine = badge ? `${badge.emoji} ${badge.label} (${revealedClues.length}/${cas.clues.length} indices)\n` : ''
+    const timeLine = won && elapsedSec > 0 ? `⏱️ Temps: ${elapsedSec}s\n` : ''
+    const specialty = cas.specialty ? ` — ${cas.specialty}` : ''
     const text = won
-      ? `🩺 CliniQ\n${new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}\nTrouvé en ${guesses.length} tentative${guesses.length > 1 ? 's' : ''}\n${emojis}\n${window.location.href}`
-      : `🩺 CliniQ\n${new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}\nNon trouvé\n${emojis}\n${window.location.href}`
+      ? `🩺 CliniQ${specialty}\n${date}\n${badgeLine}${timeLine}${emojis}\n\nRelevez le défi: ${window.location.href}`
+      : `🩺 CliniQ${specialty}\n${date}\nNon trouvé\n${emojis}\n\nRelevez le défi: ${window.location.href}`
     navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
@@ -469,9 +499,14 @@ export default function GameBoard({ cas }: { cas: Case }) {
             <p className="text-[15px] font-semibold text-[#1D1D1F] tracking-tight">
               {cas.sex === 'F' ? 'Femme' : 'Homme'}, {cas.age} {cas.age_unit}
             </p>
-            <p className="text-[11px] text-[#AEAEB2] mt-0.5">
-              {cas.setting}{cas.specialty ? ` · ${cas.specialty}` : ''}
-            </p>
+            <div className="flex items-center gap-2 mt-1.5">
+              {cas.specialty && (
+                <span className="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#EBF4FF] text-[#0066CC] border border-[#C7DEFF]/80">
+                  {cas.specialty}
+                </span>
+              )}
+              <span className="text-[11px] text-[#AEAEB2]">{cas.setting}</span>
+            </div>
           </div>
           {cas.diagnosis_urgency && (
             <span className={`text-[9px] font-bold px-2.5 py-1 rounded-full border flex-shrink-0 uppercase tracking-widest ${urgencyColor[cas.diagnosis_urgency] || 'bg-[#F5F5F7] text-[#6E6E73] border-[#E8E8ED]'}`}>
@@ -496,14 +531,17 @@ export default function GameBoard({ cas }: { cas: Case }) {
           ))}
         </div>
         
-        <button 
+        <button
           onClick={() => setShowRefModal(true)}
-          className="w-full mt-4 flex items-center justify-center gap-2 bg-[#F5F5F7] text-[#1D1D1F] hover:bg-[#E8E8ED] py-2.5 rounded-xl text-xs font-semibold transition-colors"
+          className="w-full mt-4 flex items-center gap-3 bg-[#F5F5F7] border border-[#E8E8ED] text-[#1D1D1F] hover:bg-[#E8E8ED] hover:border-[#D2D2D7] py-2.5 px-4 rounded-xl text-xs font-medium transition-all"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0066CC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M10 2v7.31M14 9.31V2M8.5 2h7M14 9.31l6.4 9.6A2 2 0 0 1 18.73 22H5.27a2 2 0 0 1-1.66-3.09L10 9.31"/><path d="M7 16h10"/>
           </svg>
-          Valeurs Biologiques Normales (Cheat Sheet)
+          <span className="flex-1 text-left">Normes Biologiques <span className="text-[#AEAEB2] font-normal">(Cheat Sheet)</span></span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#AEAEB2" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
         </button>
       </div>
 
@@ -604,9 +642,29 @@ export default function GameBoard({ cas }: { cas: Case }) {
       {gameState === 'won' && (
         <div className="bg-[#F0FDF4] rounded-2xl border border-[#BBF7D0] p-5 mb-3 text-center">
           <p className="text-base font-semibold text-[#166534] mb-1">Diagnostic réussi</p>
-          <p className="text-xs text-[#6E6E73] mb-4">
+          <p className="text-xs text-[#6E6E73] mb-3">
             Trouvé en {guesses.length} tentative{guesses.length > 1 ? 's' : ''}
+            {elapsedSec > 0 ? ` · ${elapsedSec}s` : ''}
           </p>
+          {badge && (
+            <div
+              className="flex justify-center mb-4"
+              style={{
+                opacity: showBadge ? 1 : 0,
+                transform: showBadge ? 'scale(1)' : 'scale(0.9)',
+                transition: 'opacity 0.4s cubic-bezier(0.34,1.56,0.64,1), transform 0.4s cubic-bezier(0.34,1.56,0.64,1)',
+              }}
+            >
+              <span
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full text-[13px] font-semibold tracking-wide border"
+                style={{ color: badge.color, backgroundColor: badge.bg, borderColor: badge.border }}
+              >
+                <span className="text-base">{badge.emoji}</span>
+                {badge.label}
+                <span className="text-[10px] font-normal opacity-60 ml-1">· {revealedClues.length}/{cas.clues.length} indices</span>
+              </span>
+            </div>
+          )}
           <div className="flex gap-2 justify-center flex-wrap">
             <button onClick={() => setShowSummary(true)} className="bg-[#166534] text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-[#14532D] transition-colors">
               Voir le résumé
@@ -617,6 +675,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
           </div>
         </div>
       )}
+
 
       {/* Lost state */}
       {gameState === 'lost' && (
