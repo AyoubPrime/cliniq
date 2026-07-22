@@ -186,7 +186,7 @@ export default function ArchivesClient({ cases }: { cases: Case[] }) {
                       {isPlayed && (
                         <span className="flex items-center gap-1 text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full border border-emerald-100 flex-shrink-0">
                           <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                          Joué
+                          Terminé
                         </span>
                       )}
                     </div>

@@ -247,7 +247,7 @@ export default function ShareCard({
           paddingTop: 14,
         }}>
           {[
-            { label: 'Cas joués', value: String(totalCases) },
+            { label: 'Cas traités', value: String(totalCases) },
             { label: 'Réussite', value: `${winRate}%` },
             { label: 'Série', value: `🔥 ${streak}j` },
           ].map(stat => (

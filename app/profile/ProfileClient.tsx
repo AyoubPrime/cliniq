@@ -106,7 +106,7 @@ export default function ProfileClient() {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
-            Retour au jeu
+            Cas du jour
           </Link>
         </div>
 
@@ -164,7 +164,7 @@ export default function ProfileClient() {
       {/* Top Metrics Row */}
       <div className="grid grid-cols-3 gap-3 mb-6">
         <div className={`${card} !mb-0 !p-4 flex flex-col items-center justify-center`}>
-          <span className="text-[11px] font-semibold text-[#86868B] uppercase tracking-wider mb-1">Cas joués</span>
+          <span className="text-[11px] font-semibold text-[#86868B] uppercase tracking-wider mb-1">Cas traités</span>
           <span className="text-2xl font-bold text-[#1D1D1F]">{stats.total}</span>
         </div>
         <div className={`${card} !mb-0 !p-4 flex flex-col items-center justify-center`}>
@@ -238,7 +238,7 @@ export default function ProfileClient() {
           Derniers cas cliniques
         </h2>
         {sessions.length === 0 ? (
-          <p className="text-sm text-[#86868B] text-center py-4">Aucun cas joué pour le moment.</p>
+          <p className="text-sm text-[#86868B] text-center py-4">Aucun cas traité pour le moment.</p>
         ) : (
           <div className="flex flex-col gap-3">
             {sessions.slice(0, 5).map((session) => (
