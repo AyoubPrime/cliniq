@@ -33,13 +33,13 @@ export async function generateMetadata(
     openGraph: {
       title: `CliniQ — ${cas.specialty} · Cas d'archive`,
       description,
-      images: [{ url: '/og-image.jpg', width: 1200, height: 630 }],
+      images: [{ url: '/og-image-brand.jpg', width: 1200, height: 675 }],
     },
     twitter: {
       card: 'summary_large_image',
       title: `CliniQ — ${cas.specialty} · Cas d'archive`,
       description,
-      images: ['/og-image.jpg'],
+      images: ['/og-image-brand.jpg'],
     },
   }
 }

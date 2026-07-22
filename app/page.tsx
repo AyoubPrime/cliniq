@@ -35,13 +35,13 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: `CliniQ — Cas du jour · ${cas.specialty}`,
       description,
-      images: [{ url: '/og-image.jpg', width: 1200, height: 630 }],
+      images: [{ url: '/og-image-brand.jpg', width: 1200, height: 675 }],
     },
     twitter: {
       card: 'summary_large_image',
       title: `CliniQ — Cas du jour · ${cas.specialty}`,
       description,
-      images: ['/og-image.jpg'],
+      images: ['/og-image-brand.jpg'],
     },
   }
 }

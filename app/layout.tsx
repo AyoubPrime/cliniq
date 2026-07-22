@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     siteName: 'CliniQ',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/og-image-brand.jpg',
         width: 1200,
         height: 675,
         alt: 'CliniQ — L\'instinct absolu. Simulation clinique pour étudiants en médecine.',
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'CliniQ — L\'instinct absolu.',
     description: 'Simulation clinique · Raisonnement diagnostique · Préparation ECOSs.',
-    images: ['/og-image.jpg'],
+    images: ['/og-image-brand.jpg'],
   },
 }
 
