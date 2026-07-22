@@ -10,25 +10,27 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://cliniq-blond-nu.vercel.app'),
-  title: 'CliniQ — Un cas clinique par jour',
-  description: 'Analysez les indices, posez votre diagnostic, apprenez. Un cas clinique par jour pour les étudiants en médecine francophones.',
+  title: 'CliniQ — L\'instinct absolu.',
+  description: 'La plateforme de simulation clinique pour les étudiants en médecine francophones. Un cas par jour, raisonnement diagnostique guidé, préparation ECOSs.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
     title: 'CliniQ',
   },
+  keywords: ['médecine', 'ECOS', 'OSCE', 'cas clinique', 'diagnostic', 'étudiants médecine', 'francophone', 'raisonnement clinique'],
+  authors: [{ name: 'CliniQ' }],
   openGraph: {
-    title: 'CliniQ — Un cas clinique par jour',
-    description: 'Analysez les indices, posez votre diagnostic, apprenez. Un cas clinique par jour pour les étudiants en médecine francophones.',
+    title: 'CliniQ — L\'instinct absolu.',
+    description: 'Simulation clinique · Raisonnement diagnostique · Préparation ECOSs. Un cas par jour, gratuit, en français.',
     url: 'https://cliniq-blond-nu.vercel.app',
     siteName: 'CliniQ',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
-        height: 630,
-        alt: 'CliniQ — Un cas clinique par jour',
+        height: 675,
+        alt: 'CliniQ — L\'instinct absolu. Simulation clinique pour étudiants en médecine.',
       },
     ],
     locale: 'fr_FR',
@@ -36,8 +38,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'CliniQ — Un cas clinique par jour',
-    description: 'Analysez les indices, posez votre diagnostic, apprenez.',
+    title: 'CliniQ — L\'instinct absolu.',
+    description: 'Simulation clinique · Raisonnement diagnostique · Préparation ECOSs.',
     images: ['/og-image.jpg'],
   },
 }

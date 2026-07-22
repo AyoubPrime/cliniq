@@ -1,7 +1,7 @@
 {
-  "name": "CliniQ",
+  "name": "CliniQ — L'instinct absolu.",
   "short_name": "CliniQ",
-  "description": "Un cas clinique par jour pour les étudiants en médecine.",
+  "description": "La plateforme de simulation clinique pour les étudiants en médecine francophones. Raisonnement diagnostique guidé, préparation ECOSs.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
