@@ -67,9 +67,10 @@ export default function ArchivesClient({ cases }: { cases: Case[] }) {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <div>
+          <div className="flex items-baseline gap-1">
             <span className="text-[17px] font-semibold tracking-tight text-[#1D1D1F]">Clin</span>
             <span className="text-[17px] font-bold tracking-tight text-[#0066CC]">iQ</span>
+            <span className="text-[11px] text-[#AEAEB2] font-medium ml-1.5">— L'instinct absolu</span>
           </div>
           <p className="text-[11px] text-[#AEAEB2] mt-0.5">
             Archives — {completedCount}/{cases.length} complétés
