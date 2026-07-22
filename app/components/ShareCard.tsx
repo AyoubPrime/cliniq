@@ -79,15 +79,16 @@ function RadarSVG({ data }: { data: Array<{ name: string; value: number }> }) {
           return `${p.x},${p.y}`
         }).join(' ')}
         fill="#0066CC"
-        fillOpacity="0.45"
-        stroke="#4D9EE8"
+        fillOpacity="0.35"
+        stroke="#0066CC"
         strokeWidth="1.5"
+        style={{ filter: 'drop-shadow(0 0 8px rgba(0,102,204,0.6))' }}
       />
 
       {/* Data dots */}
       {data.map((d, i) => {
         const p = getPoint(i, (d.value / 100) * maxRadius)
-        return <circle key={i} cx={p.x} cy={p.y} r="2.5" fill="#4D9EE8" />
+        return <circle key={i} cx={p.x} cy={p.y} r="2.5" fill="#0066CC" />
       })}
 
       {/* Labels */}
@@ -165,7 +166,7 @@ export default function ShareCard({
       <div
         ref={cardRef}
         style={{
-          background: 'linear-gradient(155deg, #0A1628 0%, #0D2347 55%, #091B38 100%)',
+          background: 'linear-gradient(155deg, #2A2A2D 0%, #1D1D1F 55%, #151516 100%)',
           borderRadius: 20,
           padding: 24,
           width: 300,
@@ -179,7 +180,7 @@ export default function ShareCard({
         <div style={{
           position: 'absolute', top: -80, right: -80,
           width: 220, height: 220, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(0,102,204,0.25) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(0,102,204,0.4) 0%, transparent 70%)',
           pointerEvents: 'none',
         }} />
 
@@ -191,7 +192,7 @@ export default function ShareCard({
             </div>
             <div style={{ fontSize: 15, fontWeight: 700 }}>
               <span style={{ color: 'white' }}>Clin</span>
-              <span style={{ color: '#4D9EE8' }}>iQ</span>
+              <span style={{ color: '#0066CC', textShadow: '0 0 12px rgba(0,102,204,0.5)' }}>iQ</span>
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
@@ -212,12 +213,12 @@ export default function ShareCard({
           {bestSpecialty && (
             <div style={{
               display: 'inline-block',
-              background: 'rgba(0,102,204,0.25)',
-              border: '1px solid rgba(77,158,232,0.35)',
+              background: 'rgba(0,102,204,0.2)',
+              border: '1px solid rgba(0,102,204,0.4)',
               borderRadius: 20,
               padding: '3px 10px',
               fontSize: 11,
-              color: '#4D9EE8',
+              color: '#3399FF',
               fontWeight: 600,
             }}>
               🏅 {bestSpecialty}
