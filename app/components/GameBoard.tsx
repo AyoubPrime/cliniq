@@ -306,9 +306,10 @@ export default function GameBoard({ cas }: { cas: Case }) {
     const badgeLine = badge ? `${badge.emoji} ${badge.label} (${revealedClues.length}/${cas.clues.length} indices)\n` : ''
     const timeLine = won && elapsedSec > 0 ? `⏱️ Temps: ${elapsedSec}s\n` : ''
     const specialty = cas.specialty ? ` — ${cas.specialty}` : ''
+    const shareUrl = `${window.location.href.split('?')[0]}?ref=social`
     const text = won
-      ? `🩺 CliniQ${specialty}\n${date}\n${badgeLine}${timeLine}${emojis}\n\nRelevez le défi: ${window.location.href}`
-      : `🩺 CliniQ${specialty}\n${date}\nNon trouvé\n${emojis}\n\nRelevez le défi: ${window.location.href}`
+      ? `🩺 CliniQ${specialty}\n${date}\n${badgeLine}${timeLine}${emojis}\n\nRelevez le défi: ${shareUrl}`
+      : `🩺 CliniQ${specialty}\n${date}\nNon trouvé\n${emojis}\n\nRelevez le défi: ${shareUrl}`
     navigator.clipboard.writeText(text)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
