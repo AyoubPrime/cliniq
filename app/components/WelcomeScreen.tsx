@@ -45,7 +45,7 @@ export default function WelcomeScreen() {
         <div className="mb-8">
           <div className="flex items-baseline gap-0.5 mb-1">
             <span className="text-[22px] font-semibold tracking-tight text-[#1D1D1F]">Clin</span>
-            <span className="text-[22px] font-semibold tracking-tight text-[#0066CC]">iQ</span>
+            <span className="text-[22px] font-bold tracking-tight text-[#0066CC]">iQ</span>
           </div>
           <div className="h-px w-8 bg-[#0066CC] opacity-40 rounded-full" />
         </div>

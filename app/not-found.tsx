@@ -5,8 +5,8 @@ export default function NotFound() {
     <main className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="max-w-sm w-full text-center">
         <div className="mb-6">
-          <span className="text-xl font-semibold text-gray-900">Clin</span>
-          <span className="text-xl font-semibold text-blue-600">iQ</span>
+          <span className="text-xl font-semibold tracking-tight text-[#1D1D1F]">Clin</span>
+          <span className="text-xl font-bold tracking-tight text-[#0066CC]">iQ</span>
         </div>
 
         <p className="text-4xl font-semibold text-gray-900 mb-2">404</p>
@@ -16,7 +16,7 @@ export default function NotFound() {
 
         <Link
           href="/"
-          className="inline-block bg-blue-600 text-white text-sm font-medium px-6 py-3 rounded-xl hover:bg-blue-700 transition-colors"
+          className="inline-block bg-[#0066CC] text-white text-sm font-medium px-6 py-3 rounded-xl hover:bg-[#0055AA] transition-colors"
         >
           Retour au cas du jour
         </Link>
