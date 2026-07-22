@@ -327,12 +327,11 @@ export default function GameBoard({ cas }: { cas: Case }) {
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
-            <div className="flex items-baseline gap-1">
+            <div className="flex items-baseline">
               <span className="text-[17px] font-semibold tracking-tight text-[#1D1D1F]">Clin</span>
               <span className="text-[17px] font-bold tracking-tight text-[#0066CC]">iQ</span>
-              <span className="text-[11px] text-[#AEAEB2] font-medium ml-1.5">— L'instinct absolu</span>
             </div>
-            <p className="text-[11px] text-[#AEAEB2] mt-0.5">Résumé du cas</p>
+            <p className="text-[11px] text-[#AEAEB2] mt-0.5">L'instinct absolu. • Résumé</p>
           </div>
           <div className="flex items-center gap-3">
             <a href="/profile" className="text-[#6E6E73] hover:text-[#1D1D1F] transition-colors" title="Mes Statistiques">
@@ -463,12 +462,11 @@ export default function GameBoard({ cas }: { cas: Case }) {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <div className="flex items-baseline gap-1">
+          <div className="flex items-baseline">
             <span className="text-[17px] font-semibold tracking-tight text-[#1D1D1F]">Clin</span>
             <span className="text-[17px] font-bold tracking-tight text-[#0066CC]">iQ</span>
-            <span className="text-[11px] text-[#AEAEB2] font-medium ml-1.5">— L'instinct absolu</span>
           </div>
-          <p className="text-[11px] text-[#AEAEB2] mt-0.5">Cas du jour</p>
+          <p className="text-[11px] text-[#AEAEB2] mt-0.5">L'instinct absolu.</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-4">
