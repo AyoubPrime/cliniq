@@ -187,8 +187,8 @@ export default function ShareCard({
         {/* Top row: branding + score */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
           <div>
-            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', letterSpacing: 2, textTransform: 'uppercase', marginBottom: 3 }}>
-              Profil Clinique
+            <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.4)', letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: 3 }}>
+              Carte d'Identité Clinique
             </div>
             <div style={{ fontSize: 15, fontWeight: 700 }}>
               <span style={{ color: 'white' }}>Clin</span>
@@ -287,7 +287,7 @@ export default function ShareCard({
               <polyline points="7 10 12 15 17 10" />
               <line x1="12" y1="15" x2="12" y2="3" />
             </svg>
-            Télécharger ma carte
+            Télécharger ma CIC
           </>
         )}
       </button>
