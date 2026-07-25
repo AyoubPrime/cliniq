@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   },
   keywords: ['médecine', 'ECOS', 'OSCE', 'cas clinique', 'diagnostic', 'étudiants médecine', 'francophone', 'raisonnement clinique'],
   authors: [{ name: 'CliniQ' }],
+  verification: {
+    google: 'pDMhtu52TiCDyTI_Znoa55bv5vv3P1lGxZZlJnhwSd8',
+  },
   openGraph: {
     title: 'CliniQ — L\'instinct absolu.',
     description: 'Simulation clinique · Raisonnement diagnostique · Préparation ECOSs. Un cas par jour, gratuit, en français.',
@@ -44,6 +47,16 @@ export const metadata: Metadata = {
   },
 }
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'CliniQ',
+  alternateName: 'ClinIQ',
+  url: 'https://cliniq-blond-nu.vercel.app',
+  description: 'La plateforme de simulation clinique pour les étudiants en médecine francophones. Un cas par jour, raisonnement diagnostique guidé, préparation ECOSs.',
+}
+
+
 import { Analytics } from '@vercel/analytics/react'
 
 export default function RootLayout({
@@ -61,6 +74,10 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="CliniQ" />
         <meta name="mobile-web-app-capable" content="yes" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body>
         {children}

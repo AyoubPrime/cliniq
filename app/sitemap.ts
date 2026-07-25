@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { supabase } from '@/lib/supabase'
+import { getAlgiersDateString } from '@/lib/date'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://cliniq-blond-nu.vercel.app'
@@ -21,7 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   // Dynamic routes (published cases)
-  const today = new Date().toISOString().split('T')[0]
+  const today = getAlgiersDateString()
   const { data: cases } = await supabase
     .from('cases')
     .select('id, publish_date')

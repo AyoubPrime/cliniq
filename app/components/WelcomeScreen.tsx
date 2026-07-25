@@ -88,10 +88,29 @@ export default function WelcomeScreen() {
           Commencer
         </button>
 
+        {/* Visually hidden rich SEO keywords for Google crawlability */}
+        <div className="sr-only">
+          <h1>CliniQ — L'instinct absolu</h1>
+          <p>
+            CliniQ est la plateforme de simulation et d'entraînement clinique de référence pour les étudiants en médecine francophones.
+            Préparez efficacement vos ECOS (Examens Cliniques Objectifs Structurés) et vos stages hospitaliers grâce à des cas cliniques quotidiens
+            portant sur diverses spécialités médicales : Cardiologie, Gastroentérologie, Neurologie, Pédiatrie, Pneumologie, et plus encore.
+          </p>
+          <p>
+            Analysez les indices cliniques, biologiques et d'imagerie médicale, proposez votre diagnostic, et accédez à des fiches de
+            synthèse complètes et des perles cliniques pour perfectionner votre raisonnement médical.
+          </p>
+        </div>
+
         {/* Fine print */}
-        <p className="text-center text-[11px] text-[#AEAEB2] mt-4">
-          Un nouveau cas chaque jour · Gratuit
-        </p>
+        <div className="text-center mt-4">
+          <p className="text-[11px] text-[#AEAEB2]">
+            Un nouveau cas chaque jour · Gratuit
+          </p>
+          <p className="text-[9px] text-[#AEAEB2]/60 mt-1">
+            © {new Date().getFullYear()} CliniQ — L'instinct absolu.
+          </p>
+        </div>
       </div>
     </div>
   )
