@@ -14,15 +14,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Email invalide' }, { status: 400 })
     }
 
-    // Generate a simple unsubscribe token
-    const token = Buffer.from(`${email}:${Date.now()}`).toString('base64url')
+    const cleanEmail = email.toLowerCase().trim()
+    const token = Buffer.from(`${cleanEmail}:${Date.now()}`).toString('base64url')
 
     const { error } = await supabase
       .from('email_subscribers')
-      .upsert({ email: email.toLowerCase().trim(), unsubscribe_token: token, active: true }, {
-        onConflict: 'email',
-        ignoreDuplicates: false,
-      })
+      .insert({ email: cleanEmail, unsubscribe_token: token, active: true })
+
+    // If duplicate email, treat as success (already subscribed)
+    if (error && error.code === '23505') {
+      return NextResponse.json({ success: true })
+    }
 
     if (error) {
       console.error('Subscribe error:', error)
