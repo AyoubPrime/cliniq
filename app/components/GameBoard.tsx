@@ -518,9 +518,6 @@ export default function GameBoard({ cas }: { cas: Case }) {
           </div>
         </div>
 
-        {/* Email Subscribe Box */}
-        <EmailSubscribeBox />
-
         <SaveProgressPrompt streak={streak} />
       </div>
     )
@@ -841,6 +838,11 @@ export default function GameBoard({ cas }: { cas: Case }) {
           </div>
         </div>
       )}
+
+      {/* Email Subscribe Box */}
+      <div className="mt-4">
+        <EmailSubscribeBox />
+      </div>
 
       <ReferenceValuesModal isOpen={showRefModal} onClose={() => setShowRefModal(false)} />
     </div>
