@@ -13,6 +13,7 @@ async function getAnalytics() {
     { data: recentEvents },
     { data: caseStats },
     { count: totalProfiles },
+    { count: emailSubscribers },
   ] = await Promise.all([
     supabase.from('events').select('*', { count: 'exact', head: true }),
     supabase.from('events').select('*', { count: 'exact', head: true })
@@ -32,6 +33,7 @@ async function getAnalytics() {
       .eq('event_type', 'case_completed')
       .gte('created_at', thirtyDaysAgo),
     supabase.from('profiles').select('*', { count: 'exact', head: true }),
+    supabase.from('email_subscribers').select('*', { count: 'exact', head: true }).eq('active', true),
   ])
 
   const casePerformance: Record<string, { started: number; won: number; lost: number; totalAttempts: number }> = {}
@@ -52,6 +54,7 @@ async function getAnalytics() {
     recentEvents: recentEvents || [],
     casePerformance,
     totalProfiles: totalProfiles || 0,
+    emailSubscribers: emailSubscribers || 0,
   }
 }
 
@@ -100,6 +103,10 @@ export default async function AnalyticsPage() {
           <div className={card + ' mb-0'}>
             <p className="text-xs text-gray-400 mb-1">Taux de réussite (7j)</p>
             <p className="text-2xl font-semibold text-gray-900">{data.winRate7d}%</p>
+          </div>
+          <div className={card + ' mb-0 col-span-2'}>
+            <p className="text-xs text-gray-400 mb-1">📬 Abonnés email</p>
+            <p className="text-2xl font-semibold text-blue-600">{data.emailSubscribers}</p>
           </div>
         </div>
 

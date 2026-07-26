@@ -8,6 +8,74 @@ import DiagnosticApproach from './SchemaViewer'
 import ReferenceValuesModal from './ReferenceValuesModal'
 import SimilarCases from './SimilarCases'
 
+// ─── Email Subscribe Box ───────────────────────────────────────────────────────
+function EmailSubscribeBox() {
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const [hidden, setHidden] = useState(false)
+
+  useEffect(() => {
+    if (localStorage.getItem('cliniq_subscribed') === 'true') setHidden(true)
+  }, [])
+
+  if (hidden) return null
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email.includes('@')) return
+    setStatus('loading')
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      if (res.ok) {
+        setStatus('success')
+        localStorage.setItem('cliniq_subscribed', 'true')
+      } else {
+        setStatus('error')
+      }
+    } catch {
+      setStatus('error')
+    }
+  }
+
+  return (
+    <div className="bg-[#F5F5F7] rounded-2xl p-5 mb-3 border border-[#E8E8ED]">
+      {status === 'success' ? (
+        <div className="text-center py-2">
+          <p className="text-[15px] font-semibold text-[#1D1D1F] mb-1">✓ Vous êtes abonné(e) !</p>
+          <p className="text-[12px] text-[#6E6E73]">Le prochain cas arrivera dans votre boîte mail demain à 7h.</p>
+        </div>
+      ) : (
+        <>
+          <p className="text-[13px] font-semibold text-[#1D1D1F] mb-1">📬 Recevez le cas de demain</p>
+          <p className="text-[12px] text-[#6E6E73] mb-3">Un email chaque matin à 7h avec le nouveau cas clinique.</p>
+          <form onSubmit={handleSubmit} className="flex gap-2">
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="votre@email.com"
+              required
+              className="flex-1 text-[13px] border border-[#E8E8ED] rounded-xl px-3 py-2.5 outline-none focus:border-[#0066CC] bg-white text-[#1D1D1F] placeholder:text-[#AEAEB2]"
+            />
+            <button
+              type="submit"
+              disabled={status === 'loading'}
+              className="bg-[#0066CC] text-white text-[12px] font-semibold px-4 py-2.5 rounded-xl hover:bg-[#0055AA] transition-colors disabled:opacity-50 whitespace-nowrap"
+            >
+              {status === 'loading' ? '...' : "S'abonner"}
+            </button>
+          </form>
+          {status === 'error' && <p className="text-[11px] text-[#FF3B30] mt-2">Une erreur est survenue. Réessayez.</p>}
+        </>
+      )}
+    </div>
+  )
+}
+
 type Clue = {
   id: number
   text: string
@@ -449,6 +517,9 @@ export default function GameBoard({ cas }: { cas: Case }) {
             </a>
           </div>
         </div>
+
+        {/* Email Subscribe Box */}
+        <EmailSubscribeBox />
 
         <SaveProgressPrompt streak={streak} />
       </div>
