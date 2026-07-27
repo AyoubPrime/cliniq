@@ -32,7 +32,7 @@ export default function PromoAnimation() {
             </div>
             
             {/* Tagline */}
-            <p className="text-[18px] md:text-[22px] text-[#AEAEB2] mt-3 tagline-reveal tracking-normal">
+            <p className="text-[16px] md:text-[20px] text-[#8E8E93] mt-8 tagline-reveal tracking-[0.15em] font-medium">
               L'instinct absolu.
             </p>
           </div>
