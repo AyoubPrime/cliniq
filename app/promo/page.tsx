@@ -26,7 +26,7 @@ export default function PromoAnimation() {
 
           {/* Phase 3 & 4: Logo Snap & Hold */}
           <div className="absolute flex flex-col items-center">
-            <div className="flex items-baseline overflow-hidden">
+            <div className="flex items-baseline">
               <span className="text-[64px] md:text-[80px] font-semibold tracking-tight text-[#1D1D1F] clin-animation opacity-0 transform -translate-x-[100px]">Clin</span>
               <span className="text-[64px] md:text-[80px] font-bold tracking-tight text-[#0066CC] relative iq-animation opacity-0 transform translate-x-[100px]">
                 iQ
