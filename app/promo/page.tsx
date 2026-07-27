@@ -11,110 +11,92 @@ export default function PromoAnimation() {
       onClick={() => setPlaying(true)}
     >
       {!playing ? (
-        <div className="absolute inset-0 flex items-center justify-center text-[#AEAEB2] text-sm tracking-widest uppercase">
+        <div className="absolute inset-0 flex items-center justify-center text-[#AEAEB2] text-sm tracking-widest uppercase transition-opacity hover:opacity-70">
           Tapez l'écran pour démarrer
         </div>
       ) : (
-        <div className="relative w-full h-full flex items-center justify-center">
+        <div className="relative w-full h-full flex items-center justify-center bg-white">
           
-          {/* Phase 1: Heartbeat Dot */}
-          <div className="absolute w-4 h-4 bg-[#0066CC] rounded-full dot-animation shadow-[0_0_20px_rgba(0,102,204,0.6)]" />
-          
-          {/* Phase 2: Radar Expansion */}
-          <div className="absolute w-[200px] h-[200px] border-[2px] border-[#0066CC] rounded-full radar-animation opacity-0" />
-          <div className="absolute w-[300px] h-[300px] border-[1px] border-[#0066CC] rounded-full radar-animation-2 opacity-0" />
-
-          {/* Phase 3 & 4: Logo Snap & Hold */}
+          {/* Main Logo & Tagline Container */}
           <div className="absolute flex flex-col items-center">
-            <div className="flex items-baseline">
-              <span className="text-[64px] md:text-[80px] font-semibold tracking-tight text-[#1D1D1F] clin-animation opacity-0 transform -translate-x-[100px]">Clin</span>
-              <span className="text-[64px] md:text-[80px] font-bold tracking-tight text-[#0066CC] relative iq-animation opacity-0 transform translate-x-[100px]">
+            
+            {/* The Logo (No whitespace between Clin and iQ) */}
+            <div className="flex items-baseline logo-reveal">
+              <span className="text-[64px] md:text-[80px] font-semibold tracking-tight text-[#1D1D1F]">
+                Clin
+              </span><span className="text-[64px] md:text-[80px] font-bold tracking-tight text-[#0066CC] relative overflow-hidden">
                 iQ
-                {/* Glow sweep effect */}
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-50 w-full h-full sweep-animation" />
+                {/* Premium Glass Shimmer Sweep */}
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-60 w-full h-full shimmer-sweep" />
               </span>
             </div>
             
-            <p className="text-[18px] md:text-[22px] text-[#AEAEB2] mt-2 tagline-animation opacity-0 tracking-normal">
+            {/* Tagline */}
+            <p className="text-[18px] md:text-[22px] text-[#AEAEB2] mt-3 tagline-reveal tracking-normal">
               L'instinct absolu.
             </p>
           </div>
 
-          {/* Fade out to white at the end */}
-          <div className="absolute inset-0 bg-white fade-out-animation pointer-events-none opacity-0" />
+          {/* Fade to white loop at the very end */}
+          <div className="absolute inset-0 bg-white fade-out-loop pointer-events-none opacity-0" />
         </div>
       )}
 
-      {/* Internal styles for complex keyframes */}
+      {/* Internal styles for Apple-esque bespoke animations */}
       <style jsx>{`
-        /* 0s to 2s: Heartbeat */
-        .dot-animation {
-          animation: heartbeat 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-        @keyframes heartbeat {
-          0% { transform: scale(0); opacity: 0; }
-          20% { transform: scale(1); opacity: 1; }
-          30% { transform: scale(1.3); }
-          40% { transform: scale(1); }
-          50% { transform: scale(1.3); }
-          60% { transform: scale(1); opacity: 1; }
-          80% { transform: scale(30); opacity: 0; }
-          100% { transform: scale(30); opacity: 0; }
+        /* 
+          Apple-style reveal: 
+          Starts slightly lower, blurred, and transparent.
+          Eases up slowly and sharply into focus.
+        */
+        .logo-reveal {
+          opacity: 0;
+          transform: translateY(20px) scale(0.98);
+          filter: blur(10px);
+          animation: appleReveal 2.5s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards, fadeOut 1.5s ease-in 7.5s forwards;
         }
 
-        /* 1.5s to 3s: Radar expanding outwards as dot disappears */
-        .radar-animation {
-          animation: radarExpand 1.5s ease-out 1.5s forwards;
-        }
-        .radar-animation-2 {
-          animation: radarExpand 1.5s ease-out 1.7s forwards;
-        }
-        @keyframes radarExpand {
-          0% { transform: scale(0.1); opacity: 0.8; }
-          100% { transform: scale(2); opacity: 0; }
+        .tagline-reveal {
+          opacity: 0;
+          transform: translateY(15px);
+          filter: blur(8px);
+          /* Tagline trails slightly behind the logo */
+          animation: appleReveal 3s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards, fadeOut 1.5s ease-in 7.5s forwards;
         }
 
-        /* 2.5s to 4.5s: Logo slide in */
-        .clin-animation {
-          animation: slideInLeft 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 2.5s forwards, fadeOut 1s ease-in 9s forwards;
-        }
-        .iq-animation {
-          animation: slideInRight 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 2.5s forwards, fadeOut 1s ease-in 9s forwards;
-        }
-        @keyframes slideInLeft {
-          0% { transform: translateX(-100px); opacity: 0; }
-          100% { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideInRight {
-          0% { transform: translateX(100px); opacity: 0; }
-          100% { transform: translateX(0); opacity: 1; }
+        @keyframes appleReveal {
+          100% { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
+            filter: blur(0px); 
+          }
         }
 
-        /* 4.5s to 7s: Tagline fade in and track out */
-        .tagline-animation {
-          animation: trackOut 2.5s cubic-bezier(0.2, 0, 0.2, 1) 4s forwards, fadeOut 1s ease-in 9s forwards;
-        }
-        @keyframes trackOut {
-          0% { opacity: 0; letter-spacing: 0em; transform: translateY(10px); }
-          100% { opacity: 1; letter-spacing: 0.15em; transform: translateY(0); }
+        /* 
+          Glass Shimmer: 
+          Sweeps across the "iQ" after the logo has fully settled. 
+        */
+        .shimmer-sweep {
+          transform: translateX(-150%) skewX(-25deg);
+          animation: sweep 2.5s cubic-bezier(0.25, 1, 0.5, 1) 3s forwards;
         }
 
-        /* 7s to 9s: Subtle light sweep over iQ */
-        .sweep-animation {
-          transform: translateX(-100%);
-          animation: sweep 2s ease-in-out 7s forwards;
-        }
         @keyframes sweep {
-          0% { transform: translateX(-100%) skewX(-20deg); }
-          100% { transform: translateX(200%) skewX(-20deg); }
+          100% { transform: translateX(250%) skewX(-25deg); }
         }
 
-        /* 9.5s to 10.5s: Fade entire screen to white for a clean loop */
-        .fade-out-animation {
-          animation: fadeToWhite 1s ease-in 9.5s forwards;
+        /* 
+          Fade Out for smooth looping
+        */
+        @keyframes fadeOut {
+          100% { opacity: 0; filter: blur(5px); }
         }
+
+        .fade-out-loop {
+          animation: fadeToWhite 1.5s ease-in 8s forwards;
+        }
+        
         @keyframes fadeToWhite {
-          0% { opacity: 0; }
           100% { opacity: 1; }
         }
       `}</style>
