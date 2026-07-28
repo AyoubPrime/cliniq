@@ -9,6 +9,7 @@ export const DIAGNOSES = [
   "Insuffisance cardiaque chronique",
   "Angor instable",
   "Angor stable",
+  "Tachycardie sinusale",
   "Fibrillation auriculaire",
   "Flutter auriculaire",
   "Tachycardie supraventriculaire",
