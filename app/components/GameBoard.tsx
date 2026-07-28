@@ -604,7 +604,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
           ))}
         </div>
         
-        {cas.image_url && (
+        {cas.image_url && !cas.clues.some(c => c.text.includes('[IMAGE]')) && (
           <div className="mt-4 pt-4 border-t border-[#F5F5F7]">
             <button 
               onClick={() => setShowImageModal(true)}
@@ -675,7 +675,26 @@ export default function GameBoard({ cas }: { cas: Case }) {
                 {/* Text */}
                 <div className="pb-4 flex-1 min-w-0">
                   {revealed ? (
-                    <p className="text-sm text-[#1D1D1F] leading-relaxed">{clue.text}</p>
+                    <>
+                      <p className="text-sm text-[#1D1D1F] leading-relaxed">
+                        {clue.text.replace('[IMAGE]', '').trim()}
+                      </p>
+                      {clue.text.includes('[IMAGE]') && cas.image_url && (
+                        <div className="mt-3">
+                          <button 
+                            onClick={() => setShowImageModal(true)}
+                            className="w-full flex items-center justify-center gap-2 bg-[#F0FDF4] hover:bg-[#E1FDE8] text-[#166534] border border-[#BBF7D0] py-2.5 rounded-xl text-sm font-semibold transition-colors"
+                          >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                              <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                            Voir l'image clinique
+                          </button>
+                        </div>
+                      )}
+                    </>
                   ) : (
                     <p className="text-sm text-[#D2D2D7] italic">
                       {i === revealedClues.length ? 'Débloqué à la prochaine tentative' : '···'}
