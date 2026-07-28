@@ -28,6 +28,7 @@ const emptyForm = {
   hr: '',
   temp: '',
   spo2: '',
+  image_url: '',
   clue1: '', clue2: '', clue3: '', clue4: '', clue5: '', clue6: '',
   diagnosis_exact: '',
   alias1: '', alias2: '', alias3: '',
@@ -160,6 +161,11 @@ function CaseForm({ form, update, isEdit, idExists, checkingId }: {
               <input className={inputClass} placeholder={ph} value={form[field as keyof FormType] as string} onChange={e => update(field, e.target.value)} />
             </div>
           ))}
+        </div>
+        <div className="mt-3 pt-3 border-t border-gray-100">
+          <label className={labelClass}>URL de l'image (Optionnel — ECG, Radio, etc.)</label>
+          <input className={inputClass} placeholder="https://..." value={form.image_url as string} onChange={e => update('image_url', e.target.value)} />
+          <p className="text-xs text-gray-300 mt-1">Lien direct vers l'image. Sera affiché sur le cas.</p>
         </div>
       </div>
 
@@ -338,6 +344,7 @@ useEffect(() => {
       chief_complaint: data.chief_complaint || '', context: data.context || '',
       bp: data.bp || '', hr: data.hr?.toString() || '',
       temp: data.temp?.toString() || '', spo2: data.spo2?.toString() || '',
+      image_url: data.image_url || '',
       clue1: getClue(1), clue2: getClue(2), clue3: getClue(3),
       clue4: getClue(4), clue5: getClue(5), clue6: getClue(6),
       diagnosis_exact: data.diagnosis_exact || '',
@@ -375,6 +382,7 @@ useEffect(() => {
     setting: form.setting, chief_complaint: form.chief_complaint,
     context: form.context, bp: form.bp, hr: parseInt(form.hr) || null,
     temp: parseFloat(form.temp) || null, spo2: parseInt(form.spo2) || null,
+    image_url: form.image_url || null,
     clues: [
       { id: 1, text: form.clue1, auto_reveal: true },
       { id: 2, text: form.clue2, auto_reveal: false },
@@ -448,6 +456,7 @@ useEffect(() => {
         hr: String(c.hr || ''),
         temp: String(c.temp || ''),
         spo2: String(c.spo2 || ''),
+        image_url: c.image_url || '',
         clue1: c.clue1 || '', clue2: c.clue2 || '', clue3: c.clue3 || '',
         clue4: c.clue4 || '', clue5: c.clue5 || '', clue6: c.clue6 || '',
         diagnosis_exact: c.diagnosis_exact || '',

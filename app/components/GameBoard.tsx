@@ -118,6 +118,7 @@ type Case = {
     detail: string
   }>
   schema_svg?: string
+  image_url?: string | null
 }
 
 type GuessResult = {
@@ -231,6 +232,7 @@ export default function GameBoard({ cas }: { cas: Case }) {
   const [streak, setStreak] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [showRefModal, setShowRefModal] = useState(false)
+  const [showImageModal, setShowImageModal] = useState(false)
   const [badge, setBadge] = useState<Badge | null>(null)
   const [showBadge, setShowBadge] = useState(false)
   const startTimeRef = useRef(Date.now())
@@ -602,6 +604,22 @@ export default function GameBoard({ cas }: { cas: Case }) {
           ))}
         </div>
         
+        {cas.image_url && (
+          <div className="mt-4 pt-4 border-t border-[#F5F5F7]">
+            <button 
+              onClick={() => setShowImageModal(true)}
+              className="w-full flex items-center justify-center gap-2 bg-[#F0FDF4] hover:bg-[#E1FDE8] text-[#166534] border border-[#BBF7D0] py-2.5 rounded-xl text-sm font-semibold transition-colors"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>
+              Voir l'image clinique
+            </button>
+          </div>
+        )}
+
         <button
           onClick={() => setShowRefModal(true)}
           className="w-full mt-4 flex items-center gap-3 bg-[#F5F5F7] border border-[#E8E8ED] text-[#1D1D1F] hover:bg-[#E8E8ED] hover:border-[#D2D2D7] py-2.5 px-4 rounded-xl text-xs font-medium transition-all"
@@ -845,6 +863,29 @@ export default function GameBoard({ cas }: { cas: Case }) {
       </div>
 
       <ReferenceValuesModal isOpen={showRefModal} onClose={() => setShowRefModal(false)} />
+
+      {/* Fullscreen Image Modal */}
+      {showImageModal && cas.image_url && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 animate-fade-in backdrop-blur-md">
+          <button 
+            onClick={() => setShowImageModal(false)}
+            className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 transition-colors"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+          <div className="relative max-w-4xl w-full max-h-[85vh] flex flex-col items-center">
+            <img 
+              src={cas.image_url} 
+              alt="Indice clinique" 
+              className="max-w-full max-h-[80vh] object-contain rounded-xl shadow-2xl border border-white/10"
+            />
+            <p className="text-white/60 text-xs mt-4 uppercase tracking-widest font-semibold">Image Clinique</p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
