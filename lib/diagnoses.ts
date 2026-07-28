@@ -186,6 +186,7 @@ export const DIAGNOSES = [
   "Acidose réspiratoire",
   "Alcalose métabolique",
   "Alcalose réspiratoire",
+  "Amylose",
 
   // Endocrinologie
   "Diabète de type 1",
