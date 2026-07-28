@@ -150,6 +150,7 @@ export const DIAGNOSES = [
   "Rickettsiose",
   "Leishmaniose",
   "Dengue",
+  "Rosacée",
   "Érysipèle",
   "Cellulite infectieuse",
   "Fasciite nécrosante",
@@ -355,6 +356,11 @@ export const DIAGNOSES = [
 "Fracture bimalléolaire",
 "Fracture du plateau tibial",
 "Fracture ouverte",
+"Fracture de Monteggia",
+"Fracture de Galeazzi",
+"Épiphysiolyse fémorale supérieure",
+"Maladie de Legg-Calvé-Perthes",
+"Déchirure méniscale",
 "Luxation de l'épaule",
 "Luxation de la hanche",
 "Luxation du coude",
@@ -374,6 +380,7 @@ export const DIAGNOSES = [
 "Sarcome d'Ewing",
 "Ostéosarcome",
 "Sciatique",
+
 
 // Ophtalmologie
 "Conjonctivite virale",

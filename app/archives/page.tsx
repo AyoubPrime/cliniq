@@ -16,8 +16,6 @@ async function getAllCases() {
   return data
 }
 
-export const dynamic = 'force-dynamic'
-
 export default async function ArchivesPage() {
   const cases = await getAllCases()
   return (
