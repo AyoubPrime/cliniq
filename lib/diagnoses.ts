@@ -15,7 +15,10 @@ export const DIAGNOSES = [
   "Tachycardie supraventriculaire",
   "Tachycardie ventriculaire",
   "Fibrillation ventriculaire",
-  "Bloc auriculo-ventriculaire",
+  "Bloc auriculo-ventriculaire (BAV I)",
+  "Bloc auriculo-ventriculaire (BAV II) Mobitz I ou Wenckebach",
+  "Bloc auriculo-ventriculaire (BAV II) Mobitz II",
+  "Bloc auriculo-ventriculaire (BAV III) ou Complet",
   "Insuffisance cardiaque aiguë",
   "Insuffisance cardiaque chronique",
   "Péricardite aiguë",
@@ -214,7 +217,7 @@ export const DIAGNOSES = [
   "Acromégalie",
   "Insuffisance antéhypophysaire",
 
-  // Rhumatologie
+  // Rhumatologie & Med interne
   "Polyarthrite rhumatoïde",
   "Lupus érythémateux systémique (LES)",
   "Sclérodermie systémique",
@@ -224,6 +227,7 @@ export const DIAGNOSES = [
   "Spondylarthrite ankylosante",
   "Arthrite psoriasique",
   "Goutte",
+  "syndrome des antiphospholipides (SAPL)",
   "Chondrocalcinose",
   "Arthrose",
   "Fibromyalgie",
@@ -290,7 +294,7 @@ export const DIAGNOSES = [
  "Ictère néonatal",
  "Crise convulsive fébrile",
  "Gastro-entérite aiguë de l'enfant",
- "Purpura rhumatoïde",
+ "Purpura rhumatoïde (Vascularite à IgA)",
  "Maladie de Kawasaki",
  "Crise vaso-occlusive",
  "Sténose hypertrophique du pylore",
