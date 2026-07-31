@@ -38,7 +38,13 @@ export const DIAGNOSES = [
   "Cardiomyopathie hypertrophique",
 
   // Neurologie
-  "Accident vasculaire cérébral ischémique",
+  "AVC ischémique du territoire de l'artère cérébrale moyenne (ACM)",
+  "AVC ischémique du territoire de l'artère cérébrale postérieure (ACP)",
+  "AVC ischémique du territoire de l'artère cérébelleuse antéro-inférieure (AICA)",
+  "AVC ischémique du territoire de l'artère spinale antérieure (ASA)",
+  "AVC ischémique du territoire de l'artère cérébrale antérieure (ACA)",
+  "AVC ischémique du territoire de l'artère basilaire",
+  "AVC ischémique du territoire de l'artère cérébelleuse postéro-inférieure (PICA)",
   "Accident vasculaire cérébral hémorragique",
   "Accident ischémique transitoire",
   "Hémorragie sous-arachnoïdienne",
