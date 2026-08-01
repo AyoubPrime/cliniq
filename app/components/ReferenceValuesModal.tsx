@@ -61,8 +61,11 @@ export default function ReferenceValuesModal({ isOpen, onClose }: ReferenceValue
               <Row label="Hémoglobine (Hb)" value="♂ 13-17 g/dL | ♀ 12-16 g/dL" />
               <Row label="VGM" value="80 - 100 fL" />
               <Row label="Leucocytes (GB)" value="4 000 - 10 000 /mm³" />
+              <Row label="Lymphocytes" value="1 000 - 4 000 /mm³" indent />
               <Row label="PNN" value="1 500 - 7 000 /mm³" indent />
-              <Row label="Lymphocytes" value="1 500 - 4 000 /mm³" indent />
+              <Row label="Monocytes" value="1 00 - 1 000 /mm³" indent />
+              <Row label="Eosinophiles" value="0 - 500 /mm³" indent />
+              <Row label="Basophiles" value="0 - 50 /mm³" indent />
               <Row label="Plaquettes" value="150 000 - 400 000 /mm³" />
               <Row label="Réticulocytes" value="20 000 - 100 000 /mm³" />
             </Section>
