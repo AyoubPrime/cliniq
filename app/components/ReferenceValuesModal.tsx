@@ -67,7 +67,7 @@ export default function ReferenceValuesModal({ isOpen, onClose }: ReferenceValue
               <Row label="Eosinophiles" value="0 - 500 /mm³" indent />
               <Row label="Basophiles" value="0 - 50 /mm³" indent />
               <Row label="Plaquettes" value="150 000 - 400 000 /mm³" />
-              <Row label="Réticulocytes" value="20 000 - 100 000 /mm³" />
+              <Row label="Réticulocytes" value="20 000 - 120 000 /mm³" />
             </Section>
 
             {/* Iono */}
