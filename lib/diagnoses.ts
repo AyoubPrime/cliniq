@@ -429,6 +429,7 @@ export const DIAGNOSES = [
 "Rosacée",
 "Teigne des pieds (pied d'athlète)",
 "Teigne du cuir chevelu (à dermatophyte)",
+"Dermatophytose (herpès circiné)",
 "Dermatophytose palmaire",
 "Cellulite bactérienne",
 "Impétigo croûteux",
